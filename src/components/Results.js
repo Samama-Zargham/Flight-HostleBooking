@@ -20,7 +20,7 @@ const Results = ({navigation}) => {
 
     //const [countries, setCountries] = useState(dummyData.countries)
     const [countries, setCountries] = useState([
-        { name: 'JAPAN', key: '1', price: '$1000', image: require('../images/japan.jpeg') },
+        { name: 'JAPAN-TOKYO', key: '1', price: '$1000', image: require('../images/japan.jpeg') },
         { name: 'SPAIN', key: '2', price: '$800', image: require('../images/spain.jpeg') },
         { name: 'LAOS', key: '3', price: '$500', image: require('../images/laos.png') },
     ])

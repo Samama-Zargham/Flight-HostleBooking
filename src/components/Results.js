@@ -27,7 +27,7 @@ const Results = ({navigation}) => {
 
     const renderItem = ({ item }) => {
         return (
-            <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate('')}>
+            <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.navigate('')}>
                 <View  style={style.resultItem}>
                     <View>
                         <Image style={style.image} source={item.image}></Image>

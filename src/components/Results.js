@@ -20,14 +20,14 @@ const Results = ({navigation}) => {
 
     //const [countries, setCountries] = useState(dummyData.countries)
     const [countries, setCountries] = useState([
-        { name: 'JAPAN-TOKYO', key: '1', price: '$1000', image: require('../images/japan.jpeg') },
+        { name: 'JAPAN', key: '1', price: '$1000', image: require('../images/japan.jpeg') },
         { name: 'SPAIN', key: '2', price: '$800', image: require('../images/spain.jpeg') },
         { name: 'LAOS', key: '3', price: '$500', image: require('../images/laos.png') },
     ])
 
     const renderItem = ({ item }) => {
         return (
-            <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.navigate('')}>
+            <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.navigate('Details')}>
                 <View  style={style.resultItem}>
                     <View>
                         <Image style={style.image} source={item.image}></Image>
@@ -58,9 +58,9 @@ const Results = ({navigation}) => {
                         alignItems: 'center',
                         justifyContent: 'center'
                     }}
-                    onPress={() => console.log("menu pressed")}
+                    onPress={() => navigation.navigate('LandingPage')}
                 >
-                    <Icon style={{ color: COLOURS.orange }} name="menu" size={28} />
+                    <Icon style={{ color: COLOURS.orange }} name="arrow-back-ios" size={28} />
 
                 </TouchableOpacity>
 
@@ -75,7 +75,7 @@ const Results = ({navigation}) => {
                         alignItems: 'center',
                         justifyContent: 'center'
                     }}
-                    onPress={() => console.log("profile pressed")}
+                    onPress={() => navigation.navigate('Login')}
                 >
                     <FontAwesomeIcon style={{ color: COLOURS.orange }} name="user" size={25} />
                 </TouchableOpacity>
@@ -105,7 +105,8 @@ const Results = ({navigation}) => {
 const style = StyleSheet.create({
     resultItem: {
       flexDirection: 'row',
-      margin: 20,
+      marginHorizontal: 20,
+      marginTop: 20,
       height: 100,
       backgroundColor: COLOURS.white,
       borderRadius: 10,

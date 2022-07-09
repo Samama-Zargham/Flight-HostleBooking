@@ -18,7 +18,7 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import WavyBackground from 'react-native-wavy-background';
 import COLOURS from '../consts/colours';
 
-const LandingPage = ({navigation}) => {
+const LandingPage = ({ navigation }) => {
     return(
         <SafeAreaView
             style={{flex:1, backgroundColor: COLOURS.white}}>
@@ -46,7 +46,7 @@ const LandingPage = ({navigation}) => {
                             <Icon style={{ color: COLOURS.orange }} name="attach-money" size={28} />
                             <TextInput style={{ paddingLeft: 10, color: COLOURS.grey }} placeholder="what's your BUDGET?" />
                         </View>
-                        <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate('Results')}>
+                        <TouchableOpacity style={{marginTop: 45}} activeOpacity={0.8} onPress={() => navigation.navigate('Results')}>
                             <View style={style.btn}>
                                 <Image style={style.symbol} resizeMode="contain" source={require('../images/shoestring_symbol.png')} />
                                 <Text style={{ fontWeight: 'bold', color: COLOURS.white, fontSize: 16 }}>SHOESTRING ME SOMETHING!</Text>
@@ -139,7 +139,6 @@ const style = StyleSheet.create({
         width: '100%',
         backgroundColor: COLOURS.orange,
         borderRadius: 10,
-        marginTop: 45,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',

@@ -118,6 +118,23 @@ const Details = ({ navigation }) => {
                 renderItem = {renderItem}
             />
         </View>
+        <TouchableOpacity
+            style={style.btnContainer}
+            activeOpacity={0.8}
+            onPress={() => console.log('booking button pressed')}
+            >
+            <View style={style.btn}>
+                <Text
+                style={{
+                    fontWeight: "bold",
+                    color: COLOURS.white,
+                    fontSize: 16,
+                }}
+                >
+                BOOK!
+                </Text>
+            </View>
+        </TouchableOpacity>
     </SafeAreaView>
   )
 };
@@ -162,6 +179,19 @@ const style = StyleSheet.create({
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
    },
+
+   btnContainer: {
+    marginHorizontal: 20,
+    marginTop: 20,
+  },
+
+  btn: {
+    height: 50,
+    backgroundColor: COLOURS.orange,
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
+  },
 
 });
 

@@ -22,11 +22,10 @@ const LandingPage = ({ navigation }) => {
     return(
         <SafeAreaView
             style={{flex:1, backgroundColor: COLOURS.white}}>
-                <StatusBar translucent={false} backgroundColor={COLOURS.orange} />
                 <View style={style.header}>
                     <Image style={style.logo} resizeMode="contain" source={require('../images/shoestring_logo.png')} />
                 </View>
-                <ScrollView showsVerticalScrollIndicator={false}>
+                {/* <ScrollView showsVerticalScrollIndicator={false}> */}
                     <View style={{ padding: 20 }}>
                         <Text style={style.headline}>LOOK FOR YOUR NEW ADVENTURE ON A SHOESTRING</Text>
                     </View>
@@ -46,20 +45,32 @@ const LandingPage = ({ navigation }) => {
                             <Icon style={{ color: COLOURS.orange }} name="attach-money" size={28} />
                             <TextInput style={{ paddingLeft: 10, color: COLOURS.grey }} placeholder="what's your BUDGET?" />
                         </View>
-                        <TouchableOpacity style={{marginTop: 45}} activeOpacity={0.8} onPress={() => navigation.navigate('Results')}>
+                        <TouchableOpacity
+                            style={style.btnContainer}
+                            activeOpacity={0.8}
+                            onPress={() => navigation.navigate('Results')}
+                        >
                             <View style={style.btn}>
-                                <Image style={style.symbol} resizeMode="contain" source={require('../images/shoestring_symbol.png')} />
-                                <Text style={{ fontWeight: 'bold', color: COLOURS.white, fontSize: 16 }}>SHOESTRING ME SOMETHING!</Text>
+                            <Image style={style.symbol} resizeMode="contain" source={require('../images/shoestring_symbol.png')} />
+                            <Text
+                                style={{
+                                fontWeight: "bold",
+                                color: COLOURS.white,
+                                fontSize: 16,
+                                }}
+                            >
+                                SHOESTRING ME SOMETHING!
+                            </Text>
                             </View>
                         </TouchableOpacity>
                     </View>
-                    <View
+                    {/* <View
                             style={{
                                 position: 'absolute',
                                 bottom: 0,
                                 left: 0,
                                 right: 0,
-                                top: 320,
+                                top: 400,
                             }}>
                                 <WavyBackground
                                 height={300}
@@ -70,8 +81,8 @@ const LandingPage = ({ navigation }) => {
                                 color="#67CAE0"
                                 bottom
                                 />
-                        </View>
-                        <View style={{backgroundColor: COLOURS.blue, height: 250, marginTop: 100,}}>
+                        </View> */}
+                        <View style={{backgroundColor: COLOURS.blue,}}>
                             <View>
                                 <Text style={style.socialText}>Follow us on our socials!</Text>
                                 <View style={style.social}>
@@ -88,7 +99,7 @@ const LandingPage = ({ navigation }) => {
                             </View>
                         </View>
                         
-                </ScrollView>
+                {/* </ScrollView> */}
         </SafeAreaView>
     );
 };
@@ -108,8 +119,7 @@ const style = StyleSheet.create({
         paddingTop: 50,
     },
 
-    headline: {
-        flex:1, 
+    headline: { 
         //fontFamily:'Sequel-Regular',
         flexWrap: 'wrap', 
         textAlign: 'center',
@@ -132,6 +142,10 @@ const style = StyleSheet.create({
         paddingHorizontal: 20,
         alignItems: 'center',
 
+    },
+
+    btnContainer: {
+        marginTop: 45,
     },
 
     btn: {

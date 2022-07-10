@@ -13,8 +13,8 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}}>
-        <Stack.Screen name="Results" component={Results} />
         <Stack.Screen name="LandingPage" component={LandingPage} />
+        <Stack.Screen name="Results" component={Results} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Details" component={Details} />
         <Stack.Screen name="Register" component={Register} />

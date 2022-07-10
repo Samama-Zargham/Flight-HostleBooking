@@ -74,7 +74,7 @@ const Details = ({ navigation }) => {
                         alignItems: 'center',
                         justifyContent: 'center'
                     }}
-                    onPress={() => navigation.navigate('LandingPage')}
+                    onPress={() => navigation.navigate('Results')}
                 >
                     <Icon style={{ color: COLOURS.orange }} name="arrow-back-ios" size={28} />
 

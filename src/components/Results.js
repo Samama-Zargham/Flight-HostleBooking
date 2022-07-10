@@ -86,9 +86,7 @@ const Results = ({navigation}) => {
   return (
     <SafeAreaView style={{ flex:1, backgroundColor: COLOURS.white }}>
         {renderHeader()}
-
-        <ScrollView contentContainerStyle={{ paddingBottom: Platform.OS === 'ios' ? 40 : 0 }}>
-            <View style={{ height: 700 }}>
+        <View style={{ height: 700 }}>
                 <View>
                     <FlatList
                         data={countries}
@@ -97,7 +95,6 @@ const Results = ({navigation}) => {
                     />
                 </View>
             </View>
-        </ScrollView>
     </SafeAreaView>
   )
 };

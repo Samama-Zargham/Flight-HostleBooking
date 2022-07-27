@@ -27,7 +27,10 @@
     "react-native-vector-icons": "^8.1.0",
     "react-native-wavy-background": "^0.2.0",
     "react-native-web": "0.17.7",
-    "expo-updates": "~0.13.3"
+    "expo-updates": "~0.13.3",
+    "react-native-google-places-autocomplete": "^2.4.1",
+    "react-native-date-picker": "^4.2.5",
+    "@react-native-community/datetimepicker": "^6.2.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"

@@ -84,7 +84,7 @@ const Results = ({navigation}) => {
     }
 
   return (
-    <SafeAreaView style={{ flex:1, backgroundColor: COLOURS.white }}>
+    <SafeAreaView style={{ flex:1, backgroundColor: COLOURS.white, marginTop:10 }}>
         {renderHeader()}
         <View style={{ height: 700 }}>
                 <View>

@@ -13,6 +13,8 @@ import {
     TouchableOpacity,
     Image,
 } from 'react-native';
+import URL from "../AmadeusRouts/URL";
+import axios from "axios";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import WavyBackground from 'react-native-wavy-background';
@@ -20,6 +22,7 @@ import COLOURS from '../consts/colours';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Constants from 'expo-constants';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import { setStatusBarNetworkActivityIndicatorVisible } from "expo-status-bar";
 const { width, height } = Dimensions.get("window")
 const LandingPage = ({ navigation }) => {
     const [Location, setLocation] = useState("")
@@ -29,12 +32,13 @@ const LandingPage = ({ navigation }) => {
     const [modeForDeparting, setModeForDeparting] = useState('date')
     const [showDeparting, setShowDeparting] = useState(false)
     const [departing, setDeparting] = useState('departing')
+    const [CityAirport, setCityAirport] = useState("")
     const onChange = (event, selectDate) => {
         const currentDate = selectDate || date;
         setShowDeparting(Platform.OS === 'ios');
         setDateForDeparting(currentDate);
         let tempDate = new Date(currentDate);
-        let fDate = tempDate.getDate() + '/' + (tempDate.getMonth() + 1) + '/' + tempDate.getFullYear();
+        let fDate = tempDate.getFullYear() + '-' + ((tempDate.getMonth() + 1) > 10 ? tempDate.getMonth() + 1 : '0' + (tempDate.getMonth() + 1)) + "-" + ((tempDate.getDate()) > 10 ? tempDate.getDate() : '0' + (tempDate.getDate()))
         setDeparting(fDate)
         // setReturning(fDate)
     }
@@ -47,18 +51,109 @@ const LandingPage = ({ navigation }) => {
     const [modeA, setModeForReturning] = useState('date')
     const [showReturning, setShowReturning] = useState(false)
     const [returning, setReturning] = useState('returning')
+    const [FlightOffersData, setFlightOffersData] = useState([])
+    const [Persons, setPersons] = useState()
+
     const onChangeReturn = (event, selectDate) => {
         const currentDate = selectDate || date;
         setShowReturning(Platform.OS === 'ios');
         setDateForReturning(currentDate);
         let tempDate = new Date(currentDate);
-        let fDate = tempDate.getDate() + '/' + (tempDate.getMonth() + 1) + '/' + tempDate.getFullYear();
+        let fDate = tempDate.getFullYear() + '-' + ((tempDate.getMonth() + 1) > 10 ? tempDate.getMonth() + 1 : '0' + (tempDate.getMonth() + 1)) + "-" + ((tempDate.getDate()) > 10 ? tempDate.getDate() : '0' + (tempDate.getDate()))
         setReturning(fDate)
     }
+
     const showModeA = (currentMode) => {
         setShowReturning(true);
         setModeForReturning(currentMode);
     }
+    const details = {
+        "grant_type": 'client_credentials',
+        "client_id": "Y2vZesGSskZexpIAny84ByfN3yY11dnk",
+        "client_secret": "AnMnpLyAYF4EkOQz"
+    }
+
+    const getAmadeusKey = async () => {
+        console.log(` departing date:  ${departing}, || returning date: ${returning}, ||  CityAirport : ${CityAirport}, ||  bugget: ${bugget} ||   Persons:   ${Persons}`)
+        if (!departing || !returning || !CityAirport || !bugget || !Persons) {
+            alert("Please fill all Fields")
+        }
+        else {
+            var formBody = [];
+            for (var property in details) {
+                var encodedKey = encodeURIComponent(property);
+                var encodedValue = encodeURIComponent(details[property]);
+                formBody.push(encodedKey + "=" + encodedValue);
+            }
+            formBody = formBody.join("&");
+            // console.log(" Body ===>>> " + formBody)
+
+            // await fetch(URL.Authorize_url, {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+            //     },
+            //     body: formBody
+            // }).then((response) => {
+            //     return response.json();
+            // }).then(async (res) =>{
+            //     console.log("----Response >> ", JSON.stringify(res))
+
+            await axios.get(
+                // URL.Flight_Offers + "?originLocationCode=MAD&destinationLocationCode=PAR&departureDate=2022-08-01&adults=2",
+                `https://test.api.amadeus.com/v1/reference-data/locations?subType=AIRPORT,CITY&keyword=${CityAirport}`,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${"OM0tzMwCD3SxAjmWBGfBUY2P4SXO"}`
+                    }
+                }
+            )
+                // .then((response) => {
+                //     return response.json();
+                // })
+                .then(async (res) => {
+                    // setFlightOffersData(res.data)
+                    console.log("----Response >> ", JSON.stringify(res.data))
+                    var iataCode = res?.data?.data[0]?.iataCode
+                    console.log("----Response >> ", iataCode?.length, " ", iataCode)
+
+                    if (iataCode == undefined) {
+                        alert("No any Airport exist in this city choose another city")
+
+                    } else {
+                        // alert("Ok bruh ")
+                        console.log(URL.Flight_Offers + `?originLocationCode=${iataCode}&destinationLocationCode=PAR&departureDate=${departing}&adults=${Persons}&returnDate=${returning}`)
+                        await axios.get(
+                            URL.Flight_Offers + `?originLocationCode=${iataCode}&destinationLocationCode=PAR&departureDate=${departing}&adults=${Persons}&returnDate=${returning}`,
+                            {
+                                headers: {
+                                    'Authorization': `Bearer ${"OM0tzMwCD3SxAjmWBGfBUY2P4SXO"}`
+                                }
+                            }
+                        )
+                            .then((res) => {
+                                console.log("-----------------")
+                                console.log("----Response >> ", JSON.stringify(res))
+                            }).catch((error) => {
+                                alert(error)
+                            })
+
+
+                    }
+                }).catch((error) => {
+                    alert(error)
+                })
+
+
+
+
+            // }
+            //         )
+        }
+
+    }
+
+
     return (
         <SafeAreaView
             style={{ flex: 1, backgroundColor: COLOURS.white }}>
@@ -78,20 +173,26 @@ const LandingPage = ({ navigation }) => {
                                 backgroundColor: COLOURS.white,
                                 borderColor: COLOURS.orange,
                                 borderWidth: 2,
-                                height: height*0.071,
+                                height: height * 0.071,
                                 borderRadius: 10,
-                                paddingLeft:width*0.17
+                                paddingLeft: width * 0.17
                             }
                         }}
-                        renderLeftButton={()=>
-                        <Icon style={{ color: COLOURS.orange,position:"absolute",zIndex:12, margin:10, marginLeft:width*0.06 }} name="location-pin" size={28} />
+                        renderLeftButton={() =>
+                            <Icon style={{ color: COLOURS.orange, position: "absolute", zIndex: 12, margin: 10, marginLeft: width * 0.06 }} name="location-pin" size={28} />
                         }
-                        placeholder="where are you departing from?"
+                        placeholder="Enter your departing City ?"
                         query={{
                             key: 'AIzaSyAGm9Qv2yhO03ggoPIogG3ny3dXsGZFIG0',
                             language: 'en', // language of the results
                         }}
-                        onPress={(data, details = null) => console.log(data)}
+                        onPress={(data) => {
+
+                            console.log(data.structured_formatting.main_text)
+                            setCityAirport(data.structured_formatting.main_text)
+
+                        }
+                        }
                         onFail={(error) => console.error(error)}
                         requestUrl={{
                             url:
@@ -101,7 +202,7 @@ const LandingPage = ({ navigation }) => {
                     />
                 </View>
                 {/* </View> */}
-                <View style={[style.inputContainer, { marginTop: height*0.091 }]}>
+                <View style={[style.inputContainer, { marginTop: height * 0.091 }]}>
                     <TouchableOpacity onPress={() => showModeForDeparting('date')}>
                         <Icon style={{ color: COLOURS.orange }} name="calendar-today" size={28} />
                     </TouchableOpacity>
@@ -114,19 +215,33 @@ const LandingPage = ({ navigation }) => {
                     <Text style={{ paddingLeft: 10, color: COLOURS.grey }} >{returning}</Text>
                     {/* <TextInput style={{ paddingLeft: 10, color: COLOURS.grey }} placeholder="returning" /> */}
                 </View>
-                <View style={style.inputContainer}>
-                    <Icon style={{ color: COLOURS.orange }} name="attach-money" size={28} />
-                    <TextInput style={{ paddingLeft: 10, color: COLOURS.grey }}
-                        keyboardType="number-pad"
-                        onChangeText={(bugget) => {
-                            setBugget(bugget)
-                        }}
-                        placeholder="what's your BUDGET?" />
+                <View>
+                    <View style={[style.inputContainer]}>
+                        <Icon style={{ color: COLOURS.orange }} name="attach-money" size={28} />
+                        <TextInput style={{ paddingLeft: 10, color: COLOURS.grey }}
+                            keyboardType="number-pad"
+                            onChangeText={(bugget) => {
+                                setBugget(bugget)
+                            }}
+                            placeholder="what's your BUDGET?" />
+                    </View>
+                    <View style={[style.inputContainer]}>
+                        <Icon style={{ color: COLOURS.orange }} name="person-add-alt" size={28} />
+                        <TextInput style={{ paddingLeft: 10, color: COLOURS.grey }}
+                            keyboardType="number-pad"
+                            onChangeText={(per) => {
+                                setPersons(per)
+                            }}
+                            maxLength={2}
+                            placeholder="No of Persons?" />
+                    </View>
+
                 </View>
+
                 <TouchableOpacity
                     style={style.btnContainer}
                     activeOpacity={0.8}
-                    onPress={() => navigation.navigate('Results')}
+                    onPress={() => { getAmadeusKey() }}
                 >
                     <View style={style.btn}>
                         <Image style={style.symbol} resizeMode="contain" source={require('../images/shoestring_symbol.png')} />
@@ -142,24 +257,6 @@ const LandingPage = ({ navigation }) => {
                     </View>
                 </TouchableOpacity>
             </View>
-            {/* <View
-                            style={{
-                                position: 'absolute',
-                                bottom: 0,
-                                left: 0,
-                                right: 0,
-                                top: 400,
-                            }}>
-                                <WavyBackground
-                                height={300}
-                                width={1100}
-                                amplitude={25}
-                                frequency={1}
-                                offset={150}
-                                color="#67CAE0"
-                                bottom
-                                />
-                        </View> */}
             <View style={{ backgroundColor: COLOURS.blue, }}>
                 <View>
                     <Text style={style.socialText}>Follow us on our socials!</Text>

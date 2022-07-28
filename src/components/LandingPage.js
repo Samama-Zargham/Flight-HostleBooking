@@ -12,6 +12,7 @@ import {
     Dimensions,
     TouchableOpacity,
     Image,
+    ActivityIndicator
 } from 'react-native';
 import URL from "../AmadeusRouts/URL";
 import axios from "axios";
@@ -27,6 +28,7 @@ const { width, height } = Dimensions.get("window")
 const LandingPage = ({ navigation }) => {
     const [Location, setLocation] = useState("")
     const [bugget, setBugget] = useState()
+    const [isResponse, setisResponse] = useState(false)
     // Calender For Departing
     const [dateForDeparting, setDateForDeparting] = useState(new Date())
     const [modeForDeparting, setModeForDeparting] = useState('date')
@@ -87,94 +89,104 @@ const LandingPage = ({ navigation }) => {
         // console.log(new Date(date.toDateString()))
         console.log(new Date(new Date().toDateString()))
 
-        return new Date(date.toDateString()) < new Date(new Date().toDateString());
+        return new Date(date.toDateString()) < new Date(new Date().toDateString())
     }
 
-    const getAmadeusKey = async () => {
+    const getAmadeusData = async () => {
         console.log(` departing date:  ${departing}, || returning date: ${returning}, ||  CityAirport : ${CityAirport}, ||  bugget: ${bugget} ||   Persons:   ${Persons}` + dateForReturning)
         if (!departing || !returning || !CityAirport || !bugget || !Persons) {
             alert("Please fill all Fields")
         }
         else if (departing) {
 
-            if(isDateBeforeToday(new Date(year, Month, cDate))){
-                alert("Enter a Valid departure date")
-            }else{
-                console.log("first")
+            if (isDateBeforeToday(new Date(year, Month, cDate))) {
+                alert("Enter a Valid departure/return date")
             }
-        }
-        else {
-            // var formBody = [];
-            // for (var property in details) {
-            //     var encodedKey = encodeURIComponent(property);
-            //     var encodedValue = encodeURIComponent(details[property]);
-            //     formBody.push(encodedKey + "=" + encodedValue);
-            // }
-            // formBody = formBody.join("&");
-            // console.log(" Body ===>>> " + formBody)
-
-            // await fetch(URL.Authorize_url, {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-            //     },
-            //     body: formBody
-            // }).then((response) => {
-            //     return response.json();
-            // }).then(async (res) => {
-            //     console.log("----Response >> ", JSON.stringify(res))
-            //     var access_token = res.access_token
-            await axios.get(
-                // URL.Flight_Offers + "?originLocationCode=MAD&destinationLocationCode=PAR&departureDate=2022-08-01&adults=2",
-                `https://test.api.amadeus.com/v1/reference-data/locations?subType=AIRPORT,CITY&keyword=${CityAirport}`,
-                {
-                    headers: {
-                        'Authorization': `Bearer ${"WIqg97EmkaqsM7Gk4G1ue8FjZPIE"}`
-                    }
+            else {
+                setisResponse(true)
+                var formBody = [];
+                for (var property in details) {
+                    var encodedKey = encodeURIComponent(property);
+                    var encodedValue = encodeURIComponent(details[property]);
+                    formBody.push(encodedKey + "=" + encodedValue);
                 }
-            )
-                // .then((response) => {
-                //     return response.json();
-                // })
-                .then(async (res) => {
-                    // setFlightOffersData(res.data)
-                    console.log("----Response >> ", JSON.stringify(res.data))
-                    var iataCode = res?.data?.data[0]?.iataCode
-                    console.log("----Response >> ", iataCode?.length, " ", iataCode)
+                formBody = formBody.join("&");
+                console.log(" Body ===>>> " + formBody)
 
-                    if (iataCode == undefined) {
-                        alert("No any Airport exist in this city choose another city")
-
-                    } else {
-                        // alert("Ok bruh ")
-                        console.log(URL.Flight_Offers + `?originLocationCode=${iataCode}&destinationLocationCode=PAR&departureDate=${departing}&adults=${Persons}&returnDate=${returning}`)
-                        await axios.get(
-                            URL.Flight_Offers + `?originLocationCode=${iataCode}&destinationLocationCode=PAR&departureDate=${departing}&adults=${Persons}&returnDate=${returning}`,
-                            {
-                                headers: {
-                                    'Authorization': `Bearer ${"WIqg97EmkaqsM7Gk4G1ue8FjZPIE"}`
-                                }
-                            }
-                        )
-                            .then((res) => {
-                                console.log("-----------------")
-                                console.log("----Response >> ", JSON.stringify(res))
-                            }).catch((error) => {
-                                alert(error)
-                            })
-
-
+                await fetch(URL.Authorize_url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+                    },
+                    body: formBody
+                }).then((response) => {
+                    return response.json();
+                }).then(async (res) => {
+                    setisResponse(false)
+                    console.log("----Response >> ", JSON.stringify(res))
+                    var access_token = res.access_token
+                await axios.get(
+                    // URL.Flight_Offers + "?originLocationCode=MAD&destinationLocationCode=PAR&departureDate=2022-08-01&adults=2",
+                    `https://test.api.amadeus.com/v1/reference-data/locations?subType=AIRPORT,CITY&keyword=${CityAirport}`,
+                    {
+                        headers: {
+                            'Authorization': `Bearer ${"1S4TPtQR8RG2xFQd060OXGxMMcW4"}`
+                        }
                     }
-                }).catch((error) => {
+                )
+                    // .then((response) => {
+                    //     return response.json();
+                    // })
+                    .then(async (res) => {
+                        // setFlightOffersData(res.data)
+                        console.log("----Response >> ", JSON.stringify(res.data))
+                        var iataCode = res?.data?.data[0]?.iataCode
+                        console.log("----Response >> ", iataCode?.length, " ", iataCode)
+
+                        if (iataCode == undefined) {
+                            alert("No any Amadeus Airport exist in this city choose another nearest city")
+                            setisResponse(false)
+
+                        } else {
+                            // alert("Ok bruh ")
+                            // console.log(URL.Flight_Offers + `?originLocationCode=${iataCode}&destinationLocationCode=PAR&departureDate=${departing}&adults=${Persons}&returnDate=${returning}`)
+                            await axios.get(
+                                URL.Flight_Offers + `?originLocationCode=${iataCode}&destinationLocationCode=PAR&departureDate=${departing}&adults=${Persons}&returnDate=${returning}&maxPrice=${bugget}`,
+                                {
+                                    headers: {
+                                        'Authorization': `Bearer ${"1S4TPtQR8RG2xFQd060OXGxMMcW4"}`
+                                    }
+                                }
+                            )
+                                .then((res) => {
+                                    setisResponse(false)
+                                    console.log("-----------------")
+                                    console.log("----Response >> ", JSON.stringify(res))
+                                    console.log("----Response >> ", JSON.stringify(res.data.data))
+
+                                }).catch((error) => {
+                                    setisResponse(false)
+                                    alert(error)
+                                })
+
+
+                        }
+                    }).catch((error) => {
+                        setisResponse(false)
+                        alert(error)
+                    })
+
+
+
+
+                }
+                ).catch((error) => {
+                    setisResponse(false)
                     alert(error)
                 })
-
-
-
-
-            // }
-            // )
+            }
         }
+
 
     }
 
@@ -263,10 +275,10 @@ const LandingPage = ({ navigation }) => {
 
                 </View>
 
-                <TouchableOpacity
+                {!isResponse ? <TouchableOpacity
                     style={style.btnContainer}
                     activeOpacity={0.8}
-                    onPress={() => { getAmadeusKey() }}
+                    onPress={() => { getAmadeusData() }}
                 >
                     <View style={style.btn}>
                         <Image style={style.symbol} resizeMode="contain" source={require('../images/shoestring_symbol.png')} />
@@ -280,7 +292,9 @@ const LandingPage = ({ navigation }) => {
                             SHOESTRING ME SOMETHING!
                         </Text>
                     </View>
-                </TouchableOpacity>
+                </TouchableOpacity> :
+
+                    <ActivityIndicator style={{ marginTop: height * 0.08 }} size="large" color={COLOURS.orange} />}
             </View>
             <View style={{ backgroundColor: COLOURS.blue, }}>
                 <View>
@@ -325,6 +339,7 @@ const LandingPage = ({ navigation }) => {
 const style = StyleSheet.create({
     header: {
         paddingVertical: 20,
+        marginTop:height*0.03,
         paddingHorizontal: 20,
         flexDirection: 'row',
         justifyContent: 'space-between',

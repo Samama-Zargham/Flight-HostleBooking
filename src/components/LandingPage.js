@@ -122,7 +122,6 @@ const LandingPage = ({ navigation }) => {
                 }).then((response) => {
                     return response.json();
                 }).then(async (res) => {
-                    setisResponse(false)
                     console.log("----Response >> ", JSON.stringify(res))
                     var access_token = res.access_token
                 await axios.get(
@@ -130,7 +129,7 @@ const LandingPage = ({ navigation }) => {
                     `https://test.api.amadeus.com/v1/reference-data/locations?subType=AIRPORT,CITY&keyword=${CityAirport}`,
                     {
                         headers: {
-                            'Authorization': `Bearer ${"1S4TPtQR8RG2xFQd060OXGxMMcW4"}`
+                            'Authorization': `Bearer ${access_token}`
                         }
                     }
                 )
@@ -154,15 +153,16 @@ const LandingPage = ({ navigation }) => {
                                 URL.Flight_Offers + `?originLocationCode=${iataCode}&destinationLocationCode=PAR&departureDate=${departing}&adults=${Persons}&returnDate=${returning}&maxPrice=${bugget}`,
                                 {
                                     headers: {
-                                        'Authorization': `Bearer ${"1S4TPtQR8RG2xFQd060OXGxMMcW4"}`
+                                        'Authorization': `Bearer ${access_token}`
                                     }
                                 }
                             )
                                 .then((res) => {
                                     setisResponse(false)
+                                    navigation.navigate("Results")
                                     console.log("-----------------")
                                     console.log("----Response >> ", JSON.stringify(res))
-                                    console.log("----Response >> ", JSON.stringify(res.data.data))
+                                    // console.log("----Response >> ", JSON.stringify(res.data.data))
 
                                 }).catch((error) => {
                                     setisResponse(false)

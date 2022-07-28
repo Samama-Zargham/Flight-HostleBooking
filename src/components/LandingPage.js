@@ -38,6 +38,12 @@ const LandingPage = ({ navigation }) => {
         setShowDeparting(Platform.OS === 'ios');
         setDateForDeparting(currentDate);
         let tempDate = new Date(currentDate);
+        var cdate = tempDate.getDate()
+        var month = tempDate.getMonth()
+        var year = tempDate.getFullYear()
+        setDate(cdate)
+        setMonth(month)
+        setYear(year)
         let fDate = tempDate.getFullYear() + '-' + ((tempDate.getMonth() + 1) > 10 ? tempDate.getMonth() + 1 : '0' + (tempDate.getMonth() + 1)) + "-" + ((tempDate.getDate()) > 10 ? tempDate.getDate() : '0' + (tempDate.getDate()))
         setDeparting(fDate)
         // setReturning(fDate)
@@ -53,6 +59,10 @@ const LandingPage = ({ navigation }) => {
     const [returning, setReturning] = useState('returning')
     const [FlightOffersData, setFlightOffersData] = useState([])
     const [Persons, setPersons] = useState()
+    const [cDate, setDate] = useState()
+    const [year, setYear] = useState()
+    const [Month, setMonth] = useState()
+
 
     const onChangeReturn = (event, selectDate) => {
         const currentDate = selectDate || date;
@@ -72,20 +82,35 @@ const LandingPage = ({ navigation }) => {
         "client_id": "Y2vZesGSskZexpIAny84ByfN3yY11dnk",
         "client_secret": "AnMnpLyAYF4EkOQz"
     }
+    const isDateBeforeToday = (date) => {
+        console.log(" date ", date)
+        // console.log(new Date(date.toDateString()))
+        console.log(new Date(new Date().toDateString()))
+
+        return new Date(date.toDateString()) < new Date(new Date().toDateString());
+    }
 
     const getAmadeusKey = async () => {
-        console.log(` departing date:  ${departing}, || returning date: ${returning}, ||  CityAirport : ${CityAirport}, ||  bugget: ${bugget} ||   Persons:   ${Persons}`)
+        console.log(` departing date:  ${departing}, || returning date: ${returning}, ||  CityAirport : ${CityAirport}, ||  bugget: ${bugget} ||   Persons:   ${Persons}` + dateForReturning)
         if (!departing || !returning || !CityAirport || !bugget || !Persons) {
             alert("Please fill all Fields")
         }
-        else {
-            var formBody = [];
-            for (var property in details) {
-                var encodedKey = encodeURIComponent(property);
-                var encodedValue = encodeURIComponent(details[property]);
-                formBody.push(encodedKey + "=" + encodedValue);
+        else if (departing) {
+
+            if(isDateBeforeToday(new Date(year, Month, cDate))){
+                alert("Enter a Valid departure date")
+            }else{
+                console.log("first")
             }
-            formBody = formBody.join("&");
+        }
+        else {
+            // var formBody = [];
+            // for (var property in details) {
+            //     var encodedKey = encodeURIComponent(property);
+            //     var encodedValue = encodeURIComponent(details[property]);
+            //     formBody.push(encodedKey + "=" + encodedValue);
+            // }
+            // formBody = formBody.join("&");
             // console.log(" Body ===>>> " + formBody)
 
             // await fetch(URL.Authorize_url, {
@@ -96,15 +121,15 @@ const LandingPage = ({ navigation }) => {
             //     body: formBody
             // }).then((response) => {
             //     return response.json();
-            // }).then(async (res) =>{
+            // }).then(async (res) => {
             //     console.log("----Response >> ", JSON.stringify(res))
-
+            //     var access_token = res.access_token
             await axios.get(
                 // URL.Flight_Offers + "?originLocationCode=MAD&destinationLocationCode=PAR&departureDate=2022-08-01&adults=2",
                 `https://test.api.amadeus.com/v1/reference-data/locations?subType=AIRPORT,CITY&keyword=${CityAirport}`,
                 {
                     headers: {
-                        'Authorization': `Bearer ${"OM0tzMwCD3SxAjmWBGfBUY2P4SXO"}`
+                        'Authorization': `Bearer ${"WIqg97EmkaqsM7Gk4G1ue8FjZPIE"}`
                     }
                 }
             )
@@ -127,7 +152,7 @@ const LandingPage = ({ navigation }) => {
                             URL.Flight_Offers + `?originLocationCode=${iataCode}&destinationLocationCode=PAR&departureDate=${departing}&adults=${Persons}&returnDate=${returning}`,
                             {
                                 headers: {
-                                    'Authorization': `Bearer ${"OM0tzMwCD3SxAjmWBGfBUY2P4SXO"}`
+                                    'Authorization': `Bearer ${"WIqg97EmkaqsM7Gk4G1ue8FjZPIE"}`
                                 }
                             }
                         )
@@ -148,7 +173,7 @@ const LandingPage = ({ navigation }) => {
 
 
             // }
-            //         )
+            // )
         }
 
     }

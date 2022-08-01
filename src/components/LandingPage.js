@@ -35,6 +35,7 @@ const LandingPage = ({ navigation }) => {
     const [departing, setDeparting] = useState('departing')
     const [CityAirport, setCityAirport] = useState("")
     const [MyAmadeusDataa, setMyAmadeusDataa] = useState([])
+    const [newMyAmadeusDataa, setnewMyAmadeusDataa] = useState([])
 
     const onChange = (event, selectDate) => {
         const currentDate = selectDate || date;
@@ -65,8 +66,40 @@ const LandingPage = ({ navigation }) => {
     const [cDate, setDate] = useState()
     const [year, setYear] = useState()
     const [Month, setMonth] = useState()
+    var count = 0;
 
+    const requestMergeData = async (item, access_token) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await axios.get(
+                    // URL.Flight_Offers + "?originLocationCode=MAD&destinationLocationCode=PAR&departureDate=2022-08-01&adults=2",
+                    `https://test.api.amadeus.com/v1/reference-data/locations?subType=AIRPORT,CITY&keyword=${item.cityCode}`,
+                    {
+                        headers: {
+                            'Authorization': `Bearer ${access_token}`
+                        }
+                    }
+                ).then((res) => {
+                    count = count + 1
+                    var countryName = res?.data?.data[0]?.address?.countryName
+                    console.log("--------------->< ", JSON.stringify(res))
+                    if (count < 4) {
+                        newMyAmadeusDataa.push({ "countryCode": item.countryCode, "cityCode": item.cityCode, "aircraftDaata": item.aircraftDaata, "countryName": countryName })
+                    } if (newMyAmadeusDataa.length > 2) {
+                        console.log("--------------->< ", JSON.stringify(newMyAmadeusDataa))
+                    }
 
+                    resolve()
+                })
+
+            } catch (error) {
+                // navigation.navigate("Results", { AmadeusDataa: MyAmadeusDataa })
+
+                reject()
+                console.log("error ==>  " + error)
+            }
+        })
+    }
     const onChangeReturn = (event, selectDate) => {
         const currentDate = selectDate || date;
         setShowReturning(Platform.OS === 'ios');
@@ -131,13 +164,10 @@ const LandingPage = ({ navigation }) => {
                     `https://test.api.amadeus.com/v1/reference-data/locations?subType=AIRPORT,CITY&keyword=${CityAirport}`,
                     {
                         headers: {
-                            'Authorization': `Bearer ${"oK6IvpwBOyk2Rvk3SkGBgHSGGaho"}`
+                            'Authorization': `Bearer ${"hhrh6Pc3Of3yZhzwKOyKfBYINSwp"}`
                         }
                     }
                 )
-                    // .then((response) => {
-                    //     return response.json();
-                    // })
                     .then(async (res) => {
 
                         // setFlightOffersData(res.data)
@@ -159,11 +189,11 @@ const LandingPage = ({ navigation }) => {
                                 URL.Flight_Offers + `?originLocationCode=${iataCode}&destinationLocationCode=PAR&departureDate=${departing}&adults=${Persons}&returnDate=${returning}&maxPrice=${bugget}`,
                                 {
                                     headers: {
-                                        'Authorization': `Bearer ${"oK6IvpwBOyk2Rvk3SkGBgHSGGaho"}`
+                                        'Authorization': `Bearer ${"hhrh6Pc3Of3yZhzwKOyKfBYINSwp"}`
                                     }
                                 }
                             )
-                                .then((res) => {
+                                .then(async (res) => {
                                     setisResponse(false)
                                     var resDaata = res?.data?.data
                                     console.log("-----------------")
@@ -190,13 +220,14 @@ const LandingPage = ({ navigation }) => {
                                                     console.log("first")
                                                     if (MyAmadeusDataa.length > 0) {
                                                         var len = MyAmadeusDataa.length > 1 ? MyAmadeusDataa.length : 1
-                                                        MyAmadeusDataa.map((item, index) => {
+                                                        MyAmadeusDataa.map(async (item, index) => {
                                                             item.countryCode == t.countryCode
                                                                 ?
                                                                 null
                                                                 :
-                                                                index == len - 1 ?
+                                                                (index == len - 1 && MyAmadeusDataa.length < 3) ?
                                                                     MyAmadeusDataa.push({ "countryCode": t.countryCode, "cityCode": t.cityCode, "aircraftDaata": aircraftDaata })
+
                                                                     : null
                                                         })
                                                     } else {
@@ -210,10 +241,14 @@ const LandingPage = ({ navigation }) => {
 
                                         }
 
+
                                         console.log("MyAmadeusDataa===>>>   ", JSON.stringify(MyAmadeusDataa))
 
-                                        if (MyAmadeusDataa.length > 0) {
-                                            navigation.navigate("Results", { AmadeusDataa: MyAmadeusDataa })
+                                        if (MyAmadeusDataa.length > 1) {
+                                            for (const Amadeuitem of MyAmadeusDataa) {
+                                                console.log("chla rayy")
+                                                await requestMergeData(Amadeuitem, "hhrh6Pc3Of3yZhzwKOyKfBYINSwp")
+                                            }
 
                                         }
                                         else {

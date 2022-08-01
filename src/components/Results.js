@@ -15,17 +15,8 @@ import { getPixelSizeForLayoutSize } from 'react-native/Libraries/Utilities/Pixe
 import COLOURS from '../consts/colours';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
-import RNCountry from "react-native-countries";
 
 const Results = ({ route, navigation }) => {
-    const [countryNameListWithCode, setcountryNameListWithCode] = useState([])
-
-    useEffect(() => {
-        let countryData = RNCountry.getCountryNamesWithCodes;
-        countryData.sort((a, b) => a.name.localeCompare(b.name));
-        setcountryNameListWithCode(countryData)
-    });
-
 
     const { AmadeusDataa } = route.params;
     console.log("---->>>>>>>>>>>>>>>>>>>>>>> ", JSON.stringify(AmadeusDataa))
@@ -45,15 +36,8 @@ const Results = ({ route, navigation }) => {
                         <Image style={style.image} source={item.image}></Image>
                     </View>
                     <View style={style.itemName}>
-                        {
-                            countryNameListWithCode?.map((item1, index) => {
-                                if (item1?.code == item?.countryCode) {
-                                    <Text style={{ color: COLOURS.blue, fontWeight: '800', fontSize: 15 }}>{ }</Text>
+                        <Text style={{ color: COLOURS.blue, fontWeight: '800', fontSize: 15 }}>{item.countryName}</Text>
 
-                                }
-
-                            })
-                        }
                     </View>
                     <View style={style.itemPrice}>
                         <Text style={{ color: COLOURS.white, fontWeight: '800', fontSize: 18 }}>{item?.aircraftDaata?.grandPrice}</Text>

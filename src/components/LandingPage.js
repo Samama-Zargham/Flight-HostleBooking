@@ -26,7 +26,6 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 import { setStatusBarNetworkActivityIndicatorVisible } from "expo-status-bar";
 const { width, height } = Dimensions.get("window")
 const LandingPage = ({ navigation }) => {
-    const [Location, setLocation] = useState("")
     const [bugget, setBugget] = useState()
     const [isResponse, setisResponse] = useState(false)
     // Calender For Departing
@@ -35,6 +34,8 @@ const LandingPage = ({ navigation }) => {
     const [showDeparting, setShowDeparting] = useState(false)
     const [departing, setDeparting] = useState('departing')
     const [CityAirport, setCityAirport] = useState("")
+    const [MyAmadeusDataa, setMyAmadeusDataa] = useState([])
+
     const onChange = (event, selectDate) => {
         const currentDate = selectDate || date;
         setShowDeparting(Platform.OS === 'ios');
@@ -104,32 +105,33 @@ const LandingPage = ({ navigation }) => {
             }
             else {
                 setisResponse(true)
-                var formBody = [];
-                for (var property in details) {
-                    var encodedKey = encodeURIComponent(property);
-                    var encodedValue = encodeURIComponent(details[property]);
-                    formBody.push(encodedKey + "=" + encodedValue);
-                }
-                formBody = formBody.join("&");
-                console.log(" Body ===>>> " + formBody)
+                setMyAmadeusDataa([])
+                // var formBody = [];
+                // for (var property in details) {
+                //     var encodedKey = encodeURIComponent(property);
+                //     var encodedValue = encodeURIComponent(details[property]);
+                //     formBody.push(encodedKey + "=" + encodedValue);
+                // }
+                // formBody = formBody.join("&");
+                // console.log(" Body ===>>> " + formBody)
 
-                await fetch(URL.Authorize_url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-                    },
-                    body: formBody
-                }).then((response) => {
-                    return response.json();
-                }).then(async (res) => {
-                    console.log("----Response >> ", JSON.stringify(res))
-                    var access_token = res.access_token
+                // await fetch(URL.Authorize_url, {
+                //     method: 'POST',
+                //     headers: {
+                //         'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+                //     },
+                //     body: formBody
+                // }).then((response) => {
+                //     return response.json();
+                // }).then(async (res) => {
+                //     console.log("----Response >> ", JSON.stringify(res))
+                //     var access_token = res.access_token
                 await axios.get(
                     // URL.Flight_Offers + "?originLocationCode=MAD&destinationLocationCode=PAR&departureDate=2022-08-01&adults=2",
                     `https://test.api.amadeus.com/v1/reference-data/locations?subType=AIRPORT,CITY&keyword=${CityAirport}`,
                     {
                         headers: {
-                            'Authorization': `Bearer ${access_token}`
+                            'Authorization': `Bearer ${"oK6IvpwBOyk2Rvk3SkGBgHSGGaho"}`
                         }
                     }
                 )
@@ -137,10 +139,14 @@ const LandingPage = ({ navigation }) => {
                     //     return response.json();
                     // })
                     .then(async (res) => {
+
                         // setFlightOffersData(res.data)
                         console.log("----Response >> ", JSON.stringify(res.data))
                         var iataCode = res?.data?.data[0]?.iataCode
-                        console.log("----Response >> ", iataCode?.length, " ", iataCode)
+                        var cityCode = res?.data?.data[0]?.address?.cityCode
+                        var countryCode = res?.data?.data[0]?.address?.countryCode
+
+                        console.log("----Response iataCode >> ", iataCode, "  countryCode  ", countryCode, "  cityCode  ", cityCode)
 
                         if (iataCode == undefined) {
                             alert("No any Amadeus Airport exist in this city choose another nearest city")
@@ -153,17 +159,71 @@ const LandingPage = ({ navigation }) => {
                                 URL.Flight_Offers + `?originLocationCode=${iataCode}&destinationLocationCode=PAR&departureDate=${departing}&adults=${Persons}&returnDate=${returning}&maxPrice=${bugget}`,
                                 {
                                     headers: {
-                                        'Authorization': `Bearer ${access_token}`
+                                        'Authorization': `Bearer ${"oK6IvpwBOyk2Rvk3SkGBgHSGGaho"}`
                                     }
                                 }
                             )
                                 .then((res) => {
                                     setisResponse(false)
-                                    navigation.navigate("Results")
+                                    var resDaata = res?.data?.data
                                     console.log("-----------------")
-                                    console.log("----Response >> ", JSON.stringify(res))
-                                    // console.log("----Response >> ", JSON.stringify(res.data.data))
 
+                                    if (res?.data?.data != [] && resDaata.length) {
+                                        var CountryData = res?.data?.dictionaries?.locations
+                                        var AllData = res?.data?.data
+                                        var AlDataLenght = AllData?.length
+
+                                        console.log("first====>>> ", AllData?.length)
+
+                                        for (let i = 0; i < 100; i++) {
+                                            var grandPrice = res?.data?.data[i]?.price?.grandTotal
+                                            var flightDuration = res?.data?.data[i]?.itineraries[0]?.duration
+                                            var flightDuration1 = flightDuration?.substring(2)
+                                            var aircraftDaata = { "carrierCode": res?.data?.data[i]?.itineraries[0]?.segments[0]?.carrierCode, "aircraftcode": res?.data?.data[i]?.itineraries[0]?.segments[0]?.aircraft?.code, "grandPrice": grandPrice, "flightDuration": flightDuration1 }
+                                            var arrivalCode = res?.data?.data[i]?.itineraries[0]?.segments[0]?.arrival?.iataCode
+
+                                            // console.log("aircraftDaata  ", JSON.stringify(aircraftDaata))
+
+                                            for (let i in CountryData) {
+                                                let t = CountryData[i]
+                                                if ((t.cityCode != cityCode && countryCode != t.countryCode) && t.cityCode == arrivalCode) {
+                                                    console.log("first")
+                                                    if (MyAmadeusDataa.length > 0) {
+                                                        var len = MyAmadeusDataa.length > 1 ? MyAmadeusDataa.length : 1
+                                                        MyAmadeusDataa.map((item, index) => {
+                                                            item.countryCode == t.countryCode
+                                                                ?
+                                                                null
+                                                                :
+                                                                index == len - 1 ?
+                                                                    MyAmadeusDataa.push({ "countryCode": t.countryCode, "cityCode": t.cityCode, "aircraftDaata": aircraftDaata })
+                                                                    : null
+                                                        })
+                                                    } else {
+                                                        MyAmadeusDataa.push({ "countryCode": t.countryCode, "cityCode": t.cityCode, "aircraftDaata": aircraftDaata })
+                                                        break;
+                                                    }
+                                                    break;
+
+                                                }
+                                            }
+
+                                        }
+
+                                        console.log("MyAmadeusDataa===>>>   ", JSON.stringify(MyAmadeusDataa))
+
+                                        if (MyAmadeusDataa.length > 0) {
+                                            navigation.navigate("Results", { AmadeusDataa: MyAmadeusDataa })
+
+                                        }
+                                        else {
+                                            alert("Sorry we don't have flights at this time.")
+
+                                        }
+                                        console.log("-----------------")
+                                    } else {
+                                        alert("Amadeus don't have this City or wait for a while Server is down")
+                                    }
                                 }).catch((error) => {
                                     setisResponse(false)
                                     alert(error)
@@ -179,12 +239,12 @@ const LandingPage = ({ navigation }) => {
 
 
 
-                }
-                ).catch((error) => {
-                    setisResponse(false)
-                    alert(error)
-                })
             }
+            //     ).catch((error) => {
+            //         setisResponse(false)
+            //         alert(error)
+            //     })
+            // }
         }
 
 
@@ -224,6 +284,7 @@ const LandingPage = ({ navigation }) => {
                             language: 'en', // language of the results
                         }}
                         onPress={(data) => {
+                            console.log(data)
 
                             console.log(data.structured_formatting.main_text)
                             setCityAirport(data.structured_formatting.main_text)
@@ -245,9 +306,9 @@ const LandingPage = ({ navigation }) => {
                     </TouchableOpacity>
                     <Text style={{ paddingLeft: 10, color: COLOURS.grey }} >{departing}</Text>
                     {/* <TextInput style={{ paddingLeft: 10, color: COLOURS.grey }} placeholder="departing" /> */}
-                    <Icon style={{ color: COLOURS.orange, paddingLeft: 20, }} name="arrow-forward" size={28} />
+                    <Icon style={{ color: COLOURS.orange, paddingLeft: 10, }} name="arrow-forward" size={28} />
                     <TouchableOpacity onPress={() => showModeA('date')}>
-                        <Icon style={{ color: COLOURS.orange, paddingLeft: 20, }} name="calendar-today" size={28} />
+                        <Icon style={{ color: COLOURS.orange, paddingLeft: 10, }} name="calendar-today" size={28} />
                     </TouchableOpacity>
                     <Text style={{ paddingLeft: 10, color: COLOURS.grey }} >{returning}</Text>
                     {/* <TextInput style={{ paddingLeft: 10, color: COLOURS.grey }} placeholder="returning" /> */}
@@ -339,7 +400,7 @@ const LandingPage = ({ navigation }) => {
 const style = StyleSheet.create({
     header: {
         paddingVertical: 20,
-        marginTop:height*0.03,
+        marginTop: height * 0.03,
         paddingHorizontal: 20,
         flexDirection: 'row',
         justifyContent: 'space-between',

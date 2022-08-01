@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react';
-import{
+import React, { useState, useRef, useEffect } from 'react';
+import {
     View,
     Text,
     Image,
@@ -9,41 +9,61 @@ import{
     ScrollView,
     Platform,
     FlatList,
-    StyleSheet
+    StyleSheet,
 } from 'react-native';
 import { getPixelSizeForLayoutSize } from 'react-native/Libraries/Utilities/PixelRatio';
 import COLOURS from '../consts/colours';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import RNCountry from "react-native-countries";
 
-const Results = ({navigation}) => {
+const Results = ({ route, navigation }) => {
+    const [countryNameListWithCode, setcountryNameListWithCode] = useState([])
 
-    //const [countries, setCountries] = useState(dummyData.countries)
+    useEffect(() => {
+        let countryData = RNCountry.getCountryNamesWithCodes;
+        countryData.sort((a, b) => a.name.localeCompare(b.name));
+        setcountryNameListWithCode(countryData)
+    });
+
+
+    const { AmadeusDataa } = route.params;
+    console.log("---->>>>>>>>>>>>>>>>>>>>>>> ", JSON.stringify(AmadeusDataa))
+
     const [countries, setCountries] = useState([
         { name: 'JAPAN', key: '1', price: '$1000', image: require('../images/japan.jpeg') },
         { name: 'SPAIN', key: '2', price: '$800', image: require('../images/spain.jpeg') },
         { name: 'LAOS', key: '3', price: '$500', image: require('../images/laos.png') },
     ])
 
-    const renderItem = ({ item }) => {
+    const renderItem = ({ item, index }) => {
+
         return (
-            <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.navigate('Details')}>
-                <View  style={style.resultItem}>
+            <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.navigate('Details', { aircraftDaata: item?.aircraftDaata })}>
+                <View style={style.resultItem}>
                     <View>
                         <Image style={style.image} source={item.image}></Image>
                     </View>
                     <View style={style.itemName}>
-                        <Text style={{ color: COLOURS.blue, fontWeight: '800', fontSize: 15 }}>{item.name}</Text>
+                        {
+                            countryNameListWithCode?.map((item1, index) => {
+                                if (item1?.code == item?.countryCode) {
+                                    <Text style={{ color: COLOURS.blue, fontWeight: '800', fontSize: 15 }}>{ }</Text>
+
+                                }
+
+                            })
+                        }
                     </View>
                     <View style={style.itemPrice}>
-                        <Text style={{ color: COLOURS.white, fontWeight: '800', fontSize: 18 }}>{item.price}</Text>
+                        <Text style={{ color: COLOURS.white, fontWeight: '800', fontSize: 18 }}>{item?.aircraftDaata?.grandPrice}</Text>
                     </View>
                 </View>
             </TouchableOpacity>
         );
     };
 
-    function renderHeader(){
+    function renderHeader() {
         return (
             <View style={{
                 flexDirection: 'row',
@@ -64,7 +84,7 @@ const Results = ({navigation}) => {
 
                 </TouchableOpacity>
 
-                <View style={{ flex:1, alignItems: 'center', justifyContent: 'center' }}>
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <Text style={{ color: COLOURS.black, fontWeight: 'bold' }}>
                         $1,000
                     </Text>
@@ -83,34 +103,34 @@ const Results = ({navigation}) => {
         )
     }
 
-  return (
-    <SafeAreaView style={{ flex:1, backgroundColor: COLOURS.white, marginTop:10 }}>
-        {renderHeader()}
-        <View style={{ height: 700 }}>
+    return (
+        <SafeAreaView style={{ flex: 1, backgroundColor: COLOURS.white, marginTop: 10 }}>
+            {renderHeader()}
+            <View style={{ height: 700 }}>
                 <View>
                     <FlatList
-                        data={countries}
-                        renderItem={ renderItem }
-                        ListEmptyComponent = { <Text>There's no options at the moment</Text> }
+                        data={AmadeusDataa}
+                        renderItem={renderItem}
+                        ListEmptyComponent={<Text>There's no options at the moment</Text>}
                     />
                 </View>
             </View>
-    </SafeAreaView>
-  )
+        </SafeAreaView>
+    )
 };
 
 const style = StyleSheet.create({
     resultItem: {
-      flexDirection: 'row',
-      marginHorizontal: 20,
-      marginTop: 20,
-      height: 100,
-      backgroundColor: COLOURS.white,
-      borderRadius: 10,
-      borderColor: COLOURS.orange,
-      borderWidth: 1,
-      alignItems: 'center',
-      justifyContent: 'space-between',
+        flexDirection: 'row',
+        marginHorizontal: 20,
+        marginTop: 20,
+        height: 100,
+        backgroundColor: COLOURS.white,
+        borderRadius: 10,
+        borderColor: COLOURS.orange,
+        borderWidth: 1,
+        alignItems: 'center',
+        justifyContent: 'space-between',
     },
 
     image: {

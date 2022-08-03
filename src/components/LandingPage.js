@@ -140,32 +140,32 @@ const LandingPage = ({ navigation }) => {
             else {
                 setisResponse(true)
                 setMyAmadeusDataa([])
-                // var formBody = [];
-                // for (var property in details) {
-                //     var encodedKey = encodeURIComponent(property);
-                //     var encodedValue = encodeURIComponent(details[property]);
-                //     formBody.push(encodedKey + "=" + encodedValue);
-                // }
-                // formBody = formBody.join("&");
-                // console.log(" Body ===>>> " + formBody)
+                var formBody = [];
+                for (var property in details) {
+                    var encodedKey = encodeURIComponent(property);
+                    var encodedValue = encodeURIComponent(details[property]);
+                    formBody.push(encodedKey + "=" + encodedValue);
+                }
+                formBody = formBody.join("&");
+                console.log(" Body ===>>> " + formBody)
 
-                // await fetch(URL.Authorize_url, {
-                //     method: 'POST',
-                //     headers: {
-                //         'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-                //     },
-                //     body: formBody
-                // }).then((response) => {
-                //     return response.json();
-                // }).then(async (res) => {
-                //     console.log("----Response >> ", JSON.stringify(res))
-                //     var access_token = res.access_token
+                await fetch(URL.Authorize_url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+                    },
+                    body: formBody
+                }).then((response) => {
+                    return response.json();
+                }).then(async (res) => {
+                    console.log("----Response >> ", JSON.stringify(res))
+                    var access_token = res.access_token
                 await axios.get(
                     // URL.Flight_Offers + "?originLocationCode=MAD&destinationLocationCode=PAR&departureDate=2022-08-01&adults=2",
                     `https://test.api.amadeus.com/v1/reference-data/locations?subType=AIRPORT,CITY&keyword=${CityAirport}`,
                     {
                         headers: {
-                            'Authorization': `Bearer ${"pughqvp73zzwLWqJQEDJmRpBGTUu"}`
+                            'Authorization': `Bearer ${access_token}`
                         }
                     }
                 )
@@ -190,7 +190,7 @@ const LandingPage = ({ navigation }) => {
                                 URL.Flight_Offers + `?originLocationCode=${iataCode}&destinationLocationCode=PAR&departureDate=${departing}&adults=${Persons}&returnDate=${returning}&maxPrice=${bugget}`,
                                 {
                                     headers: {
-                                        'Authorization': `Bearer ${"pughqvp73zzwLWqJQEDJmRpBGTUu"}`
+                                        'Authorization': `Bearer ${access_token}`
                                     }
                                 }
                             )
@@ -250,7 +250,7 @@ const LandingPage = ({ navigation }) => {
                                             //     console.log("chla rayy")
                                             //     await requestMergeData(Amadeuitem, "hhrh6Pc3Of3yZhzwKOyKfBYINSwp")
                                             // }
-                                            navigation.navigate("Results", { AmadeusDataa: MyAmadeusDataa })
+                                            navigation.navigate("Results", { AmadeusDataa: MyAmadeusDataa, access_token:access_token })
 
                                         }
                                         else {
@@ -277,11 +277,11 @@ const LandingPage = ({ navigation }) => {
 
 
             }
-            //     ).catch((error) => {
-            //         setisResponse(false)
-            //         alert(error)
-            //     })
-            // }
+                ).catch((error) => {
+                    setisResponse(false)
+                    alert(error)
+                })
+            }
         }
 
 

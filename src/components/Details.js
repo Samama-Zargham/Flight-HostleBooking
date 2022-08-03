@@ -17,7 +17,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import WavyBackground from 'react-native-wavy-background';
 import COLOURS from '../consts/colours';
-
+import { CountryLIST } from '../CountryData';
 const listTab = [
     {
         status: 'Hotel'
@@ -41,8 +41,8 @@ const data = [
 ]
 
 const Details = ({ navigation, route }) => {
-    const { aircraftDaata } = route.params
-    console.log(aircraftDaata)
+    const { aircraftDaata, hotelData } = route.params
+    console.log(hotelData)
     const [status, setStatus] = useState('Hotel')
     const [datalist, setDatalist] = useState(data)
     const setStatusFilter = status => {
@@ -54,19 +54,30 @@ const Details = ({ navigation, route }) => {
         return (
             <View key={index}>
                 {
-                    item.status == "Flight" ?
-                        <View>
-                            <Text style={{fontSize:17,fontWeight:"500"}}>{"Flight "+aircraftDaata.aircraftcode}</Text>
-                            <Text style={{fontSize:17,fontWeight:"500"}}>{"Carrier "+ aircraftDaata.carrierCode}</Text>
-                            <Text style={{fontSize:17,fontWeight:"500"}}>{"Duration "+aircraftDaata.flightDuration}</Text>
-                            <Text style={{fontSize:17,fontWeight:"500"}}>{"Grand Price "+aircraftDaata.grandPrice}</Text>
-                        </View> :
-                        <View>
-                            <Text>{item.name}</Text>
-                            <Text>{item.address}</Text>
-
-                        </View>
+                    item.status == "Flight"  &&
+                    <View>
+                        <Text style={{ fontSize: 17, fontWeight: "500" }}>{"Flight " + aircraftDaata.aircraftcode}</Text>
+                        <Text style={{ fontSize: 17, fontWeight: "500" }}>{"Carrier " + aircraftDaata.carrierCode}</Text>
+                        <Text style={{ fontSize: 17, fontWeight: "500" }}>{"Duration " + aircraftDaata.flightDuration}</Text>
+                        <Text style={{ fontSize: 17, fontWeight: "500" }}>{"Grand Price  $" + aircraftDaata.grandPrice}</Text>
+                    </View>
                 }
+           
+                {
+                    item.status == "Hotel"  &&
+                    <View>
+                        <Text>{"Name  "+hotelData?.name}</Text>
+                        <Text>{"City  "+hotelData?.iataCode}</Text>
+                        {CountryLIST.map((item1, index) => {
+                    if (item1.countryCode == hotelData?.address?.countryCode) {
+                        return (
+                            <Text style={{ color: COLOURS.blue, fontWeight: 'bold', fontSize: 18 }}>{item1.countryName}</Text>
+                        )
+                    }
+                })}
+                    </View>
+                }
+
             </View>
         )
     }
@@ -78,7 +89,7 @@ const Details = ({ navigation, route }) => {
                 paddingHorizontal: 20,
                 paddingVertical: 20,
                 alignItems: 'center',
-                marginTop:10
+                marginTop: 10
             }}>
                 <TouchableOpacity
                     styles={{
@@ -127,7 +138,7 @@ const Details = ({ navigation, route }) => {
             <View style={style.content}>
                 <FlatList
                     data={datalist}
-                    keyExtractor={(e, i) => i.toString()}
+                    keyExtractor={(item, index) => index}
                     renderItem={renderItem}
                 />
             </View>

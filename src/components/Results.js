@@ -16,10 +16,12 @@ import COLOURS from '../consts/colours';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import { CountryLIST } from '../CountryData';
+import axios from "axios";
+import URL from '../AmadeusRouts/URL';
 
 const Results = ({ route, navigation }) => {
 
-    const { AmadeusDataa } = route.params;
+    const { AmadeusDataa, access_token } = route.params;
     // console.log("---->>>>>>>>>>>>>>>>>>>>>>> ", JSON.stringify(AmadeusDataa))
     // console.log("-----------" + JSON.stringify(CountryLIST))
 
@@ -29,10 +31,28 @@ const Results = ({ route, navigation }) => {
         { name: 'LAOS', key: '3', price: '$500', image: require('../images/laos.png') },
     ])
 
+    const onSelectCountry = async (cityCode, aircraftDaata) => {
+        await axios.get(
+            URL.Get_hotels_from_city + `?cityCode=${cityCode}&radius=1`,
+
+            {
+                headers: {
+                    'Authorization': `Bearer ${access_token}`
+                }
+            }
+        ).then((res) => {
+            let Hotel = res?.data?.data[0]
+            if (res) {
+                navigation.navigate('Details', { aircraftDaata: aircraftDaata, hotelData: Hotel })
+
+            }
+        })
+    }
+
     const renderItem = ({ item, index }) => {
 
         return (
-            <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.navigate('Details', { aircraftDaata: item?.aircraftDaata })}>
+            <TouchableOpacity key={index} activeOpacity={0.9} onPress={() => onSelectCountry(item.cityCode, item?.aircraftDaata)}>
                 <View style={style.resultItem}>
                     {/* <View>
                         <Image style={style.image} source={item.image}></Image>
@@ -101,6 +121,7 @@ const Results = ({ route, navigation }) => {
                 <View>
                     <FlatList
                         data={AmadeusDataa}
+                        keyExtractor={(item, index) => index.toString()}
                         renderItem={renderItem}
                         ListEmptyComponent={<Text>There's no options at the moment</Text>}
                     />

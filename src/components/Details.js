@@ -12,7 +12,7 @@ import {
     Dimensions,
     TouchableOpacity,
     Image,
-  } from 'react-native';
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import WavyBackground from 'react-native-wavy-background';
@@ -25,7 +25,7 @@ const listTab = [
     {
         status: 'Flight'
     },
-    
+
 ]
 
 const data = [
@@ -40,32 +40,45 @@ const data = [
     },
 ]
 
-const Details = ({ navigation }) => {
+const Details = ({ navigation, route }) => {
+    const { aircraftDaata } = route.params
+    console.log(aircraftDaata)
     const [status, setStatus] = useState('Hotel')
     const [datalist, setDatalist] = useState(data)
     const setStatusFilter = status => {
         setDatalist([...data.filter(e => e.status === status)])
-        
+
         setStatus(status)
     }
-    const renderItem = ({item, index}) => {
+    const renderItem = ({ item, index }) => {
         return (
             <View key={index}>
-                <View>
-                    <Text>{item.name}</Text>
-                    <Text>{item.address}</Text>
-                </View>
+                {
+                    item.status == "Flight" ?
+                        <View>
+                            <Text style={{fontSize:17,fontWeight:"500"}}>{"Flight "+aircraftDaata.aircraftcode}</Text>
+                            <Text style={{fontSize:17,fontWeight:"500"}}>{"Carrier "+ aircraftDaata.carrierCode}</Text>
+                            <Text style={{fontSize:17,fontWeight:"500"}}>{"Duration "+aircraftDaata.flightDuration}</Text>
+                            <Text style={{fontSize:17,fontWeight:"500"}}>{"Grand Price "+aircraftDaata.grandPrice}</Text>
+                        </View> :
+                        <View>
+                            <Text>{item.name}</Text>
+                            <Text>{item.address}</Text>
+
+                        </View>
+                }
             </View>
         )
     }
 
-    function renderHeader(){
+    function renderHeader() {
         return (
             <View style={{
                 flexDirection: 'row',
                 paddingHorizontal: 20,
                 paddingVertical: 20,
-                alignItems: 'center'
+                alignItems: 'center',
+                marginTop:10
             }}>
                 <TouchableOpacity
                     styles={{
@@ -80,7 +93,7 @@ const Details = ({ navigation }) => {
 
                 </TouchableOpacity>
 
-                <View style={{ flex:1, alignItems: 'center', justifyContent: 'center' }}>
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <Text style={{ color: COLOURS.black, fontWeight: 'bold' }}>
                         JAPAN
                     </Text>
@@ -99,99 +112,99 @@ const Details = ({ navigation }) => {
         )
     }
 
-  return (
-    <SafeAreaView style={{flex:1, backgroundColor: COLOURS.white,}}>
-        {renderHeader()}
-        <View style={style.listTab}>
-            {
-                listTab.map(e => (
-                    <TouchableOpacity style={[style.btnTab, status === e.status && style.btnTabActive]} onPress={() => setStatusFilter(e.status)}>
-                     <Text style={[style.textTab, status === e.status && style.textTabActive]}>{e.status}</Text>
-                    </TouchableOpacity>
-                ))  
-            }
-        </View>
-        <View style={style.content}>
-            <FlatList
-                data = {datalist}
-                keyExtractor = {(e, i) => i.toString()}
-                renderItem = {renderItem}
-            />
-        </View>
-        <TouchableOpacity
-            style={style.btnContainer}
-            activeOpacity={0.8}
-            onPress={() => console.log('booking button pressed')}
-            >
-            <View style={style.btn}>
-                <Text
-                style={{
-                    fontWeight: "bold",
-                    color: COLOURS.white,
-                    fontSize: 16,
-                }}
-                >
-                BOOK!
-                </Text>
+    return (
+        <SafeAreaView style={{ flex: 1, backgroundColor: COLOURS.white, }}>
+            {renderHeader()}
+            <View style={style.listTab}>
+                {
+                    listTab.map(e => (
+                        <TouchableOpacity style={[style.btnTab, status === e.status && style.btnTabActive]} onPress={() => setStatusFilter(e.status)}>
+                            <Text style={[style.textTab, status === e.status && style.textTabActive]}>{e.status}</Text>
+                        </TouchableOpacity>
+                    ))
+                }
             </View>
-        </TouchableOpacity>
-    </SafeAreaView>
-  )
+            <View style={style.content}>
+                <FlatList
+                    data={datalist}
+                    keyExtractor={(e, i) => i.toString()}
+                    renderItem={renderItem}
+                />
+            </View>
+            <TouchableOpacity
+                style={style.btnContainer}
+                activeOpacity={0.8}
+                onPress={() => console.log('booking button pressed')}
+            >
+                <View style={style.btn}>
+                    <Text
+                        style={{
+                            fontWeight: "bold",
+                            color: COLOURS.white,
+                            fontSize: 16,
+                        }}
+                    >
+                        BOOK!
+                    </Text>
+                </View>
+            </TouchableOpacity>
+        </SafeAreaView>
+    )
 };
 
 const style = StyleSheet.create({
-   listTab: {
-    backgroundColor: COLOURS.white,
-    marginLeft: 20,
-    flexDirection: 'row'
-   },
+    listTab: {
+        backgroundColor: COLOURS.white,
+        marginLeft: 20,
+        flexDirection: 'row'
+    },
 
-   btnTab: {
-    width: Dimensions.get('window').width / 3.5,
-    flexDirection: 'row',
-    borderWidth: 0.5,
-    borderColor: COLOURS.orange,
-    padding: 10,
-    justifyContent: 'center',
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-   },
+    btnTab: {
+        width: Dimensions.get('window').width / 3.5,
+        flexDirection: 'row',
+        borderWidth: 0.5,
+        borderColor: COLOURS.orange,
+        padding: 10,
+        justifyContent: 'center',
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
+    },
 
-   textTab: {
-    fontSize: 16,
-   },
+    textTab: {
+        fontSize: 16,
+    },
 
-   btnTabActive: {
-    backgroundColor: COLOURS.orange,
-   },
+    btnTabActive: {
+        backgroundColor: COLOURS.orange,
+    },
 
-   textTabActive: {
-    color: COLOURS.white,
-   },
+    textTabActive: {
+        color: COLOURS.white,
+    },
 
-   content: {
-    padding: 20,
-    marginHorizontal: 20,
-    borderWidth: 1,
-    borderColor: COLOURS.orange,
-    height: 500,
-    borderTopRightRadius: 10,
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
-   },
+    content: {
+        padding: 20,
+        marginHorizontal: 20,
+        borderWidth: 1,
+        borderColor: COLOURS.orange,
+        height: 500,
+        borderTopRightRadius: 10,
+        borderBottomLeftRadius: 10,
+        borderBottomRightRadius: 10,
+    },
 
-   btnContainer: {
-    marginHorizontal: 20,
-    marginTop: 20,
-  },
+    btnContainer: {
+        marginHorizontal: 20,
+        marginTop: 20,
+    },
 
-  btn: {
-    height: 50,
-    backgroundColor: COLOURS.orange,
-    borderRadius: 10,
-    justifyContent: "center",
-    alignItems: "center",
-  },
+    btn: {
+        height: 50,
+        backgroundColor: COLOURS.orange,
+        borderRadius: 10,
+        justifyContent: "center",
+        alignItems: "center",
+    },
 
 });
 

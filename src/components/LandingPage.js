@@ -24,6 +24,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import Constants from 'expo-constants';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { setStatusBarNetworkActivityIndicatorVisible } from "expo-status-bar";
+
 const { width, height } = Dimensions.get("window")
 const LandingPage = ({ navigation }) => {
     const [bugget, setBugget] = useState()
@@ -68,38 +69,38 @@ const LandingPage = ({ navigation }) => {
     const [Month, setMonth] = useState()
     var count = 0;
 
-    const requestMergeData = async (item, access_token) => {
-        return new Promise(async (resolve, reject) => {
-            try {
-                await axios.get(
-                    // URL.Flight_Offers + "?originLocationCode=MAD&destinationLocationCode=PAR&departureDate=2022-08-01&adults=2",
-                    `https://test.api.amadeus.com/v1/reference-data/locations?subType=AIRPORT,CITY&keyword=${item.cityCode}`,
-                    {
-                        headers: {
-                            'Authorization': `Bearer ${access_token}`
-                        }
-                    }
-                ).then((res) => {
-                    count = count + 1
-                    var countryName = res?.data?.data[0]?.address?.countryName
-                    console.log("--------------->< ", JSON.stringify(res))
-                    if (count < 4) {
-                        newMyAmadeusDataa.push({ "countryCode": item.countryCode, "cityCode": item.cityCode, "aircraftDaata": item.aircraftDaata, "countryName": countryName })
-                    } if (newMyAmadeusDataa.length > 2) {
-                        console.log("--------------->< ", JSON.stringify(newMyAmadeusDataa))
-                    }
+    // const requestMergeData = async (item, access_token) => {
+    //     return new Promise(async (resolve, reject) => {
+    //         try {
+    //             await axios.get(
+    //                 // URL.Flight_Offers + "?originLocationCode=MAD&destinationLocationCode=PAR&departureDate=2022-08-01&adults=2",
+    //                 `https://test.api.amadeus.com/v1/reference-data/locations?subType=AIRPORT,CITY&keyword=${item.cityCode}`,
+    //                 {
+    //                     headers: {
+    //                         'Authorization': `Bearer ${access_token}`
+    //                     }
+    //                 }
+    //             ).then((res) => {
+    //                 count = count + 1
+    //                 var countryName = res?.data?.data[0]?.address?.countryName
+    //                 console.log("--------------->< ", JSON.stringify(res))
+    //                 if (count < 4) {
+    //                     newMyAmadeusDataa.push({ "countryCode": item.countryCode, "cityCode": item.cityCode, "aircraftDaata": item.aircraftDaata, "countryName": countryName })
+    //                 } if (newMyAmadeusDataa.length > 2) {
+    //                     console.log("--------------->< ", JSON.stringify(newMyAmadeusDataa))
+    //                 }
 
-                    resolve()
-                })
+    //                 resolve()
+    //             })
 
-            } catch (error) {
-                // navigation.navigate("Results", { AmadeusDataa: MyAmadeusDataa })
+    //         } catch (error) {
 
-                reject()
-                console.log("error ==>  " + error)
-            }
-        })
-    }
+
+    //             reject()
+    //             console.log("error ==>  " + error)
+    //         }
+    //     })
+    // }
     const onChangeReturn = (event, selectDate) => {
         const currentDate = selectDate || date;
         setShowReturning(Platform.OS === 'ios');
@@ -164,7 +165,7 @@ const LandingPage = ({ navigation }) => {
                     `https://test.api.amadeus.com/v1/reference-data/locations?subType=AIRPORT,CITY&keyword=${CityAirport}`,
                     {
                         headers: {
-                            'Authorization': `Bearer ${"hhrh6Pc3Of3yZhzwKOyKfBYINSwp"}`
+                            'Authorization': `Bearer ${"pughqvp73zzwLWqJQEDJmRpBGTUu"}`
                         }
                     }
                 )
@@ -189,7 +190,7 @@ const LandingPage = ({ navigation }) => {
                                 URL.Flight_Offers + `?originLocationCode=${iataCode}&destinationLocationCode=PAR&departureDate=${departing}&adults=${Persons}&returnDate=${returning}&maxPrice=${bugget}`,
                                 {
                                     headers: {
-                                        'Authorization': `Bearer ${"hhrh6Pc3Of3yZhzwKOyKfBYINSwp"}`
+                                        'Authorization': `Bearer ${"pughqvp73zzwLWqJQEDJmRpBGTUu"}`
                                     }
                                 }
                             )
@@ -245,10 +246,11 @@ const LandingPage = ({ navigation }) => {
                                         console.log("MyAmadeusDataa===>>>   ", JSON.stringify(MyAmadeusDataa))
 
                                         if (MyAmadeusDataa.length > 1) {
-                                            for (const Amadeuitem of MyAmadeusDataa) {
-                                                console.log("chla rayy")
-                                                await requestMergeData(Amadeuitem, "hhrh6Pc3Of3yZhzwKOyKfBYINSwp")
-                                            }
+                                            // for (const Amadeuitem of MyAmadeusDataa) {
+                                            //     console.log("chla rayy")
+                                            //     await requestMergeData(Amadeuitem, "hhrh6Pc3Of3yZhzwKOyKfBYINSwp")
+                                            // }
+                                            navigation.navigate("Results", { AmadeusDataa: MyAmadeusDataa })
 
                                         }
                                         else {
@@ -358,9 +360,9 @@ const LandingPage = ({ navigation }) => {
                             }}
                             placeholder="what's your BUDGET?" />
                     </View>
-                    <View style={[style.inputContainer]}>
+                    <View style={[style.inputContainer,]}>
                         <Icon style={{ color: COLOURS.orange }} name="person-add-alt" size={28} />
-                        <TextInput style={{ paddingLeft: 10, color: COLOURS.grey }}
+                        <TextInput style={{ paddingLeft: 10, color: COLOURS.grey , flex:1}}
                             keyboardType="number-pad"
                             onChangeText={(per) => {
                                 setPersons(per)

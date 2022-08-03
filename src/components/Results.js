@@ -15,11 +15,13 @@ import { getPixelSizeForLayoutSize } from 'react-native/Libraries/Utilities/Pixe
 import COLOURS from '../consts/colours';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import { CountryLIST } from '../CountryData';
 
 const Results = ({ route, navigation }) => {
 
     const { AmadeusDataa } = route.params;
-    console.log("---->>>>>>>>>>>>>>>>>>>>>>> ", JSON.stringify(AmadeusDataa))
+    // console.log("---->>>>>>>>>>>>>>>>>>>>>>> ", JSON.stringify(AmadeusDataa))
+    // console.log("-----------" + JSON.stringify(CountryLIST))
 
     const [countries, setCountries] = useState([
         { name: 'JAPAN', key: '1', price: '$1000', image: require('../images/japan.jpeg') },
@@ -32,12 +34,17 @@ const Results = ({ route, navigation }) => {
         return (
             <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.navigate('Details', { aircraftDaata: item?.aircraftDaata })}>
                 <View style={style.resultItem}>
-                    <View>
+                    {/* <View>
                         <Image style={style.image} source={item.image}></Image>
-                    </View>
+                    </View> */}
                     <View style={style.itemName}>
-                        <Text style={{ color: COLOURS.blue, fontWeight: '800', fontSize: 15 }}>{item.countryName}</Text>
-
+                        {CountryLIST.map((item1, index) => {
+                            if (item1.countryCode == item.countryCode) {
+                                return (
+                                    <Text style={{ color: COLOURS.blue, fontWeight: 'bold', fontSize: 22 }}>{item1.countryName}</Text>
+                                )
+                            }
+                        })}
                     </View>
                     <View style={style.itemPrice}>
                         <Text style={{ color: COLOURS.white, fontWeight: '800', fontSize: 18 }}>{item?.aircraftDaata?.grandPrice}</Text>

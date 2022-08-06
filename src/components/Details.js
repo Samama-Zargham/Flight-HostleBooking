@@ -13,6 +13,7 @@ import {
     TouchableOpacity,
     Image,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import WavyBackground from 'react-native-wavy-background';
@@ -41,11 +42,16 @@ const data = [
 ]
 
 const Details = ({ navigation, route }) => {
-    const { aircraftDaata, hotelData } = route.params
+    const { aircraftDaata, hotelData, hotelAddress, Beds } = route.params
     var departTime = aircraftDaata.departTime
     var returnTime = aircraftDaata.returnTime
+    const [countryName, setcountryName] = useState("")
     const Seatnumber = aircraftDaata.Seatnumber
-    console.log("aircraftDaata ==> ", JSON.stringify(aircraftDaata) + "hotel data ====>   " + JSON.stringify(hotelData))
+    const Seatnumber1 = Seatnumber.substring(0, 3)
+    const hotelGrandPrice = 170 * Beds
+    const roomType = Beds == "1" ? "Single bed Luxury room, with Wireless Internet" : Beds == "2" ?
+        "Double bed Deluxe room, with Wireless Internet " : Beds == "1" && "One Single two twin bed Super Deluxe room, with Wireless Internet "
+    console.log("aircraftDaata ==> ", JSON.stringify(aircraftDaata) + "hotel data ====>   " + JSON.stringify(hotelAddress))
     const [status, setStatus] = useState('Hotel')
     const [datalist, setDatalist] = useState(data)
     const setStatusFilter = status => {
@@ -66,30 +72,61 @@ const Details = ({ navigation, route }) => {
                         <Text style={{ fontSize: 17, fontWeight: "500" }}>{"Departing Date " + aircraftDaata.departDate}</Text>
                         <Text style={{ fontSize: 17, fontWeight: "500" }}>{"Departing Time " + departTime.substring(11, 16)}</Text>
                         <Text style={{ fontSize: 17, fontWeight: "500" }}>{"Duration " + aircraftDaata.flightDuration}</Text>
-                        <Text style={{ fontSize: 17, fontWeight: "500" }}>{"Seat Number " + Seatnumber.substring(0, 3)}</Text>
+                        {Beds == "1" &&
+                            <Text style={{ fontSize: 17, fontWeight: "500" }}>{"Seat Number " + Seatnumber1}</Text>
+                        }
+                        {Beds == "2" &&
+                            <Text style={{ fontSize: 17, fontWeight: "500" }}>{"Seat Numbers   " + Seatnumber1 + ",  " + (parseInt(Seatnumber1) + 1)}</Text>
+                        }
+                        {Beds == "3" &&
+                            <Text style={{ fontSize: 17, fontWeight: "500" }}>{"Seat Numbers   " + Seatnumber1 + ",  " + (parseInt(Seatnumber1) + 1) + ",  " + (parseInt(Seatnumber1) + 2)}</Text>
+                        }
                         <Text style={{ fontSize: 17, fontWeight: "500", color: COLOURS.blue }}>{"Returning "}</Text>
                         <Text style={{ fontSize: 17, fontWeight: "500" }}>{"Flight " + aircraftDaata.aircraftcode}</Text>
                         <Text style={{ fontSize: 17, fontWeight: "500" }}>{"Carrier " + aircraftDaata.carrierCode}</Text>
                         <Text style={{ fontSize: 17, fontWeight: "500" }}>{"Returning Date " + aircraftDaata.returDate}</Text>
                         <Text style={{ fontSize: 17, fontWeight: "500" }}>{"Returning Time " + returnTime.substring(11, 16)}</Text>
                         <Text style={{ fontSize: 17, fontWeight: "500" }}>{"Duration " + aircraftDaata.flightDuration}</Text>
-                        <Text style={{ fontSize: 17, fontWeight: "500" }}>{"Seat Number " + Seatnumber.substring(0, 3)}</Text>
+                        {Beds == "1" &&
+                            <Text style={{ fontSize: 17, fontWeight: "500" }}>{"Seat Number " + Seatnumber1}</Text>
+                        }
+                        {Beds == "2" &&
+                            <Text style={{ fontSize: 17, fontWeight: "500" }}>{"Seat Numbers   " + Seatnumber1 + ",  " + (parseInt(Seatnumber1) + 1)}</Text>
+                        }
+                        {Beds == "3" &&
+                            <Text style={{ fontSize: 17, fontWeight: "500" }}>{"Seat Numbers   " + Seatnumber1 + ",  " + (parseInt(Seatnumber1) + 1) + ",  " + (parseInt(Seatnumber1) + 2)}</Text>
+                        }
                     </View>
                 }
 
                 {
                     status == "Hotel" && index == 0 &&
-                    <View>
-                        <Text>{"Name  " + hotelData?.name}</Text>
-                        <Text>{"City  " + hotelData?.iataCode}</Text>
-                        {CountryLIST.map((item1, index) => {
-                            if (item1.countryCode == hotelData?.address?.countryCode) {
-                                return (
-                                    <Text style={{ color: COLOURS.blue, fontWeight: 'bold', fontSize: 18 }}>{item1.countryName}</Text>
-                                )
-                            }
-                        })}
-                    </View>
+                        hotelData != undefined ?
+                        <View>
+                            {CountryLIST.map((item1, index) => {
+                                if (item1.countryCode == hotelData?.address?.countryCode) {
+                                    setcountryName(item1.countryName)
+                                    // console.log(countryName)
+                                    return (
+                                        <Text style={{ color: COLOURS.blue, fontWeight: 'bold', fontSize: 18 }}>{item1.countryName}</Text>
+                                    )
+                                }
+                            })}
+                            <Text style={{ color: COLOURS.blue }}>{"Hotel:  " + hotelData?.name}</Text>
+                            <Text>{"City:  " + hotelAddress[0]?.city}</Text>
+                            <Text>{"Street:  " + hotelAddress[0]?.street}</Text>
+                            <Text>{"PostelCode:  " + hotelAddress[0]?.postalCode}</Text>
+                            <Text>{"Region:  " + hotelAddress[0]?.region}</Text>
+                            <Text>{"Subregion:  " + hotelAddress[0]?.subregion}</Text>
+                            <Text>{"No of Beds:  " + Beds}</Text>
+                            <Text>{"Room type  " + roomType}</Text>
+                            <Text>{"Price for 1 person:  " + "$170"}</Text>
+                            <Text>{"Your Grand Price:  $" + hotelGrandPrice}</Text>
+
+
+                        </View> :
+                        status == "Hotel" && index == 0 && hotelData == null &&
+                        <Text>No Hotel available</Text>
                 }
 
             </View>
@@ -120,11 +157,11 @@ const Details = ({ navigation, route }) => {
 
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <Text style={{ color: COLOURS.black, fontWeight: 'bold' }}>
-                        JAPAN
+                        OFFER FOR YOU
                     </Text>
                 </View>
 
-                <TouchableOpacity
+                {/* <TouchableOpacity
                     styles={{
                         alignItems: 'center',
                         justifyContent: 'center'
@@ -132,7 +169,7 @@ const Details = ({ navigation, route }) => {
                     onPress={() => navigation.navigate('Login')}
                 >
                     <FontAwesomeIcon style={{ color: COLOURS.orange }} name="user" size={25} />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>
         )
     }
@@ -156,24 +193,58 @@ const Details = ({ navigation, route }) => {
                     renderItem={renderItem}
                 />
             </View>
-            <TouchableOpacity
-                style={style.btnContainer}
-                activeOpacity={0.8}
-                onPress={() => console.log('booking button pressed')}
-            >
-                <View style={style.btn}>
-                    <Text
-                        style={{
-                            fontWeight: "bold",
-                            color: COLOURS.white,
-                            fontSize: 16,
+            {
+                status == "Hotel" && hotelData == null ? null :
+                    <TouchableOpacity
+                        style={style.btnContainer}
+                        activeOpacity={0.8}
+                        onPress={async () => {
+                            let AsyncObject = {
+                                "TotalGrandPrice": aircraftDaata.grandPrice + hotelGrandPrice,
+                                "DepartingTime": departTime.substring(11, 16),
+                                "ReturningTime": returnTime.substring(11, 16),
+                                "DepartingDate": aircraftDaata.departDate,
+                                "ReturningDate": aircraftDaata.returDate,
+                                "Flight": aircraftDaata.aircraftcode,
+                                "Carrier": aircraftDaata.carrierCode,
+                                "SeatNumbers": Beds == "1" ? Seatnumber1 : Beds == "2" ? Seatnumber1 + ",  " + (parseInt(Seatnumber1) + 1) : Beds == "3" && Seatnumber1 + ",  " + (parseInt(Seatnumber1) + 1) + ",  " + (parseInt(Seatnumber1) + 2),
+                                "CountryName": countryName,
+                                "Hotel:  ": hotelData?.name,
+                                "City:  ": hotelAddress[0]?.city == null ? hotelData.iataCode : hotelAddress[0]?.city,
+                                "Street:  ": hotelAddress[0]?.street,
+                                "PostelCode:  ": hotelAddress[0]?.postalCode,
+                                "Region:  ": hotelAddress[0]?.region,
+                                "Subregion:  ": hotelAddress[0]?.subregion,
+                                "No of Beds:  ": Beds,
+                                "Room type  ": roomType,
+                                "Price for 1 person:  ": "$170",
+                                "Your Grand Price:  $": hotelGrandPrice,
+                            }
+
+                            try {
+                                await AsyncStorage.setItem('@AsyncObject', JSON.stringify(AsyncObject)).then(() => {
+                                    navigation.replace("MyBookings")
+                                })
+                            } catch (e) {
+                                // saving error
+                            }
+
                         }}
                     >
-                        BOOK!
-                    </Text>
-                </View>
-            </TouchableOpacity>
-        </SafeAreaView>
+                        <View style={style.btn}>
+                            <Text
+                                style={{
+                                    fontWeight: "bold",
+                                    color: COLOURS.white,
+                                    fontSize: 16,
+                                }}
+                            >
+                                BOOK HOTEL AND FLIGHT!
+                            </Text>
+                        </View>
+                    </TouchableOpacity>
+            }
+        </SafeAreaView >
     )
 };
 

@@ -97,6 +97,15 @@ const LandingPage = ({ navigation }) => {
         if (!departing || !returning || !CityAirport || !bugget || !Persons) {
             alert("Please fill all Fields or check internet connection")
         }
+        else if (departing == returning) {
+            alert("please make 1 day differnce")
+        }
+        else if (bugget < 700) {
+            alert("bugget must be greater than 700")
+        }
+        else if (Persons > 3) {
+            alert("Max 3 seats allow")
+        }
         else if (departing) {
 
             if (isDateBeforeToday(new Date(year, Month, cDate))) {
@@ -105,32 +114,32 @@ const LandingPage = ({ navigation }) => {
             else {
                 setisResponse(true)
                 setMyAmadeusDataa([])
-                // var formBody = [];
-                // for (var property in details) {
-                //     var encodedKey = encodeURIComponent(property);
-                //     var encodedValue = encodeURIComponent(details[property]);
-                //     formBody.push(encodedKey + "=" + encodedValue);
-                // }
-                // formBody = formBody.join("&");
-                // console.log(" Body ===>>> " + formBody)
+                var formBody = [];
+                for (var property in details) {
+                    var encodedKey = encodeURIComponent(property);
+                    var encodedValue = encodeURIComponent(details[property]);
+                    formBody.push(encodedKey + "=" + encodedValue);
+                }
+                formBody = formBody.join("&");
+                console.log(" Body ===>>> " + formBody)
 
-                // await fetch(URL.Authorize_url, {
-                //     method: 'POST',
-                //     headers: {
-                //         'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-                //     },
-                //     body: formBody
-                // }).then((response) => {
-                //     return response.json();
-                // }).then(async (res) => {
-                //     console.log("----Response >> ", JSON.stringify(res))
-                //     var access_token = res.access_token
+                await fetch(URL.Authorize_url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+                    },
+                    body: formBody
+                }).then((response) => {
+                    return response.json();
+                }).then(async (res) => {
+                    console.log("----Response >> ", JSON.stringify(res))
+                    var access_token = res.access_token
                 await axios.get(
                     // URL.Flight_Offers + "?originLocationCode=MAD&destinationLocationCode=PAR&departureDate=2022-08-01&adults=2",
                     `https://test.api.amadeus.com/v1/reference-data/locations?subType=AIRPORT,CITY&keyword=${CityAirport}`,
                     {
                         headers: {
-                            'Authorization': `Bearer ${"wzwTzP6uQGkStmAEIR5hKv6e9Rxc"}`
+                            'Authorization': `Bearer ${"5B4WOTZv8kf8B5ddtfpeH4iOwshh"}`
                         }
                     }
                 )
@@ -155,7 +164,7 @@ const LandingPage = ({ navigation }) => {
                                 URL.Flight_Offers + `?originLocationCode=${iataCode}&destinationLocationCode=PAR&departureDate=${departing}&adults=${Persons}&returnDate=${returning}&maxPrice=${bugget}`,
                                 {
                                     headers: {
-                                        'Authorization': `Bearer ${"wzwTzP6uQGkStmAEIR5hKv6e9Rxc"}`
+                                        'Authorization': `Bearer ${"5B4WOTZv8kf8B5ddtfpeH4iOwshh"}`
                                     }
                                 }
                             )
@@ -208,10 +217,10 @@ const LandingPage = ({ navigation }) => {
                                                                 null
                                                                 :
                                                                 (index == len - 1 && MyAmadeusDataa.length < 3) &&
-                                                                MyAmadeusDataa.push({ "countryCode": t.countryCode, "cityCode": t.cityCode, "aircraftDaata": aircraftDaata })
+                                                                MyAmadeusDataa.push({ "countryCode": t.countryCode, "cityCode": t.cityCode, "aircraftDaata": aircraftDaata, "Persons": Persons })
                                                         })
                                                     } else {
-                                                        MyAmadeusDataa.push({ "countryCode": t.countryCode, "cityCode": t.cityCode, "aircraftDaata": aircraftDaata })
+                                                        MyAmadeusDataa.push({ "countryCode": t.countryCode, "cityCode": t.cityCode, "aircraftDaata": aircraftDaata, "Persons": Persons })
                                                         break;
                                                     }
                                                     break;
@@ -225,7 +234,7 @@ const LandingPage = ({ navigation }) => {
                                         console.log("MyAmadeusDataa===>>>   ", JSON.stringify(MyAmadeusDataa))
 
                                         if (MyAmadeusDataa.length > 0) {
-                                            navigation.navigate("Results", { AmadeusDataa: MyAmadeusDataa, access_token: "wzwTzP6uQGkStmAEIR5hKv6e9Rxc" })
+                                            navigation.navigate("Results", { AmadeusDataa: MyAmadeusDataa, access_token: "5B4WOTZv8kf8B5ddtfpeH4iOwshh" })
 
                                         }
                                         else {
@@ -252,11 +261,11 @@ const LandingPage = ({ navigation }) => {
 
 
             }
-            //     ).catch((error) => {
-            //         setisResponse(false)
-            //         alert(error)
-            //     })
-            // }
+                ).catch((error) => {
+                    setisResponse(false)
+                    alert(error)
+                })
+            }
         }
 
 

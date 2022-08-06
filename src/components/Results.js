@@ -18,6 +18,8 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import { CountryLIST } from '../CountryData';
 import axios from "axios";
 import URL from '../AmadeusRouts/URL';
+import * as Location from 'expo-location'
+
 
 const Results = ({ route, navigation }) => {
 
@@ -25,24 +27,51 @@ const Results = ({ route, navigation }) => {
     // console.log("---->>>>>>>>>>>>>>>>>>>>>>> ", JSON.stringify(AmadeusDataa))
     // console.log("-----------" + JSON.stringify(CountryLIST))
 
+    const getAddress = async (lat, lng) => {
+        console.log(" fgfg  ", lat, "dfdfdf", lng)
+        let { status } = await Location.requestForegroundPermissionsAsync(); // Get the location permission from the user and extract the 'status' key from it.
+        if (status !== 'granted') {
 
+            alert('permission denied!');
+
+        }
+        return await Location.reverseGeocodeAsync({
+            latitude: lat,
+            longitude: lng
+        });
+
+    }
     const onSelectCountry = async (cityCode, aircraftDaata) => {
-        await axios.get(
-            URL.Get_hotels_from_city + `?cityCode=${cityCode}&radius=1`,
+        try {
+            await axios.get(
+                URL.Get_hotels_from_city + `?cityCode=${cityCode}&radius=1`,
 
-            {
-                headers: {
-                    'Authorization': `Bearer ${access_token}`
+                {
+                    headers: {
+                        'Authorization': `Bearer ${access_token}`
+                    }
                 }
-            }
-        ).then((res) => {
-            let Hotel = res?.data?.data[0]
-            console.log("hdbsjhb", JSON.stringify(res?.data))
-            if (res) {
-                navigation.navigate('Details', { aircraftDaata: aircraftDaata, hotelData: Hotel })
+            ).then(async (res) => {
+                let Hotel = res?.data?.data[0]
+                let lat = res?.data?.data[0]?.geoCode?.latitude
+                let lng = res?.data?.data[0]?.geoCode?.longitude
+                let hotelId = res?.data?.data[0]?.hotelId
+                // console.log("hdbsjhb", JSON.stringify(res?.data))
+                console.log("-----------------------   ", hotelId)
+                let Address = await getAddress(lat, lng)
 
-            }
-        })
+                console.log("first ==== >>> ", JSON.stringify(Address))
+                if (res) {
+                    navigation.navigate('Details', { aircraftDaata: aircraftDaata, hotelData: Hotel, hotelAddress: Address, Beds: AmadeusDataa[0]?.Persons })
+
+                }
+            })
+        } catch (error) {
+            alert("Hotels not available book yourself")
+            navigation.navigate('Details', { aircraftDaata: aircraftDaata, hotelData: null })
+
+        }
+
     }
 
     const renderItem = ({ item, index }) => {
@@ -93,11 +122,11 @@ const Results = ({ route, navigation }) => {
 
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <Text style={{ color: COLOURS.black, fontWeight: 'bold' }}>
-                        $1,000
+                        CITIES FOR ADVENTURE
                     </Text>
                 </View>
 
-                <TouchableOpacity
+                {/* <TouchableOpacity
                     styles={{
                         alignItems: 'center',
                         justifyContent: 'center'
@@ -105,7 +134,7 @@ const Results = ({ route, navigation }) => {
                     onPress={() => navigation.navigate('Login')}
                 >
                     <FontAwesomeIcon style={{ color: COLOURS.orange }} name="user" size={25} />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>
         )
     }

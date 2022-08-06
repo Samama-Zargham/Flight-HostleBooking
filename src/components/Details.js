@@ -42,7 +42,10 @@ const data = [
 
 const Details = ({ navigation, route }) => {
     const { aircraftDaata, hotelData } = route.params
-    console.log(hotelData)
+    var departTime = aircraftDaata.departTime
+    var returnTime = aircraftDaata.returnTime
+    const Seatnumber = aircraftDaata.Seatnumber
+    console.log("aircraftDaata ==> ", JSON.stringify(aircraftDaata) + "hotel data ====>   " + JSON.stringify(hotelData))
     const [status, setStatus] = useState('Hotel')
     const [datalist, setDatalist] = useState(data)
     const setStatusFilter = status => {
@@ -54,27 +57,38 @@ const Details = ({ navigation, route }) => {
         return (
             <View key={index}>
                 {
-                    item.status == "Flight"  &&
+                    status == "Flight" && index == 0 &&
                     <View>
+                        <Text style={{ fontSize: 17, fontWeight: "500", color: COLOURS.blue }}>{"Grand Price  $" + aircraftDaata.grandPrice}</Text>
+                        <Text style={{ fontSize: 17, fontWeight: "500", color: COLOURS.blue }}>{"Departing  "}</Text>
                         <Text style={{ fontSize: 17, fontWeight: "500" }}>{"Flight " + aircraftDaata.aircraftcode}</Text>
                         <Text style={{ fontSize: 17, fontWeight: "500" }}>{"Carrier " + aircraftDaata.carrierCode}</Text>
+                        <Text style={{ fontSize: 17, fontWeight: "500" }}>{"Departing Date " + aircraftDaata.departDate}</Text>
+                        <Text style={{ fontSize: 17, fontWeight: "500" }}>{"Departing Time " + departTime.substring(11, 16)}</Text>
                         <Text style={{ fontSize: 17, fontWeight: "500" }}>{"Duration " + aircraftDaata.flightDuration}</Text>
-                        <Text style={{ fontSize: 17, fontWeight: "500" }}>{"Grand Price  $" + aircraftDaata.grandPrice}</Text>
+                        <Text style={{ fontSize: 17, fontWeight: "500" }}>{"Seat Number " + Seatnumber.substring(0, 3)}</Text>
+                        <Text style={{ fontSize: 17, fontWeight: "500", color: COLOURS.blue }}>{"Returning "}</Text>
+                        <Text style={{ fontSize: 17, fontWeight: "500" }}>{"Flight " + aircraftDaata.aircraftcode}</Text>
+                        <Text style={{ fontSize: 17, fontWeight: "500" }}>{"Carrier " + aircraftDaata.carrierCode}</Text>
+                        <Text style={{ fontSize: 17, fontWeight: "500" }}>{"Returning Date " + aircraftDaata.returDate}</Text>
+                        <Text style={{ fontSize: 17, fontWeight: "500" }}>{"Returning Time " + returnTime.substring(11, 16)}</Text>
+                        <Text style={{ fontSize: 17, fontWeight: "500" }}>{"Duration " + aircraftDaata.flightDuration}</Text>
+                        <Text style={{ fontSize: 17, fontWeight: "500" }}>{"Seat Number " + Seatnumber.substring(0, 3)}</Text>
                     </View>
                 }
-           
+
                 {
-                    item.status == "Hotel"  &&
+                    status == "Hotel" && index == 0 &&
                     <View>
-                        <Text>{"Name  "+hotelData?.name}</Text>
-                        <Text>{"City  "+hotelData?.iataCode}</Text>
+                        <Text>{"Name  " + hotelData?.name}</Text>
+                        <Text>{"City  " + hotelData?.iataCode}</Text>
                         {CountryLIST.map((item1, index) => {
-                    if (item1.countryCode == hotelData?.address?.countryCode) {
-                        return (
-                            <Text style={{ color: COLOURS.blue, fontWeight: 'bold', fontSize: 18 }}>{item1.countryName}</Text>
-                        )
-                    }
-                })}
+                            if (item1.countryCode == hotelData?.address?.countryCode) {
+                                return (
+                                    <Text style={{ color: COLOURS.blue, fontWeight: 'bold', fontSize: 18 }}>{item1.countryName}</Text>
+                                )
+                            }
+                        })}
                     </View>
                 }
 
@@ -137,7 +151,7 @@ const Details = ({ navigation, route }) => {
             </View>
             <View style={style.content}>
                 <FlatList
-                    data={datalist}
+                    data={data}
                     keyExtractor={(item, index) => index}
                     renderItem={renderItem}
                 />

@@ -7,7 +7,7 @@ import {
     View,
     Text,
     TextInput,
-    ImageBackground,
+    Linking,
     FlatList,
     Dimensions,
     TouchableOpacity,
@@ -36,7 +36,6 @@ const LandingPage = ({ navigation }) => {
     const [departing, setDeparting] = useState('departing')
     const [CityAirport, setCityAirport] = useState("")
     const [MyAmadeusDataa, setMyAmadeusDataa] = useState([])
-    const [newMyAmadeusDataa, setnewMyAmadeusDataa] = useState([])
 
     const onChange = (event, selectDate) => {
         const currentDate = selectDate || date;
@@ -49,7 +48,7 @@ const LandingPage = ({ navigation }) => {
         setDate(cdate)
         setMonth(month)
         setYear(year)
-        let fDate = tempDate.getFullYear() + '-' + ((tempDate.getMonth() + 1) > 10 ? tempDate.getMonth() + 1 : '0' + (tempDate.getMonth() + 1)) + "-" + ((tempDate.getDate()) > 10 ? tempDate.getDate() : '0' + (tempDate.getDate()))
+        let fDate = tempDate.getFullYear() + '-' + ((tempDate.getMonth() + 1) > 9 ? tempDate.getMonth() + 1 : '0' + (tempDate.getMonth() + 1)) + "-" + ((tempDate.getDate()) > 9 ? tempDate.getDate() : '0' + (tempDate.getDate()))
         setDeparting(fDate)
         // setReturning(fDate)
     }
@@ -62,51 +61,17 @@ const LandingPage = ({ navigation }) => {
     const [modeA, setModeForReturning] = useState('date')
     const [showReturning, setShowReturning] = useState(false)
     const [returning, setReturning] = useState('returning')
-    const [FlightOffersData, setFlightOffersData] = useState([])
     const [Persons, setPersons] = useState()
     const [cDate, setDate] = useState()
     const [year, setYear] = useState()
     const [Month, setMonth] = useState()
-    var count = 0;
 
-    // const requestMergeData = async (item, access_token) => {
-    //     return new Promise(async (resolve, reject) => {
-    //         try {
-    //             await axios.get(
-    //                 // URL.Flight_Offers + "?originLocationCode=MAD&destinationLocationCode=PAR&departureDate=2022-08-01&adults=2",
-    //                 `https://test.api.amadeus.com/v1/reference-data/locations?subType=AIRPORT,CITY&keyword=${item.cityCode}`,
-    //                 {
-    //                     headers: {
-    //                         'Authorization': `Bearer ${access_token}`
-    //                     }
-    //                 }
-    //             ).then((res) => {
-    //                 count = count + 1
-    //                 var countryName = res?.data?.data[0]?.address?.countryName
-    //                 console.log("--------------->< ", JSON.stringify(res))
-    //                 if (count < 4) {
-    //                     newMyAmadeusDataa.push({ "countryCode": item.countryCode, "cityCode": item.cityCode, "aircraftDaata": item.aircraftDaata, "countryName": countryName })
-    //                 } if (newMyAmadeusDataa.length > 2) {
-    //                     console.log("--------------->< ", JSON.stringify(newMyAmadeusDataa))
-    //                 }
-
-    //                 resolve()
-    //             })
-
-    //         } catch (error) {
-
-
-    //             reject()
-    //             console.log("error ==>  " + error)
-    //         }
-    //     })
-    // }
     const onChangeReturn = (event, selectDate) => {
         const currentDate = selectDate || date;
         setShowReturning(Platform.OS === 'ios');
         setDateForReturning(currentDate);
         let tempDate = new Date(currentDate);
-        let fDate = tempDate.getFullYear() + '-' + ((tempDate.getMonth() + 1) > 10 ? tempDate.getMonth() + 1 : '0' + (tempDate.getMonth() + 1)) + "-" + ((tempDate.getDate()) > 10 ? tempDate.getDate() : '0' + (tempDate.getDate()))
+        let fDate = tempDate.getFullYear() + '-' + ((tempDate.getMonth() + 1) > 9 ? tempDate.getMonth() + 1 : '0' + (tempDate.getMonth() + 1)) + "-" + ((tempDate.getDate()) > 9 ? tempDate.getDate() : '0' + (tempDate.getDate()))
         setReturning(fDate)
     }
 
@@ -130,7 +95,7 @@ const LandingPage = ({ navigation }) => {
     const getAmadeusData = async () => {
         console.log(` departing date:  ${departing}, || returning date: ${returning}, ||  CityAirport : ${CityAirport}, ||  bugget: ${bugget} ||   Persons:   ${Persons}` + dateForReturning)
         if (!departing || !returning || !CityAirport || !bugget || !Persons) {
-            alert("Please fill all Fields")
+            alert("Please fill all Fields or check internet connection")
         }
         else if (departing) {
 
@@ -140,32 +105,32 @@ const LandingPage = ({ navigation }) => {
             else {
                 setisResponse(true)
                 setMyAmadeusDataa([])
-                var formBody = [];
-                for (var property in details) {
-                    var encodedKey = encodeURIComponent(property);
-                    var encodedValue = encodeURIComponent(details[property]);
-                    formBody.push(encodedKey + "=" + encodedValue);
-                }
-                formBody = formBody.join("&");
-                console.log(" Body ===>>> " + formBody)
+                // var formBody = [];
+                // for (var property in details) {
+                //     var encodedKey = encodeURIComponent(property);
+                //     var encodedValue = encodeURIComponent(details[property]);
+                //     formBody.push(encodedKey + "=" + encodedValue);
+                // }
+                // formBody = formBody.join("&");
+                // console.log(" Body ===>>> " + formBody)
 
-                await fetch(URL.Authorize_url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-                    },
-                    body: formBody
-                }).then((response) => {
-                    return response.json();
-                }).then(async (res) => {
-                    console.log("----Response >> ", JSON.stringify(res))
-                    var access_token = res.access_token
+                // await fetch(URL.Authorize_url, {
+                //     method: 'POST',
+                //     headers: {
+                //         'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+                //     },
+                //     body: formBody
+                // }).then((response) => {
+                //     return response.json();
+                // }).then(async (res) => {
+                //     console.log("----Response >> ", JSON.stringify(res))
+                //     var access_token = res.access_token
                 await axios.get(
                     // URL.Flight_Offers + "?originLocationCode=MAD&destinationLocationCode=PAR&departureDate=2022-08-01&adults=2",
                     `https://test.api.amadeus.com/v1/reference-data/locations?subType=AIRPORT,CITY&keyword=${CityAirport}`,
                     {
                         headers: {
-                            'Authorization': `Bearer ${access_token}`
+                            'Authorization': `Bearer ${"wzwTzP6uQGkStmAEIR5hKv6e9Rxc"}`
                         }
                     }
                 )
@@ -190,7 +155,7 @@ const LandingPage = ({ navigation }) => {
                                 URL.Flight_Offers + `?originLocationCode=${iataCode}&destinationLocationCode=PAR&departureDate=${departing}&adults=${Persons}&returnDate=${returning}&maxPrice=${bugget}`,
                                 {
                                     headers: {
-                                        'Authorization': `Bearer ${access_token}`
+                                        'Authorization': `Bearer ${"wzwTzP6uQGkStmAEIR5hKv6e9Rxc"}`
                                     }
                                 }
                             )
@@ -208,9 +173,25 @@ const LandingPage = ({ navigation }) => {
 
                                         for (let i = 0; i < 100; i++) {
                                             var grandPrice = res?.data?.data[i]?.price?.grandTotal
+                                            var DepartTime = res?.data?.data[i]?.itineraries[0]?.segments[0]?.departure?.at
+                                            // var DepartTime1 = DepartTime.substring(11, 16);
+                                            var ReturnTime = res?.data?.data[i]?.itineraries[0]?.segments[0]?.arrival?.at
+                                            // var ReturnTime1 = ReturnTime.substring(11, 16);
                                             var flightDuration = res?.data?.data[i]?.itineraries[0]?.duration
                                             var flightDuration1 = flightDuration?.substring(2)
-                                            var aircraftDaata = { "carrierCode": res?.data?.data[i]?.itineraries[0]?.segments[0]?.carrierCode, "aircraftcode": res?.data?.data[i]?.itineraries[0]?.segments[0]?.aircraft?.code, "grandPrice": grandPrice, "flightDuration": flightDuration1 }
+                                            var Seatnumber = res?.data?.data[i]?.itineraries[0]?.segments[0]?.number
+                                            // var Seatnumber1 = Seatnumber.substring(0, 3)
+                                            var aircraftDaata = {
+                                                "carrierCode": res?.data?.data[i]?.itineraries[0]?.segments[0]?.carrierCode,
+                                                "Seatnumber": Seatnumber,
+                                                "aircraftcode": res?.data?.data[i]?.itineraries[0]?.segments[0]?.aircraft?.code,
+                                                "grandPrice": grandPrice,
+                                                "flightDuration": flightDuration1,
+                                                "departTime": DepartTime,
+                                                "returnTime": ReturnTime,
+                                                "departDate": departing,
+                                                "returDate": returning
+                                            }
                                             var arrivalCode = res?.data?.data[i]?.itineraries[0]?.segments[0]?.arrival?.iataCode
 
                                             // console.log("aircraftDaata  ", JSON.stringify(aircraftDaata))
@@ -218,7 +199,7 @@ const LandingPage = ({ navigation }) => {
                                             for (let i in CountryData) {
                                                 let t = CountryData[i]
                                                 if ((t.cityCode != cityCode && countryCode != t.countryCode) && t.cityCode == arrivalCode) {
-                                                    console.log("first")
+                                                    console.log("first" + t.countryCode)
                                                     if (MyAmadeusDataa.length > 0) {
                                                         var len = MyAmadeusDataa.length > 1 ? MyAmadeusDataa.length : 1
                                                         MyAmadeusDataa.map(async (item, index) => {
@@ -226,10 +207,8 @@ const LandingPage = ({ navigation }) => {
                                                                 ?
                                                                 null
                                                                 :
-                                                                (index == len - 1 && MyAmadeusDataa.length < 3) ?
-                                                                    MyAmadeusDataa.push({ "countryCode": t.countryCode, "cityCode": t.cityCode, "aircraftDaata": aircraftDaata })
-
-                                                                    : null
+                                                                (index == len - 1 && MyAmadeusDataa.length < 3) &&
+                                                                MyAmadeusDataa.push({ "countryCode": t.countryCode, "cityCode": t.cityCode, "aircraftDaata": aircraftDaata })
                                                         })
                                                     } else {
                                                         MyAmadeusDataa.push({ "countryCode": t.countryCode, "cityCode": t.cityCode, "aircraftDaata": aircraftDaata })
@@ -245,12 +224,8 @@ const LandingPage = ({ navigation }) => {
 
                                         console.log("MyAmadeusDataa===>>>   ", JSON.stringify(MyAmadeusDataa))
 
-                                        if (MyAmadeusDataa.length > 1) {
-                                            // for (const Amadeuitem of MyAmadeusDataa) {
-                                            //     console.log("chla rayy")
-                                            //     await requestMergeData(Amadeuitem, "hhrh6Pc3Of3yZhzwKOyKfBYINSwp")
-                                            // }
-                                            navigation.navigate("Results", { AmadeusDataa: MyAmadeusDataa, access_token:access_token })
+                                        if (MyAmadeusDataa.length > 0) {
+                                            navigation.navigate("Results", { AmadeusDataa: MyAmadeusDataa, access_token: "wzwTzP6uQGkStmAEIR5hKv6e9Rxc" })
 
                                         }
                                         else {
@@ -277,11 +252,11 @@ const LandingPage = ({ navigation }) => {
 
 
             }
-                ).catch((error) => {
-                    setisResponse(false)
-                    alert(error)
-                })
-            }
+            //     ).catch((error) => {
+            //         setisResponse(false)
+            //         alert(error)
+            //     })
+            // }
         }
 
 
@@ -362,7 +337,7 @@ const LandingPage = ({ navigation }) => {
                     </View>
                     <View style={[style.inputContainer,]}>
                         <Icon style={{ color: COLOURS.orange }} name="person-add-alt" size={28} />
-                        <TextInput style={{ paddingLeft: 10, color: COLOURS.grey , flex:1}}
+                        <TextInput style={{ paddingLeft: 10, color: COLOURS.grey, flex: 1 }}
                             keyboardType="number-pad"
                             onChangeText={(per) => {
                                 setPersons(per)
@@ -398,14 +373,14 @@ const LandingPage = ({ navigation }) => {
                 <View>
                     <Text style={style.socialText}>Follow us on our socials!</Text>
                     <View style={style.social}>
-                        <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate('')}>
+                        <TouchableOpacity activeOpacity={0.8} onPress={() => Linking.openURL("https://www.facebook.com/")}>
                             <FontAwesomeIcon style={{ color: COLOURS.white }} name="facebook" size={28} />
                         </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate('')}>
-                            <FontAwesomeIcon style={{ color: COLOURS.white, paddingLeft: 20, }} name="instagram" size={28} />
+                        <TouchableOpacity activeOpacity={0.8} onPress={() => Linking.openURL("https://www.instagram.com/")}>
+                            <FontAwesomeIcon style={{ color: COLOURS.white, paddingLeft: 30, }} name="instagram" size={28} />
                         </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate('')}>
-                            <FontAwesomeIcon style={{ color: COLOURS.white, paddingLeft: 20, }} name="twitter" size={28} />
+                        <TouchableOpacity activeOpacity={0.8} onPress={() => Linking.openURL("https://twitter.com/")}>
+                            <FontAwesomeIcon style={{ color: COLOURS.white, paddingLeft: 30, }} name="twitter" size={28} />
                         </TouchableOpacity>
                     </View>
                 </View>

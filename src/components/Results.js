@@ -25,11 +25,6 @@ const Results = ({ route, navigation }) => {
     // console.log("---->>>>>>>>>>>>>>>>>>>>>>> ", JSON.stringify(AmadeusDataa))
     // console.log("-----------" + JSON.stringify(CountryLIST))
 
-    const [countries, setCountries] = useState([
-        { name: 'JAPAN', key: '1', price: '$1000', image: require('../images/japan.jpeg') },
-        { name: 'SPAIN', key: '2', price: '$800', image: require('../images/spain.jpeg') },
-        { name: 'LAOS', key: '3', price: '$500', image: require('../images/laos.png') },
-    ])
 
     const onSelectCountry = async (cityCode, aircraftDaata) => {
         await axios.get(
@@ -42,6 +37,7 @@ const Results = ({ route, navigation }) => {
             }
         ).then((res) => {
             let Hotel = res?.data?.data[0]
+            console.log("hdbsjhb", JSON.stringify(res?.data))
             if (res) {
                 navigation.navigate('Details', { aircraftDaata: aircraftDaata, hotelData: Hotel })
 

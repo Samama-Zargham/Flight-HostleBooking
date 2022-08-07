@@ -49,31 +49,36 @@ const MyBookings = ({ navigation }) => {
                     MyBookings != null
                         ?
                         <>
-                            <Text style={{ alignSelf: 'center', color: COLOURS.blue, fontWeight: "bold" }}>My Last Bookings</Text>
+                            <Text style={{ alignSelf: 'center', color: COLOURS.blue, fontWeight: "bold" , fontSize:19 }}>My Last Booking</Text>
 
 
-                            <Text style={{ fontSize: 16 }}>
+                            <Text style={{ fontSize: 17, color: COLOURS.dark, width: "90%", alignSelf: "center", marginTop: 10 }}>
+                                <Text style={{ color: COLOURS.blue, fontWeight: "800" }}>{"Flight Details" + "\n"}</Text>
                                 {
-
-                                    "Country Name:  " + MyBookings.CountryName + "\n" +
-                                    "Carrier:  " + MyBookings.Carrier + "\n" +
                                     "Departing Date:  " + MyBookings.DepartingDate + "\n" +
                                     "Departing Time:  " + MyBookings.DepartingTime + "\n" +
                                     "Flight:  " + MyBookings.Flight + "\n" +
-                                    "Hotel:  " + MyBookings.Hotel + "\n" +
-                                    "No of Beds:  " + MyBookings.NoofBeds + "\n" +
-                                    "PostelCode:  " + MyBookings.PostelCode + "\n" +
-                                    "Price for 1 person:  " + MyBookings.Pricefor1person + "\n" +
-                                    "Region:  " + MyBookings.Region + "\n" +
-                                    "Returning Date:  " + MyBookings.ReturningDate + "\n" +
-                                    "City:  " + MyBookings.City + "\n" +
+                                    "Carrier:  " + MyBookings.Carrier + "\n" +
+                                    "SeatNumbers:  " + MyBookings.SeatNumbers + "\n"+
                                     "Returning Time:  " + MyBookings.ReturningTime + "\n" +
-                                    "Room type:  " + MyBookings.Roomtype + "\n" +
-                                    "SeatNumbers:  " + MyBookings.SeatNumbers + "\n" +
-                                    "Street:   " + MyBookings.Street + "\n" +
-                                    "Subregion:   " + MyBookings.Subregion + "\n" +
-                                    "Total Grand Price:  " + MyBookings.TotalGrandPrice + "\n"
+                                    "Returning Date:  " + MyBookings.ReturningDate + "\n" + "\n" 
                                 }
+                                <Text style={{ color: COLOURS.blue, fontWeight: "800" }}>{"Hotel Details" + "\n"}</Text>
+                                {
+                                    "Hotel:  " + MyBookings.Hotel + "\n" +
+                                    "PostelCode:  " + MyBookings.PostelCode + "\n" +
+                                    "Street:   " + MyBookings.Street + "\n" +
+                                    "Subregion:   " + MyBookings.Subregion + "\n"+
+                                    "No of Beds:  " + MyBookings.NoofBeds + "\n" +
+                                    "Region:  " + MyBookings.Region + "\n" +
+                                    "Country Name:  " + MyBookings.CountryName + "\n" +
+                                    "City:  " + MyBookings.City + "\n" +
+                                    "Price for 1 person:  " + MyBookings.Pricefor1person + "\n" +
+                                    "Room type:  " + MyBookings.Roomtype + "\n" + "\n"
+
+                                }
+                                <Text style={{ color: COLOURS.blue, fontWeight: "800" }}>{"Total Grand Price:  " + MyBookings.TotalGrandPrice}</Text>
+
                             </Text>
 
                         </>
@@ -92,18 +97,12 @@ const MyBookings = ({ navigation }) => {
 
                         <TouchableOpacity style={{
                             position: 'absolute',
-                            // width: 60,
-                            // height: 60,
-                            // alignItems: 'center',
-                            // justifyContent: 'center',
                             right: 30,
                             bottom: 30,
                             backgroundColor: COLOURS.blue,
                             width: "40%",
                             borderRadius: 9,
                             padding: 10
-                            // backgroundColor: COLOURS.blue,
-                            // borderRadius: 100
                         }} onPress={() => { }}>
                             <Text style={{ fontSize: 17, color: COLOURS.white, }}>Clear Booking</Text>
                         </TouchableOpacity>

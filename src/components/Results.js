@@ -75,28 +75,31 @@ const Results = ({ route, navigation }) => {
     }
 
     const renderItem = ({ item, index }) => {
-
-        return (
-            <TouchableOpacity key={index} activeOpacity={0.9} onPress={() => onSelectCountry(item.cityCode, item?.aircraftDaata)}>
-                <View style={style.resultItem}>
-                    {/* <View>
+        var code = index == 0 ? item.countryCode : null
+        var code1 = index == 1 ? item.countryCode : null
+        if (item.countryCode != code && index > 0 && item.countryCode != code1) {
+            return (
+                <TouchableOpacity key={index} activeOpacity={0.9} onPress={() => onSelectCountry(item.cityCode, item?.aircraftDaata)}>
+                    <View style={style.resultItem}>
+                        {/* <View>
                         <Image style={style.image} source={item.image}></Image>
                     </View> */}
-                    <View style={style.itemName}>
-                        {CountryLIST.map((item1, index) => {
-                            if (item1.countryCode == item.countryCode) {
-                                return (
-                                    <Text style={{ color: COLOURS.blue, fontWeight: 'bold', fontSize: 22 }}>{item1.countryName}</Text>
-                                )
-                            }
-                        })}
+                        <View style={style.itemName}>
+                            {CountryLIST.map((item1, index) => {
+                                if (item1.countryCode == item.countryCode) {
+                                    return (
+                                        <Text style={{ color: COLOURS.blue, fontWeight: 'bold', fontSize: 22 }}>{item1.countryName}</Text>
+                                    )
+                                }
+                            })}
+                        </View>
+                        <View style={style.itemPrice}>
+                            <Text style={{ color: COLOURS.white, fontWeight: '800', fontSize: 18 }}>{item?.aircraftDaata?.grandPrice}</Text>
+                        </View>
                     </View>
-                    <View style={style.itemPrice}>
-                        <Text style={{ color: COLOURS.white, fontWeight: '800', fontSize: 18 }}>{item?.aircraftDaata?.grandPrice}</Text>
-                    </View>
-                </View>
-            </TouchableOpacity>
-        );
+                </TouchableOpacity>
+            );
+        }
     };
 
     function renderHeader() {

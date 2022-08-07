@@ -126,14 +126,14 @@ const Login = ({ navigation }) => {
                   }}
                 />
               </View>
-              <View style={style.forgotContainer}>
+              {/* <View style={style.forgotContainer}>
                 <TouchableOpacity
                   activeOpacity={0.8}
                   onPress={() => navigation.navigate("")}
                 >
                   <Text style={style.forgot}>forgot password?</Text>
                 </TouchableOpacity>
-              </View>
+              </View> */}
               <TouchableOpacity
                 style={style.btnContainer}
                 activeOpacity={0.8}

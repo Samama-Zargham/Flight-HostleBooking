@@ -59,7 +59,7 @@ const Login = ({ navigation }) => {
 
           if (userData.sucess === true) {
             setTimeout(() => {
-              navigation.navigate("LandingPage");
+              navigation.navigate("MyBookings");
               setloading(false);
             }, 2000);
           }

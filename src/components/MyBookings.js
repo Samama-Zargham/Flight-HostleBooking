@@ -83,7 +83,9 @@ const MyBookings = ({ navigation }) => {
 
                         </>
                         :
-                        <Text style={style.headline}>No Bookings</Text>
+                        <Text style={style.headline}>
+                            Press below button for your adventure bookings 
+                        </Text>
                 }
 
                 {
@@ -136,7 +138,9 @@ const style = StyleSheet.create({
         fontSize: 20,
         color: "#b0aeae",
         fontWeight: '500',
-        marginTop: height * 0.33
+        marginTop: height * 0.33,
+        width: "80%",
+        alignSelf:"center"
     },
     container: {
         flex: 1,

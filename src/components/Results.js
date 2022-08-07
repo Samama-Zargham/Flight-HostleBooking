@@ -77,7 +77,7 @@ const Results = ({ route, navigation }) => {
     const renderItem = ({ item, index }) => {
         var code = index == 0 ? item.countryCode : null
         var code1 = index == 1 ? item.countryCode : null
-        if (item.countryCode != code && index > 0 && item.countryCode != code1) {
+        if ((index == 0) || (item.countryCode != code && index == 1) || (index == 2 && item.countryCode != code1)) {
             return (
                 <TouchableOpacity key={index} activeOpacity={0.9} onPress={() => onSelectCountry(item.cityCode, item?.aircraftDaata)}>
                     <View style={style.resultItem}>

@@ -49,7 +49,7 @@ const MyBookings = ({ navigation }) => {
                     MyBookings != null
                         ?
                         <>
-                            <Text style={{ alignSelf: 'center', color: COLOURS.blue, fontWeight: "bold" , fontSize:19 }}>My Last Booking</Text>
+                            <Text style={{ alignSelf: 'center', color: COLOURS.blue, fontWeight: "bold", fontSize: 19 }}>My Last Booking</Text>
 
 
                             <Text style={{ fontSize: 17, color: COLOURS.dark, width: "90%", alignSelf: "center", marginTop: 10 }}>
@@ -59,16 +59,16 @@ const MyBookings = ({ navigation }) => {
                                     "Departing Time:  " + MyBookings.DepartingTime + "\n" +
                                     "Flight:  " + MyBookings.Flight + "\n" +
                                     "Carrier:  " + MyBookings.Carrier + "\n" +
-                                    "SeatNumbers:  " + MyBookings.SeatNumbers + "\n"+
+                                    "SeatNumbers:  " + MyBookings.SeatNumbers + "\n" +
                                     "Returning Time:  " + MyBookings.ReturningTime + "\n" +
-                                    "Returning Date:  " + MyBookings.ReturningDate + "\n" + "\n" 
+                                    "Returning Date:  " + MyBookings.ReturningDate + "\n" + "\n"
                                 }
                                 <Text style={{ color: COLOURS.blue, fontWeight: "800" }}>{"Hotel Details" + "\n"}</Text>
                                 {
                                     "Hotel:  " + MyBookings.Hotel + "\n" +
                                     "PostelCode:  " + MyBookings.PostelCode + "\n" +
                                     "Street:   " + MyBookings.Street + "\n" +
-                                    "Subregion:   " + MyBookings.Subregion + "\n"+
+                                    "Subregion:   " + MyBookings.Subregion + "\n" +
                                     "No of Beds:  " + MyBookings.NoofBeds + "\n" +
                                     "Region:  " + MyBookings.Region + "\n" +
                                     "Country Name:  " + MyBookings.CountryName + "\n" +
@@ -103,7 +103,22 @@ const MyBookings = ({ navigation }) => {
                             width: "40%",
                             borderRadius: 9,
                             padding: 10
-                        }} onPress={() => { }}>
+                        }} onPress={async () => {
+
+                            try {
+                                await AsyncStorage.removeItem('@AsyncObject').then(async () => {
+                                    const jsonValue = await AsyncStorage.getItem('@AsyncObject')
+                                    setMyBookings(jsonValue != null ? JSON.parse(jsonValue) : null)
+                                    setisLoad(false)
+                                }
+
+                                )
+
+                            } catch (e) {
+                                setisLoad(false)
+                                // error reading value
+                            }
+                        }}>
                             <Text style={{ fontSize: 17, color: COLOURS.white, }}>Clear Booking</Text>
                         </TouchableOpacity>
                 }

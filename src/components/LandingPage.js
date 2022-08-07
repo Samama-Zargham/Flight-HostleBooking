@@ -139,7 +139,7 @@ const LandingPage = ({ navigation }) => {
                     `https://test.api.amadeus.com/v1/reference-data/locations?subType=AIRPORT,CITY&keyword=${CityAirport}`,
                     {
                         headers: {
-                            'Authorization': `Bearer ${"5B4WOTZv8kf8B5ddtfpeH4iOwshh"}`
+                            'Authorization': `Bearer ${"seVoR3ZJ3TR66tnNzsS7fzAPkjyr"}`
                         }
                     }
                 )
@@ -164,7 +164,7 @@ const LandingPage = ({ navigation }) => {
                                 URL.Flight_Offers + `?originLocationCode=${iataCode}&destinationLocationCode=PAR&departureDate=${departing}&adults=${Persons}&returnDate=${returning}&maxPrice=${bugget}`,
                                 {
                                     headers: {
-                                        'Authorization': `Bearer ${"5B4WOTZv8kf8B5ddtfpeH4iOwshh"}`
+                                        'Authorization': `Bearer ${"seVoR3ZJ3TR66tnNzsS7fzAPkjyr"}`
                                     }
                                 }
                             )
@@ -234,7 +234,7 @@ const LandingPage = ({ navigation }) => {
                                         console.log("MyAmadeusDataa===>>>   ", JSON.stringify(MyAmadeusDataa))
 
                                         if (MyAmadeusDataa.length > 0) {
-                                            navigation.navigate("Results", { AmadeusDataa: MyAmadeusDataa, access_token: "5B4WOTZv8kf8B5ddtfpeH4iOwshh" })
+                                            navigation.navigate("Results", { AmadeusDataa: MyAmadeusDataa, access_token: "seVoR3ZJ3TR66tnNzsS7fzAPkjyr" })
 
                                         }
                                         else {

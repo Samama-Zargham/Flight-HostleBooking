@@ -50,43 +50,64 @@ const MyBookings = ({ navigation }) => {
                         ?
                         <>
                             <Text style={{ alignSelf: 'center', color: COLOURS.blue, fontWeight: "bold" }}>My Last Bookings</Text>
-                            
 
-                                <Text>
-                                    {
-                                        "Carrier  "+ MyBookings.Carrier+
-                                        "City:  "+ MyBookings.City
-                                        // "CountryName", "Norway",
-                                        // "DepartingDate", "2022-08-07",
-                                        // "DepartingTime", "10:15",
-                                        // "Flight", "73H",
-                                        // "Hotel:  ", "RADISSON BLU OSLO AIRPORT GARD",
-                                        // "No of Beds:  ", "2",
-                                        // "PostelCode:  ", "2060",
-                                        // "Price for 1 person:  ", "$170",
-                                        // "Region:  ", "Viken",
-                                        // "ReturningDate", "2022-08-08",
-                                        // "ReturningTime", "13:20",
-                                        // "Room type  ", "Double bed Deluxe room, with Wireless Internet ",
-                                        // "SeatNumbers", "130,  131",
-                                        // "Street:  ", "Hotellvegen",
-                                        // "Subregion:  ", "Ullensaker",
-                                        // "TotalGrandPrice", "336.76340"+
-                                        // "Your Grand Price:  $"+ 340 
-                                   }
-                                </Text>
-                            
+
+                            <Text style={{ fontSize: 16 }}>
+                                {
+
+                                    "Country Name:  " + MyBookings.CountryName + "\n" +
+                                    "Carrier:  " + MyBookings.Carrier + "\n" +
+                                    "Departing Date:  " + MyBookings.DepartingDate + "\n" +
+                                    "Departing Time:  " + MyBookings.DepartingTime + "\n" +
+                                    "Flight:  " + MyBookings.Flight + "\n" +
+                                    "Hotel:  " + MyBookings.Hotel + "\n" +
+                                    "No of Beds:  " + MyBookings.NoofBeds + "\n" +
+                                    "PostelCode:  " + MyBookings.PostelCode + "\n" +
+                                    "Price for 1 person:  " + MyBookings.Pricefor1person + "\n" +
+                                    "Region:  " + MyBookings.Region + "\n" +
+                                    "Returning Date:  " + MyBookings.ReturningDate + "\n" +
+                                    "City:  " + MyBookings.City + "\n" +
+                                    "Returning Time:  " + MyBookings.ReturningTime + "\n" +
+                                    "Room type:  " + MyBookings.Roomtype + "\n" +
+                                    "SeatNumbers:  " + MyBookings.SeatNumbers + "\n" +
+                                    "Street:   " + MyBookings.Street + "\n" +
+                                    "Subregion:   " + MyBookings.Subregion + "\n" +
+                                    "Total Grand Price:  " + MyBookings.TotalGrandPrice + "\n"
+                                }
+                            </Text>
+
                         </>
                         :
                         <Text style={style.headline}>No Bookings</Text>
                 }
 
-                <TouchableOpacity
-                    activeOpacity={0.7}
-                    onPress={clickHandler}
-                    style={style.touchableOpacityStyle}>
-                    <AntDesign name="plus" color={COLOURS.white} size={24} />
-                </TouchableOpacity>
+                {
+                    MyBookings == null ?
+                        <TouchableOpacity
+                            activeOpacity={0.7}
+                            onPress={clickHandler}
+                            style={style.touchableOpacityStyle}>
+                            <AntDesign name="plus" color={COLOURS.white} size={24} />
+                        </TouchableOpacity> :
+
+                        <TouchableOpacity style={{
+                            position: 'absolute',
+                            // width: 60,
+                            // height: 60,
+                            // alignItems: 'center',
+                            // justifyContent: 'center',
+                            right: 30,
+                            bottom: 30,
+                            backgroundColor: COLOURS.blue,
+                            width: "40%",
+                            borderRadius: 9,
+                            padding: 10
+                            // backgroundColor: COLOURS.blue,
+                            // borderRadius: 100
+                        }} onPress={() => { }}>
+                            <Text style={{ fontSize: 17, color: COLOURS.white, }}>Clear Booking</Text>
+                        </TouchableOpacity>
+                }
             </View>
         </SafeAreaView>
     );

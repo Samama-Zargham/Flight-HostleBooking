@@ -69,7 +69,7 @@ const Results = ({ route, navigation }) => {
                 }
             })
         } catch (error) {
-            alert("Hotels not available book yourself")
+            alert("Sorry, we couldnt find any hotel for the selected country please book yourself")
             navigation.navigate('Details', { aircraftDaata: aircraftDaata, hotelData: null })
 
         }

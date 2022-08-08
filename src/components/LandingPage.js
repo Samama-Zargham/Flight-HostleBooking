@@ -95,21 +95,21 @@ const LandingPage = ({ navigation }) => {
     const getAmadeusData = async () => {
         console.log(` departing date:  ${departing}, || returning date: ${returning}, ||  CityAirport : ${CityAirport}, ||  bugget: ${bugget} ||   Persons:   ${Persons}` + dateForReturning)
         if (!departing || !returning || !CityAirport || !bugget || !Persons) {
-            alert("Please fill all Fields or check internet connection")
+            alert("Sorry, Please fill all Fields or check internet connection")
         }
         else if (departing == returning) {
-            alert("please make 1 day differnce")
+            alert("Sorry, please make 1 day differnce")
         }
         else if (bugget < 700) {
-            alert("bugget must be greater than 700")
+            alert("Sorry, bugget must be greater than 700")
         }
         else if (Persons > 3) {
-            alert("Max 3 seats allow")
+            alert("Sorry, Max 3 seats allow")
         }
         else if (departing) {
 
             if (isDateBeforeToday(new Date(year, Month, cDate))) {
-                alert("Enter a Valid departure/return date")
+                alert("Sorry, Please Enter a Valid departure/return date")
             }
             else {
                 setisResponse(true)
@@ -154,7 +154,7 @@ const LandingPage = ({ navigation }) => {
                         console.log("----Response iataCode >> ", iataCode, "  countryCode  ", countryCode, "  cityCode  ", cityCode)
 
                         if (iataCode == undefined) {
-                            alert("No any Amadeus Airport exist in this city choose another nearest city")
+                            alert("Sorry, No any Amadeus Airport exist in this city choose another nearest city")
                             setisResponse(false)
 
                         } else {
@@ -243,18 +243,18 @@ const LandingPage = ({ navigation }) => {
                                         }
                                         console.log("-----------------")
                                     } else {
-                                        alert("Amadeus don't have this City or wait for a while Server is down")
+                                        alert("Sorry, Amadeus don't have this City or wait for a while Server is down")
                                     }
                                 }).catch((error) => {
                                     setisResponse(false)
-                                    alert(error)
+                                    alert("Sorry", error)
                                 })
 
 
                         }
                     }).catch((error) => {
                         setisResponse(false)
-                        alert(error)
+                        alert("Sorry", error)
                     })
 
 
@@ -263,7 +263,7 @@ const LandingPage = ({ navigation }) => {
             }
                 ).catch((error) => {
                     setisResponse(false)
-                    alert(error)
+                    alert("Sorry", error)
                 })
             }
         }

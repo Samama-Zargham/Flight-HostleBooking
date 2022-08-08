@@ -168,7 +168,7 @@ const BookingDetails = ({ navigation }) => {
                             <TouchableOpacity
                                 style={style.btnContainer}
                                 activeOpacity={0.8}
-                                onPress={() => { }}
+                                onPress={() => { navigation.navigate("MyBookings")}}
                             >
                                 <View style={style.btn}>
                                     <Text

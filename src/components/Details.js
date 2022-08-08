@@ -202,17 +202,17 @@ const Details = ({ navigation, route }) => {
                         activeOpacity={0.8}
                         onPress={async () => {
                             let AsyncObject = {
-                                "TotalGrandPrice": aircraftDaata.grandPrice + hotelGrandPrice,
-                                "DepartingTime": departTime.substring(11, 16),
-                                "ReturningTime": returnTime.substring(11, 16),
-                                "DepartingDate": aircraftDaata.departDate,
-                                "ReturningDate": aircraftDaata.returDate,
-                                "Flight": aircraftDaata.aircraftcode,
-                                "Carrier": aircraftDaata.carrierCode,
+                                "TotalGrandPrice": aircraftDaata?.grandPrice + hotelGrandPrice,
+                                "DepartingTime": departTime?.substring(11, 16),
+                                "ReturningTime": returnTime?.substring(11, 16),
+                                "DepartingDate": aircraftDaata?.departDate,
+                                "ReturningDate": aircraftDaata?.returDate,
+                                "Flight": aircraftDaata?.aircraftcode,
+                                "Carrier": aircraftDaata?.carrierCode,
                                 "SeatNumbers": Beds == "1" ? Seatnumber1 : Beds == "2" ? Seatnumber1 + ",  " + (parseInt(Seatnumber1) + 1) : Beds == "3" && Seatnumber1 + ",  " + (parseInt(Seatnumber1) + 1) + ",  " + (parseInt(Seatnumber1) + 2),
                                 "CountryName": countryName,
                                 "Hotel": hotelData?.name,
-                                "City": hotelAddress[0]?.city == null ? hotelData.iataCode : hotelAddress[0]?.city,
+                                "City": hotelAddress[0]?.city == null ? hotelData?.iataCode : hotelAddress[0]?.city,
                                 "Street": hotelAddress[0]?.street,
                                 "PostelCode": hotelAddress[0]?.postalCode,
                                 "Region": hotelAddress[0]?.region,
@@ -224,7 +224,7 @@ const Details = ({ navigation, route }) => {
 
                             try {
                                 await AsyncStorage.setItem('@AsyncObject', JSON.stringify(AsyncObject)).then(() => {
-                                    navigation.replace("MyBookings")
+                                    navigation.replace("BookingDetails")
                                 })
                             } catch (e) {
                                 // saving error
@@ -240,7 +240,7 @@ const Details = ({ navigation, route }) => {
                                     fontSize: 16,
                                 }}
                             >
-                                BOOK HOTEL AND FLIGHT!
+                                BOOK!
                             </Text>
                         </View>
                     </TouchableOpacity>

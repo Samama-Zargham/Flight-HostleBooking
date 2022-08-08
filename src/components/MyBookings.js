@@ -36,7 +36,7 @@ const MyBookings = ({ navigation }) => {
         fetchData();
 
 
-    }, [])
+    }, [MyBookings])
 
 
     return (

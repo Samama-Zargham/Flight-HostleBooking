@@ -24,6 +24,8 @@ import * as Location from 'expo-location'
 const Results = ({ route, navigation }) => {
 
     const { AmadeusDataa, access_token } = route.params;
+    const [first, setfirst] = useState()
+    const [Second, setSecond] = useState()
     // console.log("---->>>>>>>>>>>>>>>>>>>>>>> ", JSON.stringify(AmadeusDataa))
     // console.log("-----------" + JSON.stringify(CountryLIST))
 
@@ -75,9 +77,9 @@ const Results = ({ route, navigation }) => {
     }
 
     const renderItem = ({ item, index }) => {
-        var code = index == 0 ? item.countryCode : null
-        var code1 = index == 1 ? item.countryCode : null
-        if ((index == 0) || (item.countryCode != code && index == 1) || (index == 2 && item.countryCode != code1)) {
+        if ((index == 0) || (item.countryCode != first && index == 1) || (index == 2 && item.countryCode != first && item.countryCode != Second)) {
+            index == 0 && setfirst(item.countryCode)
+            index == 1 && setSecond(item.countryCode)
             return (
                 <TouchableOpacity key={index} activeOpacity={0.9} onPress={() => onSelectCountry(item.cityCode, item?.aircraftDaata)}>
                     <View style={style.resultItem}>

@@ -139,7 +139,7 @@ const LandingPage = ({ navigation }) => {
                     `https://test.api.amadeus.com/v1/reference-data/locations?subType=AIRPORT,CITY&keyword=${CityAirport}`,
                     {
                         headers: {
-                            'Authorization': `Bearer ${access_token}`
+                            'Authorization': `Bearer ${"Jam8JZzeNCw1pKWXK0SR7h7AxeIG"}`
                         }
                     }
                 )
@@ -164,7 +164,7 @@ const LandingPage = ({ navigation }) => {
                                 URL.Flight_Offers + `?originLocationCode=${iataCode}&destinationLocationCode=PAR&departureDate=${departing}&adults=${Persons}&returnDate=${returning}&maxPrice=${bugget}`,
                                 {
                                     headers: {
-                                        'Authorization': `Bearer ${access_token}`
+                                        'Authorization': `Bearer ${"Jam8JZzeNCw1pKWXK0SR7h7AxeIG"}`
                                     }
                                 }
                             )
@@ -208,7 +208,7 @@ const LandingPage = ({ navigation }) => {
                                             for (let i in CountryData) {
                                                 let t = CountryData[i]
                                                 if ((t.cityCode != cityCode && countryCode != t.countryCode) && t.cityCode == arrivalCode) {
-                                                    console.log("first" + t.countryCode)
+                                                    // console.log("first" + t.countryCode)
                                                     if (MyAmadeusDataa.length > 0) {
                                                         var len = MyAmadeusDataa.length > 1 ? MyAmadeusDataa.length : 1
                                                         MyAmadeusDataa.map(async (item, index) => {
@@ -234,7 +234,7 @@ const LandingPage = ({ navigation }) => {
                                         console.log("MyAmadeusDataa===>>>   ", JSON.stringify(MyAmadeusDataa))
 
                                         if (MyAmadeusDataa.length > 0) {
-                                            navigation.navigate("Results", { AmadeusDataa: MyAmadeusDataa, access_token: access_token })
+                                            navigation.navigate("Results", { AmadeusDataa: MyAmadeusDataa, access_token: "Jam8JZzeNCw1pKWXK0SR7h7AxeIG" })
 
                                         }
                                         else {

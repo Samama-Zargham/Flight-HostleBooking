@@ -139,7 +139,7 @@ const LandingPage = ({ navigation }) => {
                     `https://test.api.amadeus.com/v1/reference-data/locations?subType=AIRPORT,CITY&keyword=${CityAirport}`,
                     {
                         headers: {
-                            'Authorization': `Bearer ${"Jam8JZzeNCw1pKWXK0SR7h7AxeIG"}`
+                            'Authorization': `Bearer ${access_token}`
                         }
                     }
                 )
@@ -164,21 +164,21 @@ const LandingPage = ({ navigation }) => {
                                 URL.Flight_Offers + `?originLocationCode=${iataCode}&destinationLocationCode=PAR&departureDate=${departing}&adults=${Persons}&returnDate=${returning}&maxPrice=${bugget}`,
                                 {
                                     headers: {
-                                        'Authorization': `Bearer ${"Jam8JZzeNCw1pKWXK0SR7h7AxeIG"}`
+                                        'Authorization': `Bearer ${access_token}`
                                     }
                                 }
                             )
                                 .then(async (res) => {
                                     setisResponse(false)
                                     var resDaata = res?.data?.data
-                                    console.log("-----------------")
+                                    // console.log("-----------------")
 
                                     if (res?.data?.data != [] && resDaata.length) {
                                         var CountryData = res?.data?.dictionaries?.locations
                                         var AllData = res?.data?.data
                                         var AlDataLenght = AllData?.length
 
-                                        console.log("first====>>> ", AllData?.length)
+                                        // console.log("first====>>> ", AllData?.length)
 
                                         for (let i = 0; i < 100; i++) {
                                             var grandPrice = res?.data?.data[i]?.price?.grandTotal
@@ -234,7 +234,7 @@ const LandingPage = ({ navigation }) => {
                                         console.log("MyAmadeusDataa===>>>   ", JSON.stringify(MyAmadeusDataa))
 
                                         if (MyAmadeusDataa.length > 0) {
-                                            navigation.navigate("Results", { AmadeusDataa: MyAmadeusDataa, access_token: "Jam8JZzeNCw1pKWXK0SR7h7AxeIG" })
+                                            navigation.navigate("Results", { AmadeusDataa: MyAmadeusDataa, access_token: access_token })
 
                                         }
                                         else {

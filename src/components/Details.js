@@ -114,6 +114,8 @@ const Details = ({ navigation, route }) => {
                             })}
                             <Text style={{ color: COLOURS.blue }}>{"Hotel:  " + hotelData?.name}</Text>
                             <Text>{"City:  " + hotelAddress[0]?.city}</Text>
+                            <Text>{"CheckIn Date " + aircraftDaata.departDate}</Text>
+                            <Text>{"CheckOut Date " + aircraftDaata.returDate}</Text>
                             <Text>{"Street:  " + hotelAddress[0]?.street}</Text>
                             <Text>{"PostelCode:  " + hotelAddress[0]?.postalCode}</Text>
                             <Text>{"Region:  " + hotelAddress[0]?.region}</Text>

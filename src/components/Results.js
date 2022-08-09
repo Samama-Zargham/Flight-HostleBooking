@@ -22,6 +22,8 @@ import * as Location from 'expo-location'
 
 
 const Results = ({ route, navigation }) => {
+    const isLogged = route?.params?.isLogged ? true : false
+    console.log("first--------", isLogged)
 
     const { AmadeusDataa, access_token, LeaveCity } = route.params;
     const [first, setfirst] = useState()
@@ -55,7 +57,7 @@ const Results = ({ route, navigation }) => {
                     }
                 }
             ).then(async (res) => {
-                console.log("first    " ,JSON.stringify(res))
+                console.log("first    ", JSON.stringify(res))
                 let points = [
                     { pointName: res?.data?.data[0]?.name, Category: res?.data?.data[0]?.category },
                     { pointName: res?.data?.data[1]?.name, Category: res?.data?.data[1]?.category }
@@ -88,18 +90,18 @@ const Results = ({ route, navigation }) => {
                 console.log("hdbsjhb", JSON.stringify(res?.data))
                 console.log("-----------------------   ", hotelId)
                 let Address = await getAddress(lat, lng)
-                let PointofInterest = await GetPointOfInterest(lat, lng)
-                console.log("PointofInterest", JSON.stringify(PointofInterest))
+                // let PointofInterest = await GetPointOfInterest(lat, lng)
+                // console.log("PointofInterest", JSON.stringify(PointofInterest))
 
                 console.log("first ==== >>> ", JSON.stringify(Address))
                 if (res) {
-                    navigation.navigate('Details', { aircraftDaata: aircraftDaata, hotelData: Hotel, hotelAddress: Address, Beds: AmadeusDataa[0]?.Persons, LeaveCity: LeaveCity, ArrivalCity: cityCode })
+                    navigation.navigate('Details', { aircraftDaata: aircraftDaata, hotelData: Hotel, hotelAddress: Address, Beds: AmadeusDataa[0]?.Persons, LeaveCity: LeaveCity, ArrivalCity: cityCode, isLogged: isLogged })
 
                 }
             })
         } catch (error) {
             alert("Sorry, we couldnt find any hotel for the selected country please book yourself")
-            navigation.navigate('Details', { aircraftDaata: aircraftDaata, hotelData: null, Beds: AmadeusDataa[0]?.Persons, LeaveCity: LeaveCity, ArrivalCity: cityCode })
+            navigation.navigate('Details', { aircraftDaata: aircraftDaata, isLogged: isLogged, hotelData: null, Beds: AmadeusDataa[0]?.Persons, LeaveCity: LeaveCity, ArrivalCity: cityCode })
 
         }
 
@@ -160,15 +162,16 @@ const Results = ({ route, navigation }) => {
                     </Text>
                 </View>
 
-                {/* <TouchableOpacity
-                    styles={{
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                    }}
-                    onPress={() => navigation.navigate('Login')}
-                >
-                    <FontAwesomeIcon style={{ color: COLOURS.orange }} name="user" size={25} />
-                </TouchableOpacity> */}
+                {isLogged
+                    && <TouchableOpacity
+                        styles={{
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }}
+                        onPress={() => navigation.replace('Login')}
+                    >
+                        <FontAwesomeIcon style={{ color: COLOURS.orange }} name="user" size={25} />
+                    </TouchableOpacity>}
             </View>
         )
     }

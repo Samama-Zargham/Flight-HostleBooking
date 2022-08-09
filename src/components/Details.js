@@ -42,6 +42,9 @@ const data = [
 ]
 
 const Details = ({ navigation, route }) => {
+    const isLogged = route?.params?.isLogged ? true : false
+    console.log("first--------", isLogged)
+
     const { aircraftDaata, hotelData, hotelAddress, Beds, ArrivalCity, LeaveCity } = route.params
     var departTime = aircraftDaata.departTime
     var returnTime = aircraftDaata.returnTime
@@ -163,15 +166,16 @@ const Details = ({ navigation, route }) => {
                     </Text>
                 </View>
 
-                {/* <TouchableOpacity
-                    styles={{
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                    }}
-                    onPress={() => navigation.navigate('Login')}
-                >
-                    <FontAwesomeIcon style={{ color: COLOURS.orange }} name="user" size={25} />
-                </TouchableOpacity> */}
+                {isLogged &&
+                    <TouchableOpacity
+                        styles={{
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }}
+                        onPress={() => navigation.replace('Login')}
+                    >
+                        <FontAwesomeIcon style={{ color: COLOURS.orange }} name="user" size={25} />
+                    </TouchableOpacity>}
             </View>
         )
     }
@@ -204,7 +208,7 @@ const Details = ({ navigation, route }) => {
                             let FlightData = {
                                 "ArrivalCity": ArrivalCity,
                                 "LeaveCity": LeaveCity,
-                                "TotalGrandPrice": hotelData == null ? aircraftDaata?.grandPrice  : JSON.parse(aircraftDaata?.grandPrice) + hotelGrandPrice,
+                                "TotalGrandPrice": hotelData == null ? aircraftDaata?.grandPrice : JSON.parse(aircraftDaata?.grandPrice) + hotelGrandPrice,
                                 "DepartingTime": departTime?.substring(11, 16),
                                 "ReturningTime": returnTime?.substring(11, 16),
                                 "DepartingDate": aircraftDaata?.departDate,
@@ -228,11 +232,16 @@ const Details = ({ navigation, route }) => {
                                     "Pricefor1person": "$170",
                                 }
                             }
-                            navigation.navigate("BookingDetails", {
-                                FlightData: FlightData,
-                                HotelData: hotelData == null ? null : HotelData
-                            })
-
+                            isLogged == true ?
+                                navigation.navigate("BookingDetails", {
+                                    FlightData: FlightData,
+                                    HotelData: hotelData == null ? null : HotelData
+                                })
+                                :
+                                [
+                                    alert("Sorry, Please Register First For booking"),
+                                    navigation.replace("Register")
+                                ]
 
                         }}
                     >

@@ -178,7 +178,7 @@ const Register = ({ navigation }) => {
                 <Text style={style.loginText}>already have an account?</Text>
                 <TouchableOpacity
                   activeOpacity={0.8}
-                  onPress={() => navigation.navigate("Login")}
+                  onPress={() => navigation.replace("Login")}
                 >
                   <Text style={style.loginHere}> Login here!</Text>
                 </TouchableOpacity>

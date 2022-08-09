@@ -59,7 +59,7 @@ const Login = ({ navigation }) => {
 
           if (userData.sucess === true) {
             setTimeout(() => {
-              navigation.navigate("MyBookings");
+              navigation.replace("MyBookings");
               setloading(false);
             }, 2000);
           }
@@ -155,7 +155,7 @@ const Login = ({ navigation }) => {
                 <Text style={style.registerText}>don't have an account?</Text>
                 <TouchableOpacity
                   activeOpacity={0.8}
-                  onPress={() => navigation.navigate("Register")}
+                  onPress={() => navigation.replace("Register")}
                 >
                   <Text style={style.registerHere}> Register here!</Text>
                 </TouchableOpacity>

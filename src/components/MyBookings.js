@@ -19,7 +19,7 @@ const MyBookings = ({ navigation }) => {
     const [isLoad, setisLoad] = useState(false)
 
     const clickHandler = () => {
-        navigation.navigate("LandingPage")
+        navigation.replace("LandingPage", { isLogged: true })
     };
     async function fetchData() {
         try {
@@ -183,7 +183,7 @@ const style = StyleSheet.create({
         bottom: 30,
         backgroundColor: COLOURS.blue,
         borderRadius: 100,
-        elevation:10
+        elevation: 10
     },
 
 

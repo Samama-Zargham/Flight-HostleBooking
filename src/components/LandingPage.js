@@ -26,7 +26,9 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 import { setStatusBarNetworkActivityIndicatorVisible } from "expo-status-bar";
 
 const { width, height } = Dimensions.get("window")
-const LandingPage = ({ navigation }) => {
+const LandingPage = ({ navigation, route }) => {
+    const isLogged = route?.params?.isLogged ? true : false
+    console.log("first", isLogged)
     const [bugget, setBugget] = useState()
     const [isResponse, setisResponse] = useState(false)
     // Calender For Departing
@@ -234,7 +236,7 @@ const LandingPage = ({ navigation }) => {
                                             console.log("MyAmadeusDataa===>>>   ", JSON.stringify(MyAmadeusDataa))
 
                                             if (MyAmadeusDataa.length > 0) {
-                                                navigation.navigate("Results", { AmadeusDataa: MyAmadeusDataa, access_token: access_token, LeaveCity: CityAirport })
+                                                navigation.navigate("Results", { AmadeusDataa: MyAmadeusDataa, access_token: access_token, LeaveCity: CityAirport, isLogged:isLogged })
 
                                             }
                                             else {

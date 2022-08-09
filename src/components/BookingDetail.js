@@ -13,53 +13,64 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import COLOURS from '../consts/colours';
 const { width, height } = Dimensions.get("window")
 
-const MyBookings = ({ navigation }) => {
-
+const BookingDetail = ({ navigation, route }) => {
+    const {
+        FlightData,
+        HotelData,
+        UserData
+    } = route.params
     return (
         <SafeAreaView style={style.container}>
             <View style={style.container}>
                 <View style={style.header}>
-                    <Image style={style.logo} resizeMode="contain" source={require('../images/shoestring_logo.png')} />
+                    <AntDesign onPress={() => navigation.goBack()} name='back' color={COLOURS.blue} size={24} style={{ elevation: 10, backgroundColor: COLOURS.white, alignSelf: "center", borderRadius: 20, marginLeft: 20, padding: 5 }} />
                 </View>
-              
-                            <Text style={{ alignSelf: 'center', color: COLOURS.blue, fontWeight: "bold", fontSize: 19 }}>My Bookings</Text>
 
-                            <Text style={{ fontSize: 17, color: COLOURS.dark, width: "90%", alignSelf: "center", marginTop: 10 }}>
-                                <Text style={{ color: COLOURS.blue, fontWeight: "800" }}>{"Flight Details" + "\n"}</Text>
-                                {
-                                    "Departing Date:  " + MyBookings.DepartingDate + "\n" +
-                                    "Departing Time:  " + MyBookings.DepartingTime + "\n" +
-                                    "Flight:  " + MyBookings.Flight + "\n" +
-                                    "Carrier:  " + MyBookings.Carrier + "\n" +
-                                    "SeatNumbers:  " + MyBookings.SeatNumbers + "\n" +
-                                    "Returning Time:  " + MyBookings.ReturningTime + "\n" +
-                                    "Returning Date:  " + MyBookings.ReturningDate + "\n" + "\n"
-                                }
-                                <Text style={{ color: COLOURS.blue, fontWeight: "800" }}>{"Hotel Details" + "\n"}</Text>
-                                {
-                                    "Hotel:  " + MyBookings.Hotel + "\n" +
-                                    "PostelCode:  " + MyBookings.PostelCode + "\n" +
-                                    "Street:   " + MyBookings.Street + "\n" +
-                                    "Subregion:   " + MyBookings.Subregion + "\n" +
-                                    "No of Beds:  " + MyBookings.NoofBeds + "\n" +
-                                    "Region:  " + MyBookings.Region + "\n" +
-                                    "Country Name:  " + MyBookings.CountryName + "\n" +
-                                    "City:  " + MyBookings.City + "\n" +
-                                    "Price for 1 person:  " + MyBookings.Pricefor1person + "\n" +
-                                    "Room type:  " + MyBookings.Roomtype + "\n" + "\n"
+                <Text style={{ alignSelf: 'center', color: COLOURS.blue, fontWeight: "bold", fontSize: 19 }}>Booking Detail</Text>
 
-                                }
-                                <Text style={{ color: COLOURS.blue, fontWeight: "800" }}>{"Total Grand Price:  " + MyBookings.TotalGrandPrice}</Text>
+                <Text style={{ fontSize: 17, color: COLOURS.dark, width: "90%", alignSelf: "center", marginTop: 10 }}>
+                    <Text style={{ color: COLOURS.blue, fontWeight: "800" }}>{"User Details" + "\n"}</Text>
+                    {
+                        "FirstName:  " + UserData.FirstName + "\n" +
+                        "LastName:  " + UserData.LastName + "\n" +
+                        "Phone number:  " + UserData.Phone + "\n" +
+                        "Email:  " + UserData.Email + "\n" + "\n"
+                    }
+                    <Text style={{ color: COLOURS.blue, fontWeight: "800" }}>{"Flight Details" + "\n"}</Text>
+                    {
+                        "Departing Date:  " + FlightData.DepartingDate + "\n" +
+                        "Departing Time:  " + FlightData.DepartingTime + "\n" +
+                        "Flight:  " + FlightData.Flight + "\n" +
+                        "Carrier:  " + FlightData.Carrier + "\n" +
+                        "SeatNumbers:  " + FlightData.SeatNumbers + "\n" +
+                        "Returning Time:  " + FlightData.ReturningTime + "\n" +
+                        "Returning Date:  " + FlightData.ReturningDate + "\n" + "\n"
+                    }
+                    <Text style={{ color: COLOURS.blue, fontWeight: "800" }}>{"Hotel Details" + "\n"}</Text>
+                    {
+                        "Hotel:  " + HotelData.Hotel + "\n" +
+                        "PostelCode:  " + HotelData.PostelCode + "\n" +
+                        "Street:   " + HotelData.Street + "\n" +
+                        "Subregion:   " + HotelData.Subregion + "\n" +
+                        "No of Beds:  " + HotelData.NoofBeds + "\n" +
+                        "Region:  " + HotelData.Region + "\n" +
+                        "Country Name:  " + HotelData.CountryName + "\n" +
+                        "City:  " + HotelData.City + "\n" +
+                        "Price for 1 person:  " + HotelData.Pricefor1person + "\n" +
+                        "Room type:  " + HotelData.Roomtype + "\n"
 
-                            </Text>
-                       
+                    }
+                    <Text style={{ color: COLOURS.blue, fontWeight: "800",  }}>{"Total Grand Price:  " + FlightData.TotalGrandPrice}</Text>
+
+                </Text>
+
 
             </View>
         </SafeAreaView>
     );
 };
 
-export default MyBookings;
+export default BookingDetail;
 
 const style = StyleSheet.create({
     headline: {
@@ -87,6 +98,7 @@ const style = StyleSheet.create({
         maxWidth: 350,
         height: '100%',
         paddingTop: 50,
+        marginLeft: -25
     },
     touchableOpacityStyle: {
         position: 'absolute',

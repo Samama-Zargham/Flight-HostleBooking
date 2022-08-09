@@ -10,7 +10,7 @@ import Register from './src/components/Register';
 import MyBookings from "./src/components/MyBookings"
 import BookingDetails from './src/components/BookingDetails';
 const Stack = createStackNavigator();
-
+import BookingDetail from "./src/components/BookingDetail"
 const App = () => {
   return (
     <NavigationContainer>
@@ -26,6 +26,8 @@ const App = () => {
         <Stack.Screen name="Results" component={Results} />
         <Stack.Screen name="MyBookings" component={MyBookings} />
         <Stack.Screen name='BookingDetails' component={BookingDetails} /> */}
+        <Stack.Screen name="BookingDetail" component={BookingDetail} />
+
 
       </Stack.Navigator>
     </NavigationContainer>

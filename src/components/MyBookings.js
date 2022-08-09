@@ -46,13 +46,19 @@ const MyBookings = ({ navigation }) => {
         var HotelData = item.HotelData
         var UserData = item.UserData
         return (
-            <TouchableOpacity key={index} style={style.ServiceStyle}>
-                <Text>{`Booked By: ${UserData.FirstName} ${UserData.LastName}`} </Text>
+            <TouchableOpacity
+                onPress={() => navigation.navigate("BookingDetail", {
+                    FlightData: FlightData,
+                    HotelData: HotelData,
+                    UserData: UserData,
+                })}
+                activeOpacity={0.7} key={index} style={style.ServiceStyle}>
+                <Text style={style.ttx}>{`Booked By: ${UserData.FirstName} ${UserData.LastName}`} </Text>
                 <Text>{`Departing Date: ${FlightData.DepartingDate}`} </Text>
                 <Text>{`Returning Date: ${FlightData.ReturningDate}`} </Text>
-                <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+                <View style={{ marginTop: 5, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
                     <Text>{`Flight: ${FlightData.Flight}`} </Text>
-                    <Text style={{ marginRight: 20 }}>{`Flight: ${FlightData.TotalGrandPrice}`}</Text>
+                    <Text style={{ marginRight: 20, color: COLOURS.blue, fontWeight: "800" }}>{`GrandTotal:  ${FlightData.TotalGrandPrice}`}</Text>
                 </View>
 
             </TouchableOpacity>
@@ -131,6 +137,10 @@ const MyBookings = ({ navigation }) => {
 export default MyBookings;
 
 const style = StyleSheet.create({
+    ttx: {
+        fontSize: 15,
+        fontWeight: "bold"
+    },
     ServiceStyle: {
         backgroundColor: "white",
         elevation: 10, marginBottom: 15,
@@ -172,7 +182,8 @@ const style = StyleSheet.create({
         right: 30,
         bottom: 30,
         backgroundColor: COLOURS.blue,
-        borderRadius: 100
+        borderRadius: 100,
+        elevation:10
     },
 
 

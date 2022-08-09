@@ -43,6 +43,33 @@ const Results = ({ route, navigation }) => {
         });
 
     }
+    const GetPointOfInterest = async (lat, lng) => {
+        console.log("firs t   ", lat, "  ", lng)
+        try {
+            await axios.get(
+                `https://test.api.amadeus.com/v1/reference-data/locations/pois?latitude=${lat}&longitude=${lng}`,
+
+                {
+                    headers: {
+                        'Authorization': `Bearer ${access_token}`
+                    }
+                }
+            ).then(async (res) => {
+                console.log("first    " ,JSON.stringify(res))
+                let points = [
+                    { pointName: res?.data?.data[0]?.name, Category: res?.data?.data[0]?.category },
+                    { pointName: res?.data?.data[1]?.name, Category: res?.data?.data[1]?.category }
+                ]
+
+
+                return points
+
+            }
+            )
+        } catch (error) {
+            alert("Sorry, we couldnt find any point of interest for the selected City")
+        }
+    }
     const onSelectCountry = async (cityCode, aircraftDaata) => {
         try {
             await axios.get(
@@ -61,6 +88,8 @@ const Results = ({ route, navigation }) => {
                 console.log("hdbsjhb", JSON.stringify(res?.data))
                 console.log("-----------------------   ", hotelId)
                 let Address = await getAddress(lat, lng)
+                let PointofInterest = await GetPointOfInterest(lat, lng)
+                console.log("PointofInterest", JSON.stringify(PointofInterest))
 
                 console.log("first ==== >>> ", JSON.stringify(Address))
                 if (res) {

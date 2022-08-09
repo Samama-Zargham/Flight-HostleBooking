@@ -19,6 +19,8 @@ const BookingDetail = ({ navigation, route }) => {
         HotelData,
         UserData
     } = route.params
+    var total = FlightData?.TotalGrandPrice
+
     return (
         <SafeAreaView style={style.container}>
             <View style={style.container}>
@@ -60,7 +62,7 @@ const BookingDetail = ({ navigation, route }) => {
                         "Room type:  " + HotelData.Roomtype + "\n"
 
                     }
-                    <Text style={{ color: COLOURS.blue, fontWeight: "800",  }}>{"Total Grand Price:  " + FlightData.TotalGrandPrice}</Text>
+                    <Text style={{ color: COLOURS.blue, fontWeight: "800", }}>{"Total Grand Price:  " + total.toFixed(2)}</Text>
 
                 </Text>
 

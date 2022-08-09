@@ -42,9 +42,10 @@ const MyBookings = ({ navigation }) => {
 
 
     const renderItem = ({ item, index }) => {
-        var FlightData = item.FlightData
-        var HotelData = item.HotelData
-        var UserData = item.UserData
+        var FlightData = item?.FlightData
+        var HotelData = item?.HotelData
+        var UserData = item?.UserData
+        var total = FlightData?.TotalGrandPrice
         return (
             <TouchableOpacity
                 onPress={() => navigation.navigate("BookingDetail", {
@@ -58,7 +59,7 @@ const MyBookings = ({ navigation }) => {
                 <Text>{`Returning Date: ${FlightData.ReturningDate}`} </Text>
                 <View style={{ marginTop: 5, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
                     <Text>{`Flight: ${FlightData.Flight}`} </Text>
-                    <Text style={{ marginRight: 20, color: COLOURS.blue, fontWeight: "800" }}>{`GrandTotal:  ${FlightData.TotalGrandPrice}`}</Text>
+                    <Text style={{ marginRight: 20, color: COLOURS.blue, fontWeight: "800" }}>{`GrandTotal:  ${total.toFixed(2)}`}</Text>
                 </View>
 
             </TouchableOpacity>

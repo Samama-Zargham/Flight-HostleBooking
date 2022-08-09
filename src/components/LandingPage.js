@@ -134,136 +134,138 @@ const LandingPage = ({ navigation }) => {
                 }).then(async (res) => {
                     console.log("----Response >> ", JSON.stringify(res))
                     var access_token = res.access_token
-                await axios.get(
-                    // URL.Flight_Offers + "?originLocationCode=MAD&destinationLocationCode=PAR&departureDate=2022-08-01&adults=2",
-                    `https://test.api.amadeus.com/v1/reference-data/locations?subType=AIRPORT,CITY&keyword=${CityAirport}`,
-                    {
-                        headers: {
-                            'Authorization': `Bearer ${access_token}`
+                    await axios.get(
+                        // URL.Flight_Offers + "?originLocationCode=MAD&destinationLocationCode=PAR&departureDate=2022-08-01&adults=2",
+                        `https://test.api.amadeus.com/v1/reference-data/locations?subType=AIRPORT,CITY&keyword=${CityAirport}`,
+                        {
+                            headers: {
+                                'Authorization': `Bearer ${access_token}`
+                            }
                         }
-                    }
-                )
-                    .then(async (res) => {
+                    )
+                        .then(async (res) => {
 
-                        // setFlightOffersData(res.data)
-                        console.log("----Response >> ", JSON.stringify(res.data))
-                        var iataCode = res?.data?.data[0]?.iataCode
-                        var cityCode = res?.data?.data[0]?.address?.cityCode
-                        var countryCode = res?.data?.data[0]?.address?.countryCode
+                            // setFlightOffersData(res.data)
+                            console.log("----Response >> ", JSON.stringify(res.data))
+                            var iataCode = res?.data?.data[0]?.iataCode
+                            var cityCode = res?.data?.data[0]?.address?.cityCode
+                            var countryCode = res?.data?.data[0]?.address?.countryCode
 
-                        console.log("----Response iataCode >> ", iataCode, "  countryCode  ", countryCode, "  cityCode  ", cityCode)
+                            console.log("----Response iataCode >> ", iataCode, "  countryCode  ", countryCode, "  cityCode  ", cityCode)
 
-                        if (iataCode == undefined) {
-                            alert("Sorry, No any Amadeus Airport exist in this city choose another nearest city")
-                            setisResponse(false)
+                            if (iataCode == undefined) {
+                                alert("Sorry, No any Amadeus Airport exist in this city choose another nearest city")
+                                setisResponse(false)
 
-                        } else {
-                            // alert("Ok bruh ")
-                            // console.log(URL.Flight_Offers + `?originLocationCode=${iataCode}&destinationLocationCode=PAR&departureDate=${departing}&adults=${Persons}&returnDate=${returning}`)
-                            await axios.get(
-                                URL.Flight_Offers + `?originLocationCode=${iataCode}&destinationLocationCode=PAR&departureDate=${departing}&adults=${Persons}&returnDate=${returning}&maxPrice=${bugget}`,
-                                {
-                                    headers: {
-                                        'Authorization': `Bearer ${access_token}`
+                            } else {
+                                // alert("Ok bruh ")
+                                // console.log(URL.Flight_Offers + `?originLocationCode=${iataCode}&destinationLocationCode=PAR&departureDate=${departing}&adults=${Persons}&returnDate=${returning}`)
+                                await axios.get(
+                                    URL.Flight_Offers + `?originLocationCode=${iataCode}&destinationLocationCode=PAR&departureDate=${departing}&adults=${Persons}&returnDate=${returning}&maxPrice=${bugget}`,
+                                    {
+                                        headers: {
+                                            'Authorization': `Bearer ${access_token}`
+                                        }
                                     }
-                                }
-                            )
-                                .then(async (res) => {
-                                    setisResponse(false)
-                                    var resDaata = res?.data?.data
-                                    // console.log("-----------------")
+                                )
+                                    .then(async (res) => {
+                                        setisResponse(false)
+                                        var resDaata = res?.data?.data
+                                        // console.log("-----------------")
 
-                                    if (res?.data?.data != [] && resDaata.length) {
-                                        var CountryData = res?.data?.dictionaries?.locations
-                                        var AllData = res?.data?.data
-                                        var AlDataLenght = AllData?.length
+                                        if (res?.data?.data != [] && resDaata.length) {
+                                            var CountryData = res?.data?.dictionaries?.locations
+                                            var AllData = res?.data?.data
+                                            var AlDataLenght = AllData?.length
 
-                                        // console.log("first====>>> ", AllData?.length)
+                                            // console.log("first====>>> ", AllData?.length)
 
-                                        for (let i = 0; i < 100; i++) {
-                                            var grandPrice = res?.data?.data[i]?.price?.grandTotal
-                                            var DepartTime = res?.data?.data[i]?.itineraries[0]?.segments[0]?.departure?.at
-                                            // var DepartTime1 = DepartTime.substring(11, 16);
-                                            var ReturnTime = res?.data?.data[i]?.itineraries[0]?.segments[0]?.arrival?.at
-                                            // var ReturnTime1 = ReturnTime.substring(11, 16);
-                                            var flightDuration = res?.data?.data[i]?.itineraries[0]?.duration
-                                            var flightDuration1 = flightDuration?.substring(2)
-                                            var Seatnumber = res?.data?.data[i]?.itineraries[0]?.segments[0]?.number
-                                            // var Seatnumber1 = Seatnumber.substring(0, 3)
-                                            var aircraftDaata = {
-                                                "carrierCode": res?.data?.data[i]?.itineraries[0]?.segments[0]?.carrierCode,
-                                                "Seatnumber": Seatnumber,
-                                                "aircraftcode": res?.data?.data[i]?.itineraries[0]?.segments[0]?.aircraft?.code,
-                                                "grandPrice": grandPrice,
-                                                "flightDuration": flightDuration1,
-                                                "departTime": DepartTime,
-                                                "returnTime": ReturnTime,
-                                                "departDate": departing,
-                                                "returDate": returning
-                                            }
-                                            var arrivalCode = res?.data?.data[i]?.itineraries[0]?.segments[0]?.arrival?.iataCode
-
-                                            // console.log("aircraftDaata  ", JSON.stringify(aircraftDaata))
-
-                                            for (let i in CountryData) {
-                                                let t = CountryData[i]
-                                                if ((t.cityCode != cityCode && countryCode != t.countryCode) && t.cityCode == arrivalCode) {
-                                                    // console.log("first" + t.countryCode)
-                                                    if (MyAmadeusDataa.length > 0) {
-                                                        var len = MyAmadeusDataa.length > 1 ? MyAmadeusDataa.length : 1
-                                                        MyAmadeusDataa.map(async (item, index) => {
-                                                            item.countryCode == t.countryCode
-                                                                ?
-                                                                null
-                                                                :
-                                                                (index == len - 1 && MyAmadeusDataa.length < 3) &&
-                                                                MyAmadeusDataa.push({ "countryCode": t.countryCode, "cityCode": t.cityCode, "aircraftDaata": aircraftDaata, "Persons": Persons })
-                                                        })
-                                                    } else {
-                                                        MyAmadeusDataa.push({ "countryCode": t.countryCode, "cityCode": t.cityCode, "aircraftDaata": aircraftDaata, "Persons": Persons })
-                                                        break;
-                                                    }
-                                                    break;
-
+                                            for (let i = 0; i < 100; i++) {
+                                                var grandPrice = res?.data?.data[i]?.price?.grandTotal
+                                                var DepartTime = res?.data?.data[i]?.itineraries[0]?.segments[0]?.departure?.at
+                                                // var DepartTime1 = DepartTime.substring(11, 16);
+                                                var ReturnTime = res?.data?.data[i]?.itineraries[0]?.segments[0]?.arrival?.at
+                                                // var ReturnTime1 = ReturnTime.substring(11, 16);
+                                                var flightDuration = res?.data?.data[i]?.itineraries[0]?.duration
+                                                var flightDuration1 = flightDuration?.substring(2)
+                                                var Seatnumber = res?.data?.data[i]?.itineraries[0]?.segments[0]?.number
+                                                // var Seatnumber1 = Seatnumber.substring(0, 3)
+                                                var aircraftDaata = {
+                                                    "carrierCode": res?.data?.data[i]?.itineraries[0]?.segments[0]?.carrierCode,
+                                                    "Seatnumber": Seatnumber,
+                                                    "aircraftcode": res?.data?.data[i]?.itineraries[0]?.segments[0]?.aircraft?.code,
+                                                    "grandPrice": grandPrice,
+                                                    "flightDuration": flightDuration1,
+                                                    "departTime": DepartTime,
+                                                    "returnTime": ReturnTime,
+                                                    "departDate": departing,
+                                                    "returDate": returning
                                                 }
+                                                var arrivalCode = res?.data?.data[i]?.itineraries[0]?.segments[0]?.arrival?.iataCode
+
+                                                // console.log("aircraftDaata  ", JSON.stringify(aircraftDaata))
+
+                                                for (let i in CountryData) {
+                                                    let t = CountryData[i]
+                                                    if ((t.cityCode != cityCode && countryCode != t.countryCode) && t.cityCode == arrivalCode) {
+                                                        // console.log("first" + t.countryCode)
+                                                        if (MyAmadeusDataa.length > 0) {
+                                                            var len = MyAmadeusDataa.length > 1 ? MyAmadeusDataa.length : 1
+                                                            MyAmadeusDataa.map(async (item, index) => {
+                                                                item.countryCode == t.countryCode
+                                                                    ?
+                                                                    null
+                                                                    :
+                                                                    (index == len - 1 && MyAmadeusDataa.length < 3) &&
+                                                                    MyAmadeusDataa.push({ "countryCode": t.countryCode, "cityCode": t.cityCode, "aircraftDaata": aircraftDaata, "Persons": Persons })
+                                                            })
+                                                        } else {
+                                                            MyAmadeusDataa.push({ "countryCode": t.countryCode, "cityCode": t.cityCode, "aircraftDaata": aircraftDaata, "Persons": Persons })
+                                                            break;
+                                                        }
+                                                        break;
+
+                                                    }
+                                                }
+
                                             }
 
+
+                                            console.log("MyAmadeusDataa===>>>   ", JSON.stringify(MyAmadeusDataa))
+
+                                            if (MyAmadeusDataa.length > 0) {
+                                                navigation.navigate("Results", { AmadeusDataa: MyAmadeusDataa, access_token: access_token, LeaveCity: CityAirport })
+
+                                            }
+                                            else {
+                                                alert("Sorry we don't have flights at this time.")
+
+                                            }
+                                            console.log("-----------------")
+                                        } else {
+                                            alert("Sorry, Amadeus don't have this City or wait for a while Server is down")
                                         }
+                                    }).catch((error) => {
+                                        setisResponse(false)
+                                        alert("Sorry", error)
+                                    })
 
 
-                                        console.log("MyAmadeusDataa===>>>   ", JSON.stringify(MyAmadeusDataa))
-
-                                        if (MyAmadeusDataa.length > 0) {
-                                            navigation.navigate("Results", { AmadeusDataa: MyAmadeusDataa, access_token: access_token })
-
-                                        }
-                                        else {
-                                            alert("Sorry we don't have flights at this time.")
-
-                                        }
-                                        console.log("-----------------")
-                                    } else {
-                                        alert("Sorry, Amadeus don't have this City or wait for a while Server is down")
-                                    }
-                                }).catch((error) => {
-                                    setisResponse(false)
-                                    alert("Sorry", error)
-                                })
-
-
-                        }
-                    }).catch((error) => {
-                        setisResponse(false)
-                        alert("Sorry", error)
-                    })
+                            }
+                        }).catch((error) => {
+                            setisResponse(false)
+                            alert("Sorry", error)
+                        })
 
 
 
 
-            }
+                }
                 ).catch((error) => {
                     setisResponse(false)
-                    alert("Sorry", error)
+                    if (error) {
+                        alert("Sorry " + error)
+                    }
                 })
             }
         }

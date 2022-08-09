@@ -9,6 +9,7 @@ import {
     Text,
     Dimensions
 } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import COLOURS from '../consts/colours';
 const { width, height } = Dimensions.get("window")
@@ -24,6 +25,7 @@ const MyBookings = ({ navigation }) => {
         try {
             const jsonValue = await AsyncStorage.getItem('@AsyncObject')
             setMyBookings(jsonValue != null ? JSON.parse(jsonValue) : null)
+            // console.log("--------... >>>", JSON.stringify(MyBookings))
             setisLoad(false)
         } catch (e) {
             setisLoad(false)
@@ -39,6 +41,23 @@ const MyBookings = ({ navigation }) => {
     }, [MyBookings])
 
 
+    const renderItem = ({ item, index }) => {
+        var FlightData = item.FlightData
+        var HotelData = item.HotelData
+        var UserData = item.UserData
+        return (
+            <TouchableOpacity key={index} style={style.ServiceStyle}>
+                <Text>{`Booked By: ${UserData.FirstName} ${UserData.LastName}`} </Text>
+                <Text>{`Departing Date: ${FlightData.DepartingDate}`} </Text>
+                <Text>{`Returning Date: ${FlightData.ReturningDate}`} </Text>
+                <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+                    <Text>{`Flight: ${FlightData.Flight}`} </Text>
+                    <Text style={{ marginRight: 20 }}>{`Flight: ${FlightData.TotalGrandPrice}`}</Text>
+                </View>
+
+            </TouchableOpacity>
+        )
+    }
     return (
         <SafeAreaView style={style.container}>
             <View style={style.container}>
@@ -49,81 +68,60 @@ const MyBookings = ({ navigation }) => {
                     MyBookings != null
                         ?
                         <>
-                            <Text style={{ alignSelf: 'center', color: COLOURS.blue, fontWeight: "bold", fontSize: 19 }}>My Last Booking</Text>
-
-
-                            <Text style={{ fontSize: 17, color: COLOURS.dark, width: "90%", alignSelf: "center", marginTop: 10 }}>
-                                <Text style={{ color: COLOURS.blue, fontWeight: "800" }}>{"Flight Details" + "\n"}</Text>
-                                {
-                                    "Departing Date:  " + MyBookings.DepartingDate + "\n" +
-                                    "Departing Time:  " + MyBookings.DepartingTime + "\n" +
-                                    "Flight:  " + MyBookings.Flight + "\n" +
-                                    "Carrier:  " + MyBookings.Carrier + "\n" +
-                                    "SeatNumbers:  " + MyBookings.SeatNumbers + "\n" +
-                                    "Returning Time:  " + MyBookings.ReturningTime + "\n" +
-                                    "Returning Date:  " + MyBookings.ReturningDate + "\n" + "\n"
-                                }
-                                <Text style={{ color: COLOURS.blue, fontWeight: "800" }}>{"Hotel Details" + "\n"}</Text>
-                                {
-                                    "Hotel:  " + MyBookings.Hotel + "\n" +
-                                    "PostelCode:  " + MyBookings.PostelCode + "\n" +
-                                    "Street:   " + MyBookings.Street + "\n" +
-                                    "Subregion:   " + MyBookings.Subregion + "\n" +
-                                    "No of Beds:  " + MyBookings.NoofBeds + "\n" +
-                                    "Region:  " + MyBookings.Region + "\n" +
-                                    "Country Name:  " + MyBookings.CountryName + "\n" +
-                                    "City:  " + MyBookings.City + "\n" +
-                                    "Price for 1 person:  " + MyBookings.Pricefor1person + "\n" +
-                                    "Room type:  " + MyBookings.Roomtype + "\n" + "\n"
-
-                                }
-                                <Text style={{ color: COLOURS.blue, fontWeight: "800" }}>{"Total Grand Price:  " + MyBookings.TotalGrandPrice}</Text>
-
-                            </Text>
+                            <FlatList
+                                style={{ marginBottom: 30, }}
+                                ListHeaderComponent={() => {
+                                    return (<Text style={{ alignSelf: 'center', color: COLOURS.blue, fontWeight: "bold", fontSize: 19, marginBottom: 20 }}>My Bookings</Text>
+                                    )
+                                }}
+                                keyExtractor={(item, indx) => indx}
+                                data={MyBookings}
+                                renderItem={renderItem}
+                            />
 
                         </>
                         :
                         <Text style={style.headline}>
-                            Press below button for your adventure bookings 
+                            Press below button for your adventure bookings
                         </Text>
                 }
 
                 {
                     // MyBookings == null ?
-                        <TouchableOpacity
-                            activeOpacity={0.7}
-                            onPress={clickHandler}
-                            style={style.touchableOpacityStyle}>
-                            <AntDesign name="plus" color={COLOURS.white} size={24} />
-                        </TouchableOpacity>
-                        //  :
+                    <TouchableOpacity
+                        activeOpacity={0.7}
+                        onPress={clickHandler}
+                        style={style.touchableOpacityStyle}>
+                        <AntDesign name="plus" color={COLOURS.white} size={24} />
+                    </TouchableOpacity>
+                    //  :
 
-                        // <TouchableOpacity style={{
-                        //     position: 'absolute',
-                        //     right: 30,
-                        //     bottom: 30,
-                        //     backgroundColor: COLOURS.blue,
-                        //     width: "40%",
-                        //     borderRadius: 9,
-                        //     padding: 10
-                        // }} onPress={async () => {
+                    // <TouchableOpacity style={{
+                    //     position: 'absolute',
+                    //     right: 30,
+                    //     bottom: 30,
+                    //     backgroundColor: COLOURS.blue,
+                    //     width: "40%",
+                    //     borderRadius: 9,
+                    //     padding: 10
+                    // }} onPress={async () => {
 
-                        //     try {
-                        //         await AsyncStorage.removeItem('@AsyncObject').then(async () => {
-                        //             const jsonValue = await AsyncStorage.getItem('@AsyncObject')
-                        //             setMyBookings(jsonValue != null ? JSON.parse(jsonValue) : null)
-                        //             setisLoad(false)
-                        //         }
+                    //     try {
+                    //         await AsyncStorage.removeItem('@AsyncObject').then(async () => {
+                    //             const jsonValue = await AsyncStorage.getItem('@AsyncObject')
+                    //             setMyBookings(jsonValue != null ? JSON.parse(jsonValue) : null)
+                    //             setisLoad(false)
+                    //         }
 
-                        //         )
+                    //         )
 
-                        //     } catch (e) {
-                        //         setisLoad(false)
-                        //         // error reading value
-                        //     }
-                        // }}>
-                        //     <Text style={{ fontSize: 17, color: COLOURS.white, }}>Clear Booking</Text>
-                        // </TouchableOpacity>
+                    //     } catch (e) {
+                    //         setisLoad(false)
+                    //         // error reading value
+                    //     }
+                    // }}>
+                    //     <Text style={{ fontSize: 17, color: COLOURS.white, }}>Clear Booking</Text>
+                    // </TouchableOpacity>
                 }
             </View>
         </SafeAreaView>
@@ -133,6 +131,12 @@ const MyBookings = ({ navigation }) => {
 export default MyBookings;
 
 const style = StyleSheet.create({
+    ServiceStyle: {
+        backgroundColor: "white",
+        elevation: 10, marginBottom: 15,
+        alignSelf: "center",
+        width: "90%", padding: 10, borderRadius: 7
+    },
     headline: {
         flexWrap: 'wrap',
         textAlign: 'center',
@@ -141,7 +145,7 @@ const style = StyleSheet.create({
         fontWeight: '500',
         marginTop: height * 0.33,
         width: "80%",
-        alignSelf:"center"
+        alignSelf: "center"
     },
     container: {
         flex: 1,

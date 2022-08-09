@@ -1,85 +1,119 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     SafeAreaView,
     ScrollView,
-    StatusBar,
     StyleSheet,
     View,
     Text,
     TextInput,
     ImageBackground,
-    FlatList,
-    Dimensions,
     TouchableOpacity,
     Image,
     ActivityIndicator,
 } from "react-native";
-import Icon from "react-native-vector-icons/MaterialIcons";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import WavyBackground from "react-native-wavy-background";
 import COLOURS from "../consts/colours";
-import { CheckBox } from "react-native-web";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-// Auth Api
-import { axiosInstance, baseUrl } from "../api";
-
-const BookingDetails = ({ navigation }) => {
-    const [isSelected, setSelection] = useState(false);
+const BookingDetails = ({ navigation, route }) => {
+    const { FlightData, HotelData } = route.params
+    console.log(FlightData)
+    const [CardNumber, setCardNumber] = useState(false);
     const [Email, setEmail] = useState("");
     const [loading, setloading] = useState(false);
     const [FirstName, setFirstName] = useState("");
     const [LastName, setLastName] = useState("");
-    const [Password, setPassword] = useState("");
+    const [Phone, setPhone] = useState("");
+    const [ExpiryDate, setExpiryDate] = useState("")
+    const [MyBookings, setMyBookings] = useState([])
 
-    //   const Signup = () => {
-    //     if (
-    //       Email !== "" &&
-    //       FirstName !== "" &&
-    //       LastName !== "" &&
-    //       Password !== ""
-    //     ) {
-    //       if (Password.length > 7) {
-    //         if (Email.includes("@gmail")) {
-    //           setloading(true);
-    //           const params = {
-    //             firstName: FirstName,
-    //             LastName: LastName,
-    //             Email: Email.toLowerCase(),
-    //             Password: Password,
-    //           };
+    useEffect(async () => {
+        try {
+            const jsonValue = await AsyncStorage.getItem('@AsyncObject')
+            setMyBookings(jsonValue != null ? JSON.parse(jsonValue) : null)
+            console.log("--------... >>>", JSON.stringify(MyBookings), "   ii  ", JSON.parse(jsonValue))
 
-    //           axiosInstance
-    //             .post(baseUrl + "users/signup", params)
-    //             .then((res) => {
-    //               console.warn(res);
-    //               const userData = res.data;
+        } catch (e) {
+            // error reading value
+            alert(e)
+        }
+    }, [])
 
-    //               if (userData.status === "200") {
-    //                 setloading(false);
-    //                 alert("User Register !");
-    //                 navigation.goBack();
-    //                 // navigation.navigate("Results")
-    //               }
-    //             })
-    //             .catch((error) => {
-    //               if (error) {
-    //                 // console.warn(error);
-    //                 setloading(false);
-    //                 alert("Email Already Registered");
-    //               }
-    //             });
-    //         } else {
-    //           alert("use Valid Email");
-    //         }
-    //       } else {
-    //         setloading(false);
-    //         alert("Password must contain 8 characters.");
-    //       }
-    //     } else {
-    //       setloading(false);
-    //       alert("All fields are Required");
-    //     }
-    //   };
+
+    async function fetchData(AsyncObject, AsyncArray) {
+        console.log("5555555555555555555   ", AsyncObject)
+        try {
+            if (MyBookings == null) {
+                setMyBookings(AsyncObject)
+                console.log("66666666666666666666666666", MyBookings)
+                try {
+                    await AsyncStorage.setItem('@AsyncObject', JSON.stringify(AsyncArray)).then(() => {
+                        navigation.navigate("MyBookings")
+                    })
+                } catch (e) {
+                    // saving error
+                    alert(e)
+                }
+            }
+            else {
+                console.log("444444444444444444      ", JSON.stringify(MyBookings))
+
+                MyBookings.push(AsyncObject)
+                console.log("7777777777777777777777777777", JSON.stringify(MyBookings))
+
+                setTimeout(async () => {
+                    try {
+                        await AsyncStorage.setItem('@AsyncObject', JSON.stringify(MyBookings)).then(() => {
+                            navigation.navigate("MyBookings")
+                        })
+                    } catch (e) {
+                        // saving error
+                        alert(e)
+                    }
+                }, 1000)
+            }
+
+
+
+        } catch (e) {
+            // error reading value
+            alert(e)
+        }
+    }
+    const Signup = async () => {
+        if (
+            !Email &&
+            !FirstName &&
+            !LastName &&
+            !Phone &&
+            !CardNumber &&
+            !ExpiryDate
+        ) {
+            alert("Sorry, Please Fill all Fields")
+
+        } else {
+            let UserData = {
+                "Email": Email,
+                "FirstName": FirstName,
+                "LastName": LastName,
+                "Phone": Phone,
+                "CardNumber": CardNumber,
+                "ExpiryDate": ExpiryDate
+            }
+            let AsyncArray = [
+                {
+                    "UserData": UserData,
+                    "HotelData": HotelData,
+                    "FlightData": FlightData
+                }
+            ]
+            let AsyncObject = {
+                "UserData": UserData,
+                "HotelData": HotelData,
+                "FlightData": FlightData
+            }
+            fetchData(AsyncObject, AsyncArray)
+        }
+    };
 
     return (
         <>
@@ -109,7 +143,7 @@ const BookingDetails = ({ navigation }) => {
                                 style={style.logo}
                                 source={require("../images/shoestring_logo.png")}
                             />
-                            <Text style={{ color: COLOURS.green, fontWeight: "bold", fontSize: 17,width: "80%",alignSelf:"center" }}>Contact Details</Text>
+                            <Text style={{ color: COLOURS.green, fontWeight: "bold", fontSize: 17, width: "80%", alignSelf: "center" }}>Contact Details</Text>
                             <View style={style.inputContainer}>
                                 <TextInput
                                     style={{ paddingLeft: 10, color: COLOURS.grey, flex: 1 }}
@@ -132,6 +166,7 @@ const BookingDetails = ({ navigation }) => {
                                 <TextInput
                                     style={{ paddingLeft: 10, color: COLOURS.grey, flex: 1 }}
                                     placeholder="email address"
+                                    keyboardType="email-address"
                                     onChangeText={(text) => {
                                         setEmail(text);
                                     }}
@@ -141,18 +176,20 @@ const BookingDetails = ({ navigation }) => {
                                 <TextInput
                                     style={{ paddingLeft: 10, color: COLOURS.grey, flex: 1 }}
                                     placeholder="Phone Number"
+                                    keyboardType="numeric"
                                     onChangeText={(text) => {
-                                        setPassword(text);
+                                        setPhone(text);
                                     }}
                                 />
                             </View>
-                            <Text style={{ color: COLOURS.green, fontWeight: "bold", fontSize: 17,width: "80%",alignSelf:"center" }}>Payment Details</Text>
+                            <Text style={{ color: COLOURS.green, fontWeight: "bold", fontSize: 17, width: "80%", alignSelf: "center" }}>Payment Details</Text>
                             <View style={[style.inputContainer, { marginTop: 10 }]}>
                                 <TextInput
                                     style={{ paddingLeft: 10, color: COLOURS.grey, flex: 1 }}
                                     placeholder="Card Number"
+                                    keyboardType="numeric"
                                     onChangeText={(text) => {
-                                        setEmail(text);
+                                        setCardNumber(text);
                                     }}
                                 />
                             </View>
@@ -160,15 +197,17 @@ const BookingDetails = ({ navigation }) => {
                                 <TextInput
                                     style={{ paddingLeft: 10, color: COLOURS.grey, flex: 1 }}
                                     placeholder="Expiry Date"
+                                    keyboardType="numeric"
+
                                     onChangeText={(text) => {
-                                        setPassword(text);
+                                        setExpiryDate(text);
                                     }}
                                 />
                             </View>
                             <TouchableOpacity
                                 style={style.btnContainer}
                                 activeOpacity={0.8}
-                                onPress={() => { navigation.navigate("MyBookings")}}
+                                onPress={() => { Signup() }}
                             >
                                 <View style={style.btn}>
                                     <Text
@@ -221,13 +260,13 @@ const style = StyleSheet.create({
         flexDirection: "row",
         paddingHorizontal: 20,
         alignItems: "center",
-        alignSelf:"center"
+        alignSelf: "center"
     },
 
     btnContainer: {
         marginTop: 20,
         width: "80%",
-        alignSelf:"center"
+        alignSelf: "center"
     },
 
     btn: {

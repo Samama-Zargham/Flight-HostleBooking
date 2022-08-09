@@ -42,7 +42,7 @@ const data = [
 ]
 
 const Details = ({ navigation, route }) => {
-    const { aircraftDaata, hotelData, hotelAddress, Beds } = route.params
+    const { aircraftDaata, hotelData, hotelAddress, Beds, ArrivalCity, LeaveCity } = route.params
     var departTime = aircraftDaata.departTime
     var returnTime = aircraftDaata.returnTime
     const [countryName, setcountryName] = useState("")
@@ -201,8 +201,10 @@ const Details = ({ navigation, route }) => {
                         style={style.btnContainer}
                         activeOpacity={0.8}
                         onPress={async () => {
-                            let AsyncObject = {
-                                "TotalGrandPrice": aircraftDaata?.grandPrice + hotelGrandPrice,
+                            let FlightData = {
+                                "ArrivalCity": ArrivalCity,
+                                "LeaveCity": LeaveCity,
+                                "TotalGrandPrice": hotelData == null ? aircraftDaata?.grandPrice  : JSON.parse(aircraftDaata?.grandPrice) + hotelGrandPrice,
                                 "DepartingTime": departTime?.substring(11, 16),
                                 "ReturningTime": returnTime?.substring(11, 16),
                                 "DepartingDate": aircraftDaata?.departDate,
@@ -210,25 +212,27 @@ const Details = ({ navigation, route }) => {
                                 "Flight": aircraftDaata?.aircraftcode,
                                 "Carrier": aircraftDaata?.carrierCode,
                                 "SeatNumbers": Beds == "1" ? Seatnumber1 : Beds == "2" ? Seatnumber1 + ",  " + (parseInt(Seatnumber1) + 1) : Beds == "3" && Seatnumber1 + ",  " + (parseInt(Seatnumber1) + 1) + ",  " + (parseInt(Seatnumber1) + 2),
-                                "CountryName": countryName,
-                                "Hotel": hotelData?.name,
-                                "City": hotelAddress[0]?.city == null ? hotelData?.iataCode : hotelAddress[0]?.city,
-                                "Street": hotelAddress[0]?.street,
-                                "PostelCode": hotelAddress[0]?.postalCode,
-                                "Region": hotelAddress[0]?.region,
-                                "Subregion": hotelAddress[0]?.subregion,
-                                "NoofBeds": Beds,
-                                "Roomtype": roomType,
-                                "Pricefor1person": "$170",
                             }
 
-                            try {
-                                await AsyncStorage.setItem('@AsyncObject', JSON.stringify(AsyncObject)).then(() => {
-                                    navigation.replace("BookingDetails")
-                                })
-                            } catch (e) {
-                                // saving error
+                            if (hotelData != null) {
+                                var HotelData = {
+                                    "CountryName": countryName,
+                                    "Hotel": hotelData?.name,
+                                    "City": hotelAddress[0]?.city == null ? hotelData?.iataCode : hotelAddress[0]?.city,
+                                    "Street": hotelAddress[0]?.street,
+                                    "PostelCode": hotelAddress[0]?.postalCode,
+                                    "Region": hotelAddress[0]?.region,
+                                    "Subregion": hotelAddress[0]?.subregion,
+                                    "NoofBeds": Beds,
+                                    "Roomtype": roomType,
+                                    "Pricefor1person": "$170",
+                                }
                             }
+                            navigation.navigate("BookingDetails", {
+                                FlightData: FlightData,
+                                HotelData: hotelData == null ? null : HotelData
+                            })
+
 
                         }}
                     >

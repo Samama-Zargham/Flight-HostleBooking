@@ -23,7 +23,7 @@ import * as Location from 'expo-location'
 
 const Results = ({ route, navigation }) => {
 
-    const { AmadeusDataa, access_token } = route.params;
+    const { AmadeusDataa, access_token, LeaveCity } = route.params;
     const [first, setfirst] = useState()
     const [Second, setSecond] = useState()
     // console.log("---->>>>>>>>>>>>>>>>>>>>>>> ", JSON.stringify(AmadeusDataa))
@@ -58,19 +58,19 @@ const Results = ({ route, navigation }) => {
                 let lat = res?.data?.data[0]?.geoCode?.latitude
                 let lng = res?.data?.data[0]?.geoCode?.longitude
                 let hotelId = res?.data?.data[0]?.hotelId
-                // console.log("hdbsjhb", JSON.stringify(res?.data))
+                console.log("hdbsjhb", JSON.stringify(res?.data))
                 console.log("-----------------------   ", hotelId)
                 let Address = await getAddress(lat, lng)
 
                 console.log("first ==== >>> ", JSON.stringify(Address))
                 if (res) {
-                    navigation.navigate('Details', { aircraftDaata: aircraftDaata, hotelData: Hotel, hotelAddress: Address, Beds: AmadeusDataa[0]?.Persons })
+                    navigation.navigate('Details', { aircraftDaata: aircraftDaata, hotelData: Hotel, hotelAddress: Address, Beds: AmadeusDataa[0]?.Persons, LeaveCity: LeaveCity, ArrivalCity: cityCode })
 
                 }
             })
         } catch (error) {
             alert("Sorry, we couldnt find any hotel for the selected country please book yourself")
-            navigation.navigate('Details', { aircraftDaata: aircraftDaata, hotelData: null })
+            navigation.navigate('Details', { aircraftDaata: aircraftDaata, hotelData: null, Beds: AmadeusDataa[0]?.Persons, LeaveCity: LeaveCity, ArrivalCity: cityCode })
 
         }
 

@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import IconA from 'react-native-vector-icons/Ionicons';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import WavyBackground from 'react-native-wavy-background';
 import COLOURS from '../consts/colours';
@@ -166,7 +167,18 @@ const Details = ({ navigation, route }) => {
                     </Text>
                 </View>
 
-                {isLogged &&
+                {isLogged
+                    ?
+                    <TouchableOpacity
+                        styles={{
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }}
+                        onPress={() => navigation.replace('Login')}
+                    >
+                        <IconA style={{ color: COLOURS.orange }} name="log-out" size={25} />
+                    </TouchableOpacity>
+                    :
                     <TouchableOpacity
                         styles={{
                             alignItems: 'center',
@@ -175,7 +187,8 @@ const Details = ({ navigation, route }) => {
                         onPress={() => navigation.replace('Login')}
                     >
                         <FontAwesomeIcon style={{ color: COLOURS.orange }} name="user" size={25} />
-                    </TouchableOpacity>}
+                    </TouchableOpacity>
+                }
             </View>
         )
     }

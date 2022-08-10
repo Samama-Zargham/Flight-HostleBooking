@@ -14,6 +14,7 @@ import {
 import { getPixelSizeForLayoutSize } from 'react-native/Libraries/Utilities/PixelRatio';
 import COLOURS from '../consts/colours';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import IconA from 'react-native-vector-icons/Ionicons';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import { CountryLIST } from '../CountryData';
 import axios from "axios";
@@ -163,7 +164,18 @@ const Results = ({ route, navigation }) => {
                 </View>
 
                 {isLogged
-                    && <TouchableOpacity
+                    ?
+                    <TouchableOpacity
+                        styles={{
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }}
+                        onPress={() => navigation.replace('Login')}
+                    >
+                        <IconA style={{ color: COLOURS.orange }} name="log-out" size={25} />
+                    </TouchableOpacity>
+                    :
+                    <TouchableOpacity
                         styles={{
                             alignItems: 'center',
                             justifyContent: 'center'
@@ -171,7 +183,8 @@ const Results = ({ route, navigation }) => {
                         onPress={() => navigation.replace('Login')}
                     >
                         <FontAwesomeIcon style={{ color: COLOURS.orange }} name="user" size={25} />
-                    </TouchableOpacity>}
+                    </TouchableOpacity>
+                }
             </View>
         )
     }

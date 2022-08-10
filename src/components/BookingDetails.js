@@ -11,19 +11,21 @@ import {
     Image,
     ActivityIndicator,
 } from "react-native";
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import COLOURS from "../consts/colours";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const BookingDetails = ({ navigation, route }) => {
     const { FlightData, HotelData } = route.params
     console.log(FlightData)
     const [CardNumber, setCardNumber] = useState(false);
     const [Email, setEmail] = useState("");
+    const [CVC, setCVC] = useState()
     const [loading, setloading] = useState(false);
     const [FirstName, setFirstName] = useState("");
     const [LastName, setLastName] = useState("");
     const [Phone, setPhone] = useState("");
-    const [ExpiryDate, setExpiryDate] = useState("")
+    const [ExpiryDate, setExpiryDate] = useState("Select Expiry date")
     const [MyBookings, setMyBookings] = useState([])
 
     useEffect(async () => {
@@ -115,6 +117,24 @@ const BookingDetails = ({ navigation, route }) => {
         }
     };
 
+
+    const [modeA, setModeForReturning] = useState('date')
+    const [showReturning, setShowReturning] = useState(false)
+
+    const showModeA = (currentMode) => {
+        setShowReturning(true);
+        setModeForReturning(currentMode);
+    }
+    const [dateForReturning, setDateForReturning] = useState(new Date())
+
+    const onChangeReturn = (event, selectDate) => {
+        const currentDate = selectDate || date;
+        setShowReturning(Platform.OS === 'ios');
+        setDateForReturning(currentDate);
+        let tempDate = new Date(currentDate);
+        let fDate = tempDate.getFullYear() + '-' + ((tempDate.getMonth() + 1) > 9 ? tempDate.getMonth() + 1 : '0' + (tempDate.getMonth() + 1)) + "-" + ((tempDate.getDate()) > 9 ? tempDate.getDate() : '0' + (tempDate.getDate()))
+        setExpiryDate(fDate)
+    }
     return (
         <>
             {loading === true ? (
@@ -193,16 +213,22 @@ const BookingDetails = ({ navigation, route }) => {
                                     }}
                                 />
                             </View>
-                            <View style={style.inputContainer}>
+                            <View style={[style.inputContainer, { marginTop: 10 }]}>
                                 <TextInput
                                     style={{ paddingLeft: 10, color: COLOURS.grey, flex: 1 }}
-                                    placeholder="Expiry Date"
+                                    placeholder="Enter CVC"
                                     keyboardType="numeric"
-
+                                    maxLength={3}
                                     onChangeText={(text) => {
-                                        setExpiryDate(text);
+                                        setCVC(text);
                                     }}
                                 />
+                            </View>
+                            <View style={[style.inputContainer, { paddingLeft: 0, }]}>
+                                <TouchableOpacity onPress={() => showModeA('date')}>
+                                    <Icon style={{ color: COLOURS.green, paddingLeft: 10 }} name="calendar-today" size={28} />
+                                </TouchableOpacity>
+                                <Text style={{ paddingLeft: 10, color: COLOURS.grey }} >{ExpiryDate}</Text>
                             </View>
                             <TouchableOpacity
                                 style={style.btnContainer}
@@ -221,7 +247,16 @@ const BookingDetails = ({ navigation, route }) => {
                                     </Text>
                                 </View>
                             </TouchableOpacity>
-
+                            {showReturning && (
+                                <DateTimePicker
+                                    testID='dateTimePicker'
+                                    value={dateForReturning}
+                                    mode={modeA}
+                                    is24Hour={true}
+                                    display='default'
+                                    onChange={onChangeReturn}
+                                />
+                            )}
                         </View>
                     </ImageBackground>
                 </ScrollView>
@@ -232,7 +267,7 @@ const BookingDetails = ({ navigation, route }) => {
 
 const style = StyleSheet.create({
     container: {
-        margin: 40,
+        margin: 25,
         backgroundColor: "rgba(255,255,255,0.9)",
         flex: 1,
         // alignItems: "center",
@@ -245,9 +280,10 @@ const style = StyleSheet.create({
     },
 
     logo: {
-        width: 150,
-        height: 50,
-        margin: 30,
+        width: 140,
+        alignSelf:"center",
+        height:45,
+        margin: 10,
     },
 
     inputContainer: {

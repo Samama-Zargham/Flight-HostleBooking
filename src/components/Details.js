@@ -11,7 +11,7 @@ import {
     FlatList,
     Dimensions,
     TouchableOpacity,
-    Image,
+    Image,Alert,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/MaterialIcons';

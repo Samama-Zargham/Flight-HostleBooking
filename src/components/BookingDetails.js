@@ -49,7 +49,7 @@ const BookingDetails = ({ navigation, route }) => {
                 console.log("66666666666666666666666666", MyBookings)
                 try {
                     await AsyncStorage.setItem('@AsyncObject', JSON.stringify(AsyncArray)).then(() => {
-                        navigation.navigate("MyBookings")
+                        navigation.replace("MyBookings")
                     })
                 } catch (e) {
                     // saving error
@@ -65,7 +65,7 @@ const BookingDetails = ({ navigation, route }) => {
                 setTimeout(async () => {
                     try {
                         await AsyncStorage.setItem('@AsyncObject', JSON.stringify(MyBookings)).then(() => {
-                            navigation.navigate("MyBookings")
+                            navigation.replace("MyBookings")
                         })
                     } catch (e) {
                         // saving error

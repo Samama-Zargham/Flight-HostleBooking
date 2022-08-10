@@ -48,7 +48,7 @@ const MyBookings = ({ navigation }) => {
         var total = FlightData?.TotalGrandPrice
         return (
             <TouchableOpacity
-                onPress={() => navigation.navigate("BookingDetail", {
+                onPress={() => navigation.replace("BookingDetail", {
                     FlightData: FlightData,
                     HotelData: HotelData,
                     UserData: UserData,

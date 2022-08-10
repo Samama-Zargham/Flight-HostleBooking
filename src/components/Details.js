@@ -155,7 +155,7 @@ const Details = ({ navigation, route }) => {
                         alignItems: 'center',
                         justifyContent: 'center'
                     }}
-                    onPress={() => navigation.navigate('Results')}
+                    onPress={() => navigation.replace('Results')}
                 >
                     <Icon style={{ color: COLOURS.orange }} name="arrow-back-ios" size={28} />
 
@@ -174,7 +174,19 @@ const Details = ({ navigation, route }) => {
                             alignItems: 'center',
                             justifyContent: 'center'
                         }}
-                        onPress={() => navigation.replace('Login')}
+                        onPress={() => 
+                            Alert.alert(
+                                "Log Out", "Are you sure to log out?",
+                                [
+                                    {
+                                        text: 'Yes', onPress: () => {  navigation.replace('Login') }
+                                    },
+                                    {
+                                        text: 'No', onPress: () => { }
+                                    },
+                                ]
+                            )
+                        }
                     >
                         <IconA style={{ color: COLOURS.orange }} name="log-out" size={25} />
                     </TouchableOpacity>
@@ -246,7 +258,7 @@ const Details = ({ navigation, route }) => {
                                 }
                             }
                             isLogged == true ?
-                                navigation.navigate("BookingDetails", {
+                                navigation.replace("BookingDetails", {
                                     FlightData: FlightData,
                                     HotelData: hotelData == null ? null : HotelData
                                 })

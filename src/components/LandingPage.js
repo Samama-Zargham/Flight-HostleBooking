@@ -236,7 +236,7 @@ const LandingPage = ({ navigation, route }) => {
                                             console.log("MyAmadeusDataa===>>>   ", JSON.stringify(MyAmadeusDataa))
 
                                             if (MyAmadeusDataa.length > 0) {
-                                                navigation.navigate("Results", { AmadeusDataa: MyAmadeusDataa, access_token: access_token, LeaveCity: CityAirport, isLogged:isLogged })
+                                                navigation.replace("Results", { AmadeusDataa: MyAmadeusDataa, access_token: access_token, LeaveCity: CityAirport, isLogged:isLogged })
 
                                             }
                                             else {

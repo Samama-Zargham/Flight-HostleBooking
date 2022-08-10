@@ -58,7 +58,7 @@ const Register = ({ navigation }) => {
                 setloading(false);
                 alert("User Register !");
                 navigation.goBack();
-                // navigation.navigate("Results")
+                // navigation.replace("Results")
               }
             })
             .catch((error) => {

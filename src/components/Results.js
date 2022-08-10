@@ -97,13 +97,13 @@ const Results = ({ route, navigation }) => {
 
                 console.log("first ==== >>> ", JSON.stringify(Address))
                 if (res) {
-                    navigation.replace('Details', { aircraftDaata: aircraftDaata, hotelData: Hotel, hotelAddress: Address, Beds: AmadeusDataa[0]?.Persons, LeaveCity: LeaveCity, ArrivalCity: cityCode, isLogged: isLogged })
+                    navigation.navigate('Details', { aircraftDaata: aircraftDaata, hotelData: Hotel, hotelAddress: Address, Beds: AmadeusDataa[0]?.Persons, LeaveCity: LeaveCity, ArrivalCity: cityCode, isLogged: isLogged })
 
                 }
             })
         } catch (error) {
             alert("Sorry, we couldnt find any hotel for the selected country please book yourself")
-            navigation.replace('Details', { aircraftDaata: aircraftDaata, isLogged: isLogged, hotelData: null, Beds: AmadeusDataa[0]?.Persons, LeaveCity: LeaveCity, ArrivalCity: cityCode })
+            navigation.navigate('Details', { aircraftDaata: aircraftDaata, isLogged: isLogged, hotelData: null, Beds: AmadeusDataa[0]?.Persons, LeaveCity: LeaveCity, ArrivalCity: cityCode })
 
         }
 
@@ -152,7 +152,7 @@ const Results = ({ route, navigation }) => {
                         alignItems: 'center',
                         justifyContent: 'center'
                     }}
-                    onPress={() => navigation.replace('LandingPage')}
+                    onPress={() => navigation.navigate('LandingPage')}
                 >
                     <Icon style={{ color: COLOURS.orange }} name="arrow-back-ios" size={28} />
 
@@ -176,7 +176,7 @@ const Results = ({ route, navigation }) => {
                                 "Log Out", "Are you sure to log out?",
                                 [
                                     {
-                                        text: 'Yes', onPress: () => {  navigation.replace('Login') }
+                                        text: 'Yes', onPress: () => {  navigation.navigate('Login') }
                                     },
                                     {
                                         text: 'No', onPress: () => { }
@@ -193,7 +193,7 @@ const Results = ({ route, navigation }) => {
                             alignItems: 'center',
                             justifyContent: 'center'
                         }}
-                        onPress={() => navigation.replace('Login')}
+                        onPress={() => navigation.navigate('Login')}
                     >
                         <FontAwesomeIcon style={{ color: COLOURS.orange }} name="user" size={25} />
                     </TouchableOpacity>

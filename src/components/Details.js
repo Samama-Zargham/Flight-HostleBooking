@@ -155,7 +155,7 @@ const Details = ({ navigation, route }) => {
                         alignItems: 'center',
                         justifyContent: 'center'
                     }}
-                    onPress={() => navigation.replace('Results')}
+                    onPress={() => navigation.navigate('Results')}
                 >
                     <Icon style={{ color: COLOURS.orange }} name="arrow-back-ios" size={28} />
 
@@ -179,7 +179,7 @@ const Details = ({ navigation, route }) => {
                                 "Log Out", "Are you sure to log out?",
                                 [
                                     {
-                                        text: 'Yes', onPress: () => {  navigation.replace('Login') }
+                                        text: 'Yes', onPress: () => {  navigation.navigate('Login') }
                                     },
                                     {
                                         text: 'No', onPress: () => { }
@@ -196,7 +196,7 @@ const Details = ({ navigation, route }) => {
                             alignItems: 'center',
                             justifyContent: 'center'
                         }}
-                        onPress={() => navigation.replace('Login')}
+                        onPress={() => navigation.navigate('Login')}
                     >
                         <FontAwesomeIcon style={{ color: COLOURS.orange }} name="user" size={25} />
                     </TouchableOpacity>
@@ -258,14 +258,14 @@ const Details = ({ navigation, route }) => {
                                 }
                             }
                             isLogged == true ?
-                                navigation.replace("BookingDetails", {
+                                navigation.navigate("BookingDetails", {
                                     FlightData: FlightData,
                                     HotelData: hotelData == null ? null : HotelData
                                 })
                                 :
                                 [
                                     alert("Sorry, Please Register First For booking"),
-                                    navigation.replace("Register")
+                                    navigation.navigate("Register")
                                 ]
 
                         }}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import {
     SafeAreaView,
     ScrollView,
@@ -11,7 +11,7 @@ import {
     FlatList,
     Dimensions,
     TouchableOpacity,
-    Image,Alert,
+    Image, Alert,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -20,6 +20,7 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import WavyBackground from 'react-native-wavy-background';
 import COLOURS from '../consts/colours';
 import { CountryLIST } from '../CountryData';
+
 const listTab = [
     {
         status: 'Hotel'
@@ -43,9 +44,23 @@ const data = [
 ]
 
 const Details = ({ navigation, route }) => {
-    const isLogged = route?.params?.isLogged ? true : false
+    // const isLogged = route?.params?.isLogged ? true : false
     console.log("first--------", isLogged)
+    const [isLogged, setisLogged] = useState(false)
+    const getResponse = async () => {
+        try {
+            const jsonValue = await AsyncStorage.getItem('@IsLogin')
+            setisLogged(jsonValue != null ? true : false)
 
+        } catch (e) {
+            // error reading value
+            alert(e)
+        }
+    }
+    useEffect(() => {
+        getResponse();
+
+    }, [isLogged])
     const { aircraftDaata, hotelData, hotelAddress, Beds, ArrivalCity, LeaveCity } = route.params
     var departTime = aircraftDaata.departTime
     var returnTime = aircraftDaata.returnTime
@@ -174,12 +189,25 @@ const Details = ({ navigation, route }) => {
                             alignItems: 'center',
                             justifyContent: 'center'
                         }}
-                        onPress={() => 
+                        onPress={() =>
                             Alert.alert(
                                 "Log Out", "Are you sure to log out?",
                                 [
                                     {
-                                        text: 'Yes', onPress: () => {  navigation.navigate('Login') }
+                                        text: 'Yes', onPress: async () => {
+                                            try {
+                                                await AsyncStorage.removeItem('@IsLogin').then(() => {
+                                                    navigation.replace('Login')
+
+                                                }
+
+                                                )
+
+                                            } catch (e) {
+                                                // error reading value
+                                            }
+
+                                        }
                                     },
                                     {
                                         text: 'No', onPress: () => { }
@@ -196,7 +224,7 @@ const Details = ({ navigation, route }) => {
                             alignItems: 'center',
                             justifyContent: 'center'
                         }}
-                        onPress={() => navigation.navigate('Login')}
+                        onPress={() => navigation.replace('Login')}
                     >
                         <FontAwesomeIcon style={{ color: COLOURS.orange }} name="user" size={25} />
                     </TouchableOpacity>
@@ -258,14 +286,14 @@ const Details = ({ navigation, route }) => {
                                 }
                             }
                             isLogged == true ?
-                                navigation.navigate("BookingDetails", {
+                                navigation.replace("BookingDetails", {
                                     FlightData: FlightData,
                                     HotelData: hotelData == null ? null : HotelData
                                 })
                                 :
                                 [
                                     alert("Sorry, Please Register First For booking"),
-                                    navigation.navigate("Register")
+                                    navigation.replace("Register")
                                 ]
 
                         }}

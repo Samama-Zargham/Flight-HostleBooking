@@ -19,7 +19,10 @@ const BookingDetail = ({ navigation, route }) => {
         HotelData,
         UserData
     } = route.params
-    var total = FlightData?.TotalGrandPrice
+
+    console.log(HotelData)
+    var total = JSON.parse(FlightData?.TotalGrandPrice)
+    console.log(typeof (total))
 
     return (
         <SafeAreaView style={style.container}>
@@ -48,18 +51,26 @@ const BookingDetail = ({ navigation, route }) => {
                         "Returning Time:  " + FlightData.ReturningTime + "\n" +
                         "Returning Date:  " + FlightData.ReturningDate + "\n" + "\n"
                     }
-                    <Text style={{ color: COLOURS.blue, fontWeight: "800" }}>{"Hotel Details" + "\n"}</Text>
                     {
-                        "Hotel:  " + HotelData.Hotel + "\n" +
-                        "PostelCode:  " + HotelData.PostelCode + "\n" +
-                        "Street:   " + HotelData.Street + "\n" +
-                        "Subregion:   " + HotelData.Subregion + "\n" +
-                        "No of Beds:  " + HotelData.NoofBeds + "\n" +
-                        "Region:  " + HotelData.Region + "\n" +
-                        "Country Name:  " + HotelData.CountryName + "\n" +
-                        "City:  " + HotelData.City + "\n" +
-                        "Price for 1 person:  " + HotelData.Pricefor1person + "\n" +
-                        "Room type:  " + HotelData.Roomtype + "\n"
+                        HotelData != null && <Text style={{ color: COLOURS.blue, fontWeight: "800" }}>{"Hotel Details" + "\n"}</Text>
+
+                    }
+                    {HotelData != null &&
+                        <Text>
+                            {
+                                "Hotel:  " + HotelData.Hotel + "\n" +
+                                "PostelCode:  " + HotelData.PostelCode + "\n" +
+                                "Street:   " + HotelData.Street + "\n" +
+                                "Subregion:   " + HotelData.Subregion + "\n" +
+                                "No of Beds:  " + HotelData.NoofBeds + "\n" +
+                                "Region:  " + HotelData.Region + "\n" +
+                                "Country Name:  " + HotelData.CountryName + "\n" +
+                                "City:  " + HotelData.City + "\n" +
+                                "Price for 1 person:  " + HotelData.Pricefor1person + "\n" +
+                                "Room type:  " + HotelData.Roomtype + "\n"
+
+                            }
+                        </Text>
 
                     }
                     <Text style={{ color: COLOURS.blue, fontWeight: "800", }}>{"Total Grand Price:  " + total.toFixed(2)}</Text>

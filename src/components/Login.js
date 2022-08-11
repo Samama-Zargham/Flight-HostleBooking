@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
   ScrollView,
@@ -13,12 +13,14 @@ import {
   TouchableOpacity,
   Image,
   ActivityIndicator,
+  BackHandler,ToastAndroid
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import WavyBackground from "react-native-wavy-background";
 import COLOURS from "../consts/colours";
 import { CheckBox } from "react-native-web";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Auth Api
 import { axiosInstance, baseUrl } from "../api";
@@ -28,7 +30,13 @@ const Login = ({ navigation }) => {
   const [loading, setloading] = useState(false);
   const [email, setemail] = useState("");
   const [Password, setPassword] = useState("");
-
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', handleBackButton);
+  }, [])
+  const handleBackButton = () => {
+    ToastAndroid.show('Previous screen not available', ToastAndroid.SHORT);
+    return true;
+  }
   const signIn = () => {
     if (email === "" || Password === "") {
       setloading(true);
@@ -58,10 +66,18 @@ const Login = ({ navigation }) => {
           }
 
           if (userData.sucess === true) {
-            setTimeout(() => {
-              navigation.replace("MyBookings");
-              setloading(false);
-            }, 2000);
+            try {
+              await AsyncStorage.setItem('@IsLogin', "True").then(() => {
+                setTimeout(() => {
+                  navigation.replace("MyBookings");
+                  setloading(false);
+                }, 2000)
+              })
+            } catch (e) {
+              // saving error
+              alert(e)
+            }
+
           }
         })
         .catch((error) => {

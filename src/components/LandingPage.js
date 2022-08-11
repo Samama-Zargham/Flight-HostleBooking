@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     SafeAreaView,
     ScrollView,
@@ -12,11 +12,13 @@ import {
     Dimensions,
     TouchableOpacity,
     Image,
-    ActivityIndicator
+    ActivityIndicator,
+    Alert
 } from 'react-native';
 import URL from "../AmadeusRouts/URL";
 import axios from "axios";
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import IconA from 'react-native-vector-icons/Ionicons';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import WavyBackground from 'react-native-wavy-background';
 import COLOURS from '../consts/colours';
@@ -24,11 +26,27 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import Constants from 'expo-constants';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { setStatusBarNetworkActivityIndicatorVisible } from "expo-status-bar";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { width, height } = Dimensions.get("window")
 const LandingPage = ({ navigation, route }) => {
-    const isLogged = route?.params?.isLogged ? true : false
+    // const isLogged = route?.params?.isLogged ? true : false
     console.log("first", isLogged)
+    const [isLogged, setisLogged] = useState(false)
+    const getResponse = async () => {
+        try {
+            const jsonValue = await AsyncStorage.getItem('@IsLogin')
+            setisLogged(jsonValue != null ? true : false)
+
+        } catch (e) {
+            // error reading value
+            alert(e)
+        }
+    }
+    useEffect(() => {
+        getResponse();
+
+    }, [isLogged])
     const [bugget, setBugget] = useState()
     const [isResponse, setisResponse] = useState(false)
     // Calender For Departing
@@ -236,7 +254,7 @@ const LandingPage = ({ navigation, route }) => {
                                             console.log("MyAmadeusDataa===>>>   ", JSON.stringify(MyAmadeusDataa))
 
                                             if (MyAmadeusDataa.length > 0) {
-                                                navigation.replace("Results", { AmadeusDataa: MyAmadeusDataa, access_token: access_token, LeaveCity: CityAirport, isLogged:isLogged })
+                                                navigation.replace("Results", { AmadeusDataa: MyAmadeusDataa, access_token: access_token, LeaveCity: CityAirport, isLogged: isLogged })
 
                                             }
                                             else {
@@ -280,7 +298,70 @@ const LandingPage = ({ navigation, route }) => {
         <SafeAreaView
             style={{ flex: 1, backgroundColor: COLOURS.white }}>
             <View style={style.header}>
+                {isLogged && <TouchableOpacity
+                    style={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        position: "absolute",
+                        marginLeft: 20
+                    }}
+                    onPress={() => {navigation.navigate("MyBookings") }
+                    }
+                >
+                    <Icon style={{ color: COLOURS.orange }} name="history-edu" size={25} />
+                </TouchableOpacity>
+                }
                 <Image style={style.logo} resizeMode="contain" source={require('../images/shoestring_logo.png')} />
+                {isLogged
+                    ?
+                    <TouchableOpacity
+                        style={{
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            marginLeft: width * 0.25,
+                        }}
+                        onPress={() =>
+                            Alert.alert(
+                                "Log Out", "Are you sure to log out?",
+                                [
+                                    {
+                                        text: 'Yes', onPress: async () => {
+                                            try {
+                                                await AsyncStorage.removeItem('@IsLogin').then(() => {
+                                                    navigation.replace('Login')
+
+                                                }
+
+                                                )
+
+                                            } catch (e) {
+                                                // error reading value
+                                            }
+
+                                        }
+                                    },
+                                    {
+                                        text: 'No', onPress: () => { }
+                                    },
+                                ]
+                            )
+                        }
+                    >
+                        <IconA style={{ color: COLOURS.orange }} name="log-out" size={25} />
+                    </TouchableOpacity>
+                    :
+                    <TouchableOpacity
+                        style={{
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            marginLeft: width * 0.25,
+
+                        }}
+                        onPress={() => navigation.replace('Login')}
+                    >
+                        <FontAwesomeIcon style={{ color: COLOURS.orange }} name="user" size={25} />
+                    </TouchableOpacity>
+                }
             </View>
             <View style={{ padding: 20 }}>
                 <Text style={style.headline}>LOOK FOR YOUR NEW ADVENTURE ON A SHOESTRING</Text>
@@ -426,15 +507,16 @@ const style = StyleSheet.create({
     header: {
         paddingVertical: 20,
         marginTop: height * 0.03,
-        paddingHorizontal: 20,
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        // justifyContent: "center",
+        alignItems: "center",
         backgroundColor: COLOURS.white,
     },
     logo: {
-        maxWidth: 350,
+        maxWidth: 130,
         height: '100%',
         paddingTop: 50,
+        marginLeft: width * 0.27
     },
     container: {
         position: "absolute",

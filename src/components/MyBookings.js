@@ -45,10 +45,10 @@ const MyBookings = ({ navigation }) => {
         var FlightData = item?.FlightData
         var HotelData = item?.HotelData
         var UserData = item?.UserData
-        var total = FlightData?.TotalGrandPrice
+        var total = JSON.parse(FlightData?.TotalGrandPrice)
         return (
             <TouchableOpacity
-                onPress={() => navigation.replace("BookingDetail", {
+                onPress={() => navigation.navigate("BookingDetail", {
                     FlightData: FlightData,
                     HotelData: HotelData,
                     UserData: UserData,

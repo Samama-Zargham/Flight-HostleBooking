@@ -10,7 +10,7 @@ import {
     ScrollView,
     Platform,
     FlatList,
-    StyleSheet,
+    StyleSheet
 } from 'react-native';
 import { getPixelSizeForLayoutSize } from 'react-native/Libraries/Utilities/PixelRatio';
 import COLOURS from '../consts/colours';
@@ -21,11 +21,26 @@ import { CountryLIST } from '../CountryData';
 import axios from "axios";
 import URL from '../AmadeusRouts/URL';
 import * as Location from 'expo-location'
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Results = ({ route, navigation }) => {
-    const isLogged = route?.params?.isLogged ? true : false
+    // const isLogged = route?.params?.isLogged ? true : false
     console.log("first--------", isLogged)
+    const [isLogged, setisLogged] = useState(false)
+    const getResponse = async () => {
+        try {
+            const jsonValue = await AsyncStorage.getItem('@IsLogin')
+            setisLogged(jsonValue != null ? true : false)
+
+        } catch (e) {
+            // error reading value
+            alert(e)
+        }
+    }
+    useEffect(() => {
+        getResponse();
+
+    }, [isLogged])
 
     const { AmadeusDataa, access_token, LeaveCity } = route.params;
     const [first, setfirst] = useState()
@@ -167,16 +182,29 @@ const Results = ({ route, navigation }) => {
                 {isLogged
                     ?
                     <TouchableOpacity
-                        styles={{
+                        style={{
                             alignItems: 'center',
                             justifyContent: 'center'
                         }}
-                        onPress={() => 
+                        onPress={() =>
                             Alert.alert(
                                 "Log Out", "Are you sure to log out?",
                                 [
                                     {
-                                        text: 'Yes', onPress: () => {  navigation.navigate('Login') }
+                                        text: 'Yes', onPress: async () => {
+                                            try {
+                                                await AsyncStorage.removeItem('@IsLogin').then(() => {
+                                                    navigation.replace('Login')
+
+                                                }
+
+                                                )
+
+                                            } catch (e) {
+                                                // error reading value
+                                            }
+
+                                        }
                                     },
                                     {
                                         text: 'No', onPress: () => { }
@@ -189,11 +217,11 @@ const Results = ({ route, navigation }) => {
                     </TouchableOpacity>
                     :
                     <TouchableOpacity
-                        styles={{
+                        style={{
                             alignItems: 'center',
                             justifyContent: 'center'
                         }}
-                        onPress={() => navigation.navigate('Login')}
+                        onPress={() => navigation.replace('Login')}
                     >
                         <FontAwesomeIcon style={{ color: COLOURS.orange }} name="user" size={25} />
                     </TouchableOpacity>

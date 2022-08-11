@@ -14,7 +14,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import COLOURS from "../consts/colours";
 import DateTimePicker from '@react-native-community/datetimepicker';
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const BookingDetails = ({ navigation, route }) => {
     const { FlightData, HotelData } = route.params
     console.log(FlightData)
@@ -27,8 +27,7 @@ const BookingDetails = ({ navigation, route }) => {
     const [Phone, setPhone] = useState("");
     const [ExpiryDate, setExpiryDate] = useState("Select Expiry date")
     const [MyBookings, setMyBookings] = useState([])
-
-    useEffect(async () => {
+    const getResponse = async () => {
         try {
             const jsonValue = await AsyncStorage.getItem('@AsyncObject')
             setMyBookings(jsonValue != null ? JSON.parse(jsonValue) : null)
@@ -38,6 +37,10 @@ const BookingDetails = ({ navigation, route }) => {
             // error reading value
             alert(e)
         }
+    }
+    useEffect(() => {
+        getResponse();
+
     }, [])
 
 
@@ -197,6 +200,7 @@ const BookingDetails = ({ navigation, route }) => {
                                     style={{ paddingLeft: 10, color: COLOURS.grey, flex: 1 }}
                                     placeholder="Phone Number"
                                     keyboardType="numeric"
+                                    maxLength={11}
                                     onChangeText={(text) => {
                                         setPhone(text);
                                     }}
@@ -208,6 +212,7 @@ const BookingDetails = ({ navigation, route }) => {
                                     style={{ paddingLeft: 10, color: COLOURS.grey, flex: 1 }}
                                     placeholder="Card Number"
                                     keyboardType="numeric"
+                                    maxLength={16}
                                     onChangeText={(text) => {
                                         setCardNumber(text);
                                     }}
@@ -281,8 +286,8 @@ const style = StyleSheet.create({
 
     logo: {
         width: 140,
-        alignSelf:"center",
-        height:45,
+        alignSelf: "center",
+        height: 45,
         margin: 10,
     },
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
   ScrollView,
@@ -13,6 +13,8 @@ import {
   TouchableOpacity,
   Image,
   ActivityIndicator,
+  BackHandler,
+  ToastAndroid
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
@@ -30,7 +32,13 @@ const Register = ({ navigation }) => {
   const [FirstName, setFirstName] = useState("");
   const [LastName, setLastName] = useState("");
   const [Password, setPassword] = useState("");
-
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', handleBackButton);
+  }, [])
+  const handleBackButton = () => {
+    ToastAndroid.show('Previous screen not available', ToastAndroid.SHORT);
+    return true;
+  }
   const Signup = () => {
     if (
       Email !== "" &&

@@ -13,7 +13,8 @@ import {
     TouchableOpacity,
     Image,
     ActivityIndicator,
-    Alert
+    Alert,
+    Platform
 } from 'react-native';
 import URL from "../AmadeusRouts/URL";
 import axios from "axios";
@@ -485,7 +486,7 @@ const LandingPage = ({ navigation, route }) => {
                     value={dateForDeparting}
                     mode={modeForDeparting}
                     is24Hour={true}
-                    display='default'
+                    display={Platform.OS === 'ios' ? 'spinner' : 'default'}
                     onChange={onChange}
                 />
             )}
@@ -495,7 +496,7 @@ const LandingPage = ({ navigation, route }) => {
                     value={dateForReturning}
                     mode={modeA}
                     is24Hour={true}
-                    display='default'
+                    display={Platform.OS === 'ios' ? 'spinner' : 'default'}
                     onChange={onChangeReturn}
                 />
             )}

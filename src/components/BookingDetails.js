@@ -10,6 +10,7 @@ import {
     TouchableOpacity,
     Image,
     ActivityIndicator,
+    Platform
 } from "react-native";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import COLOURS from "../consts/colours";
@@ -258,7 +259,7 @@ const BookingDetails = ({ navigation, route }) => {
                                     value={dateForReturning}
                                     mode={modeA}
                                     is24Hour={true}
-                                    display='default'
+                                    display={Platform.OS === 'ios' ? 'spinner' : 'default'}
                                     onChange={onChangeReturn}
                                 />
                             )}

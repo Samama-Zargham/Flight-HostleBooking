@@ -61,7 +61,7 @@ const LandingPage = ({ navigation, route }) => {
 
     const onChange = (event, selectDate) => {
         const currentDate = selectDate || date;
-        setShowDeparting(Platform.OS === 'ios');
+   
         setDateForDeparting(currentDate);
         let tempDate = new Date(currentDate);
         var cdate = tempDate.getDate()
@@ -73,6 +73,7 @@ const LandingPage = ({ navigation, route }) => {
         let fDate = tempDate.getFullYear() + '-' + ((tempDate.getMonth() + 1) > 9 ? tempDate.getMonth() + 1 : '0' + (tempDate.getMonth() + 1)) + "-" + ((tempDate.getDate()) > 9 ? tempDate.getDate() : '0' + (tempDate.getDate()))
         setDeparting(fDate)
         // setReturning(fDate)
+             setShowDeparting(false);
     }
     const showModeForDeparting = (currentMode) => {
         setShowDeparting(true);
@@ -90,11 +91,12 @@ const LandingPage = ({ navigation, route }) => {
 
     const onChangeReturn = (event, selectDate) => {
         const currentDate = selectDate || date;
-        setShowReturning(Platform.OS === 'ios');
         setDateForReturning(currentDate);
         let tempDate = new Date(currentDate);
         let fDate = tempDate.getFullYear() + '-' + ((tempDate.getMonth() + 1) > 9 ? tempDate.getMonth() + 1 : '0' + (tempDate.getMonth() + 1)) + "-" + ((tempDate.getDate()) > 9 ? tempDate.getDate() : '0' + (tempDate.getDate()))
         setReturning(fDate)
+        setShowReturning(false);
+
     }
 
     const showModeA = (currentMode) => {

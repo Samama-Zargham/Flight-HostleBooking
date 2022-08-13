@@ -105,8 +105,8 @@ const LandingPage = ({ navigation, route }) => {
     }
     const details = {
         "grant_type": 'client_credentials',
-        "client_id": "Y2vZesGSskZexpIAny84ByfN3yY11dnk",
-        "client_secret": "AnMnpLyAYF4EkOQz"
+        "client_id": "wViS8AC4Tu7DmlSom4t2cVN1HChFmM4g",
+        "client_secret": "EYZGXWk4Kfb8TND4"
     }
     const isDateBeforeToday = (date) => {
         console.log(" date ", date)

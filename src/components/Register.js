@@ -50,7 +50,7 @@ const Register = ({ navigation }) => {
         if (Email.includes("@gmail")) {
           setloading(true);
           const params = {
-            firstName: FirstName,
+            FirstName: FirstName,
             LastName: LastName,
             Email: Email.toLowerCase(),
             Password: Password,
@@ -71,7 +71,7 @@ const Register = ({ navigation }) => {
             })
             .catch((error) => {
               if (error) {
-                // console.warn(error);
+                console.warn(error);
                 setloading(false);
                 alert("Email Already Registered");
               }

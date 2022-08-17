@@ -9,8 +9,12 @@ import Details from './src/components/Details';
 import Register from './src/components/Register';
 import MyBookings from "./src/components/MyBookings"
 import BookingDetails from './src/components/BookingDetails';
-const Stack = createStackNavigator();
 import BookingDetail from "./src/components/BookingDetail"
+import EmailVerification from './src/components/forgetPassword/EmailVerification';
+import VerifyOTP from './src/components/forgetPassword/VerifyOTP';
+import ResetPassword from './src/components/forgetPassword/ResetPassword';
+const Stack = createStackNavigator();
+
 const App = () => {
   return (
     <NavigationContainer>
@@ -23,7 +27,9 @@ const App = () => {
         <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="MyBookings" component={MyBookings} />
         <Stack.Screen name="BookingDetail" component={BookingDetail} />
-
+        <Stack.Screen name="EmailVerification" component={EmailVerification} />
+        <Stack.Screen name="VerifyOTP" component={VerifyOTP} />
+        <Stack.Screen name="ResetPassword" component={ResetPassword} />
 
       </Stack.Navigator>
     </NavigationContainer>

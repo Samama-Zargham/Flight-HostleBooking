@@ -124,9 +124,6 @@ const LandingPage = ({ navigation, route }) => {
         else if (departing == returning) {
             alert("Sorry, please make 1 day differnce")
         }
-        else if (bugget < 700) {
-            alert("Sorry, bugget must be greater than 700")
-        }
         else if (Persons > 3) {
             alert("Sorry, Max 3 seats allow")
         }

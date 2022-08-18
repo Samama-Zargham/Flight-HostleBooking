@@ -107,8 +107,8 @@ const Results = ({ route, navigation }) => {
                 console.log("hdbsjhb", JSON.stringify(res?.data))
                 console.log("-----------------------   ", hotelId)
                 let Address = await getAddress(lat, lng)
-                // let PointofInterest = await GetPointOfInterest(lat, lng)
-                // console.log("PointofInterest", JSON.stringify(PointofInterest))
+                let PointofInterest = await GetPointOfInterest(lat, lng)
+                console.log("PointofInterest", JSON.stringify(PointofInterest))
 
                 console.log("first ==== >>> ", JSON.stringify(Address))
                 if (res) {
@@ -117,6 +117,8 @@ const Results = ({ route, navigation }) => {
                 }
             })
         } catch (error) {
+            let Address = await getAddress(lat, lng)
+                let PointofInterest = await GetPointOfInterest(lat, lng)
             alert("Sorry, we couldnt find any hotel for the selected country please book yourself")
             navigation.navigate('Details', { aircraftDaata: aircraftDaata, isLogged: isLogged, hotelData: null, Beds: AmadeusDataa[0]?.Persons, LeaveCity: LeaveCity, ArrivalCity: cityCode })
 

@@ -15,7 +15,7 @@ import {
     ActivityIndicator,
     Alert,
     Platform
-    
+
 } from 'react-native';
 import URL from "../AmadeusRouts/URL";
 import axios from "axios";
@@ -61,7 +61,7 @@ const LandingPage = ({ navigation, route }) => {
 
     const onChange = (event, selectDate) => {
         const currentDate = selectDate || date;
-   
+
         setDateForDeparting(currentDate);
         let tempDate = new Date(currentDate);
         var cdate = tempDate.getDate()
@@ -73,7 +73,7 @@ const LandingPage = ({ navigation, route }) => {
         let fDate = tempDate.getFullYear() + '-' + ((tempDate.getMonth() + 1) > 9 ? tempDate.getMonth() + 1 : '0' + (tempDate.getMonth() + 1)) + "-" + ((tempDate.getDate()) > 9 ? tempDate.getDate() : '0' + (tempDate.getDate()))
         setDeparting(fDate)
         // setReturning(fDate)
-             setShowDeparting(false);
+        setShowDeparting(false);
     }
     const showModeForDeparting = (currentMode) => {
         setShowDeparting(true);
@@ -255,7 +255,7 @@ const LandingPage = ({ navigation, route }) => {
                                             console.log("MyAmadeusDataa===>>>   ", JSON.stringify(MyAmadeusDataa))
 
                                             if (MyAmadeusDataa.length > 0) {
-                                                navigation.replace("Results", { AmadeusDataa: MyAmadeusDataa, access_token: access_token, LeaveCity: CityAirport, isLogged: isLogged })
+                                                navigation.replace("Results", { AmadeusDataa: MyAmadeusDataa, access_token: access_token, LeaveCity: CityAirport, isLogged: isLogged, Persons: Persons, departing: departing, })
 
                                             }
                                             else {
@@ -306,7 +306,7 @@ const LandingPage = ({ navigation, route }) => {
                         position: "absolute",
                         marginLeft: 20
                     }}
-                    onPress={() => {navigation.navigate("MyBookings") }
+                    onPress={() => { navigation.navigate("MyBookings") }
                     }
                 >
                     <Icon style={{ color: COLOURS.orange }} name="history-edu" size={25} />

@@ -42,7 +42,7 @@ const Results = ({ route, navigation }) => {
 
     }, [isLogged])
 
-    const { AmadeusDataa, access_token, LeaveCity } = route.params;
+    const { AmadeusDataa, access_token, LeaveCity, Persons, departing } = route.params;
     const [first, setfirst] = useState()
     const [Second, setSecond] = useState()
     // console.log("---->>>>>>>>>>>>>>>>>>>>>>> ", JSON.stringify(AmadeusDataa))
@@ -86,7 +86,31 @@ const Results = ({ route, navigation }) => {
             }
             )
         } catch (error) {
-            alert("Sorry, we couldnt find any point of interest for the selected City")
+            // alert("Sorry, we couldnt find any point of interest for the selected City")
+        }
+    }
+    const GetHotelOffer = async (hotelId, Persons, departing) => {
+        console.log("firs t   ", hotelId, "    ", Persons, "    " + departing)
+        try {
+            await axios.get(
+                `https://test.api.amadeus.com/v3/shopping/hotel-offers?hotelIds=${hotelId}&adults=${Persons}&checkInDate=${departing}&paymentPolicy=NONE&roomQuantity=${Persons}`,
+
+                {
+                    headers: {
+                        'Authorization': `Bearer ${access_token}`
+                    }
+                }
+            ).then(async (res) => {
+                console.log("firsyooyooy--------------------------t    ", res?.data?.data[0]?.offers[0]?.price?.total)
+
+
+                return await res?.data?.data[0]?.offers[0]?.price?.total
+
+            }
+            )
+        } catch (error) {
+            // alert("Sorry, we couldnt find any point of interest for the selected City")
+            console.log("first------------------------------------------------------------------------")
         }
     }
     const onSelectCountry = async (cityCode, aircraftDaata) => {
@@ -107,20 +131,48 @@ const Results = ({ route, navigation }) => {
                 console.log("hdbsjhb", JSON.stringify(res?.data))
                 console.log("-----------------------   ", hotelId)
                 let Address = await getAddress(lat, lng)
-                let PointofInterest = await GetPointOfInterest(lat, lng)
-                console.log("PointofInterest", JSON.stringify(PointofInterest))
+                var PointofInterest = await GetPointOfInterest(lat, lng)
+                // var Price = null
+                // let Price = await GetHotelOffer(hotelId, Persons, departing)
 
-                console.log("first ==== >>> ", JSON.stringify(Address))
+                // console.log("Price -----------------    ", Price)
+
+                // console.log("first ==== >>> ", JSON.stringify(Address))
+
+                try {
+                    await axios.get(
+                        `https://test.api.amadeus.com/v3/shopping/hotel-offers?hotelIds=${hotelId}&adults=${Persons}&checkInDate=${departing}&paymentPolicy=NONE&roomQuantity=${Persons}`,
+
+                        {
+                            headers: {
+                                'Authorization': `Bearer ${access_token}`
+                            }
+                        }
+                    ).then(async (res) => {
+
+
+                        if (res) {
+                            navigation.navigate('Details', { aircraftDaata: aircraftDaata, hotelData: Hotel, hotelAddress: Address, Beds: AmadeusDataa[0]?.Persons, LeaveCity: LeaveCity, ArrivalCity: cityCode, isLogged: isLogged, PointofInterest: PointofInterest, Price: res?.data?.data[0]?.offers[0]?.price?.total })
+
+                        }
+                    }
+                    )
+                } catch (error) {
+                    if (res) {
+                        navigation.navigate('Details', { aircraftDaata: aircraftDaata, hotelData: Hotel, hotelAddress: Address, Beds: AmadeusDataa[0]?.Persons, LeaveCity: LeaveCity, ArrivalCity: cityCode, isLogged: isLogged, PointofInterest: PointofInterest, Price: null })
+
+                    }
+                    // alert("Sorry, we couldnt find any point of interest for the selected City")
+                    console.log("first------------------------------------------------------------------------")
+                }
                 if (res) {
-                    navigation.navigate('Details', { aircraftDaata: aircraftDaata, hotelData: Hotel, hotelAddress: Address, Beds: AmadeusDataa[0]?.Persons, LeaveCity: LeaveCity, ArrivalCity: cityCode, isLogged: isLogged })
+                    navigation.navigate('Details', { aircraftDaata: aircraftDaata, hotelData: Hotel, hotelAddress: Address, Beds: AmadeusDataa[0]?.Persons, LeaveCity: LeaveCity, ArrivalCity: cityCode, isLogged: isLogged, PointofInterest: PointofInterest, Price: null })
 
                 }
             })
         } catch (error) {
-            let Address = await getAddress(lat, lng)
-                let PointofInterest = await GetPointOfInterest(lat, lng)
             alert("Sorry, we couldnt find any hotel for the selected country please book yourself")
-            navigation.navigate('Details', { aircraftDaata: aircraftDaata, isLogged: isLogged, hotelData: null, Beds: AmadeusDataa[0]?.Persons, LeaveCity: LeaveCity, ArrivalCity: cityCode })
+            navigation.navigate('Details', { aircraftDaata: aircraftDaata, isLogged: isLogged, hotelData: null, Beds: AmadeusDataa[0]?.Persons, LeaveCity: LeaveCity, ArrivalCity: cityCode, Price: null })
 
         }
 

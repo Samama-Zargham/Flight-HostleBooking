@@ -64,6 +64,10 @@ const Login = ({ navigation }) => {
             alert("Check your Email and Password Again!");
             setloading(false);
           }
+          if (userData.msg === "User Not Verified") {
+            alert("User Not Verified!");
+            setloading(false);
+          }
 
           if (userData.sucess === true) {
             try {
@@ -142,14 +146,14 @@ const Login = ({ navigation }) => {
                   }}
                 />
               </View>
-              {/* <View style={style.forgotContainer}>
+              <View style={style.forgotContainer}>
                 <TouchableOpacity
                   activeOpacity={0.8}
-                  onPress={() => navigation.navigate("")}
+                  onPress={() => navigation.navigate("EmailVerification")}
                 >
                   <Text style={style.forgot}>forgot password?</Text>
                 </TouchableOpacity>
-              </View> */}
+              </View>
               <TouchableOpacity
                 style={style.btnContainer}
                 activeOpacity={0.8}

@@ -11,6 +11,11 @@ import MyBookings from "./src/components/MyBookings"
 import BookingDetails from './src/components/BookingDetails';
 const Stack = createStackNavigator();
 import BookingDetail from "./src/components/BookingDetail"
+import EmailVerification from './src/components/forgetPassword/EmailVerification';
+import VerifyOTP from './src/components/forgetPassword/VerifyOTP';
+import ResetPassword from './src/components/forgetPassword/ResetPassword';
+const Stack = createStackNavigator();
+
 const App = () => {
   return (
     <NavigationContainer>
